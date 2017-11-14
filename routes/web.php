@@ -34,3 +34,7 @@ Route::get('/userinfo', 'UserController@getUserInfo');
 //CHANGE
 Route::post('/changepassword','UserController@ChangePassword');
 Route::post('/changeemail','UserController@ChangeEmail');
+
+//LOCATION
+Route::get('/location', 'LocationController@getLocation');
+Route::post('/location', 'LocationController@CreateLocation');
