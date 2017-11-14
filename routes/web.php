@@ -10,37 +10,18 @@
 |
 */
 use App\User;
+use Illuminate\Http\Request;
+
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/register', function () {
-    return view('register');
-});
-Route::post('/register', function () {
+//USER
+Route::get('/register', 'UserController@getReg');
+Route::post('/register', 'UserController@postReg');
+Route::post('/login', 'UserController@login');
+Route::post('/logout', 'UserController@logout');
 
-    $account = request('account');
-    $password = bcrypt(request('password'));
-    $name= request('name');
-    $role= request('role');
-    $sn= request('sn');
-    $gender= request('gender');
-    $email= request('email');
-    $birthday= request('birthday');
-    $new_user = new User;
-    $new_user->account=$account;
-    $new_user->password=$password;
-    $new_user->role=$role;
-    $new_user->name=$name;
-    $new_user->sn=$sn;
-    $new_user->gender=$gender;
-    $new_user->email=$email;
-    $new_user->birthday=$birthday;
-    $check_user=User::where('account','=',$account)->first();
-    if( $check_user) {
-        return "已存在該用戶";
-    }
-    else {
-        $new_user->save();
-        return "註冊成功";
-    }
-});
+//VERIFICATION
+Route::get('/verification', 'VerificationController@getVerification');
+Route::post('/verification','VerificationController@PostVerification');
+Route::post('/newverification','VerificationController@Verification');
