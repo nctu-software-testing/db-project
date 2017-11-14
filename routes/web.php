@@ -15,13 +15,22 @@ use Illuminate\Http\Request;
 Route::get('/', function () {
     return view('welcome');
 });
-//USER
-Route::get('/register', 'UserController@getReg');
-Route::post('/register', 'UserController@postReg');
+//LOGIN LOGOUT
 Route::post('/login', 'UserController@login');
 Route::post('/logout', 'UserController@logout');
+
+//REGISTER
+Route::get('/register', 'UserController@getReg');
+Route::post('/register', 'UserController@postReg');
 
 //VERIFICATION
 Route::get('/verification', 'VerificationController@getVerification');
 Route::post('/verification','VerificationController@PostVerification');
 Route::post('/newverification','VerificationController@Verification');
+
+//USER
+Route::get('/userinfo', 'UserController@getUserInfo');
+
+//CHANGE
+Route::post('/changepassword','UserController@ChangePassword');
+Route::post('/changeemail','UserController@ChangeEmail');

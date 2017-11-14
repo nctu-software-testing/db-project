@@ -10,6 +10,7 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends BaseController
 {
@@ -84,5 +85,45 @@ class UserController extends BaseController
         echo "window.location.href='$url'";
         echo "</script>";
 
+    }
+    public function getUserInfo(Request $request){
+        if (!($request->session()->has('user')))
+            return redirect()->back();
+        $id=$request->session()->get('user')->id;
+        $data = DB::table('user')
+            ->where('user.id','=',$id)
+            ->get();
+        return view('userinfo', ['data' => $data]);
+    }
+    public function ChangePassword(Request $request)
+    {
+        $id=$request->session()->get('user')->id;
+        $oldpassword = request('oldpassword');
+        $check_user=User::where('id','=',$id)->first();
+            $dbpassword = $check_user->password;
+            if (Hash::check($oldpassword, $dbpassword))
+            {
+                $check_user->password=bcrypt(request('newpassword'));
+                $check_user->save();
+                $request->session()->flash('log', '修改成功，請重新登入。');
+                $this->logout($request);
+                return;
+            }
+            else
+            {
+                $request->session()->put('user',  $check_user);
+                $request->session()->flash('log', '密碼不符合');
+                return redirect()->back();
+            }
+    }
+    public function ChangeEmail(Request $request)
+    {
+        $id=$request->session()->get('user')->id;
+        $email = request('email');
+        $check_user=User::where('id','=',$id)->first();
+        $check_user->email=$email;
+        $check_user->save();
+        $request->session()->flash('log', '修改成功。');
+        return redirect()->back();
     }
 }
