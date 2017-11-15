@@ -25,4 +25,5 @@
 <a href="verification"><Button>(B)會員驗證</Button></a><br>
 <a href="userinfo"><Button>(C)會員資料</Button></a><br>
 <a href="location"><Button>(D)地址管理</Button></a><br>
+<a href="category"><Button>(E)類別管理</Button></a><br>
 

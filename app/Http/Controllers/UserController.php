@@ -100,7 +100,7 @@ class UserController extends BaseController
             return view('userinfo', ['data' => $data]);
         }
     }
-    public function ChangePassword(Request $request)
+    public function changePassword(Request $request)
     {
         $id=$request->session()->get('user')->id;
         $oldpassword = request('oldpassword');
@@ -121,7 +121,7 @@ class UserController extends BaseController
                 return redirect()->back();
             }
     }
-    public function ChangeEmail(Request $request)
+    public function changeEmail(Request $request)
     {
         $id=$request->session()->get('user')->id;
         $email = request('email');

@@ -54,7 +54,7 @@ class VerificationController extends BaseController
         }
         return;
     }
-    public function Verification(Request $request)
+    public function verification(Request $request)
     {
         $Verification = new Verification;
         //圖片上傳
@@ -77,7 +77,6 @@ class VerificationController extends BaseController
             return redirect()->back();
         }
     }
-
     public function getImage($vid, $face){
         $role = session('user.role');
         $verify = Verification::where('id',$vid);
