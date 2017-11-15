@@ -1,18 +1,12 @@
-<!doctype html>
-<html lang="{{ app()->getLocale() }}">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        @include("header")
-        <title>Laravel</title>
-    </head>
-    <body>
-    <div>
+@section('extraScript')
+<script src="https://code.essoduke.org/js/twzipcode/jquery.twzipcode-1.7.14.min.js"></script>
+@endsection
+@section('content')
     <table border="1">
         <tr>
             　<td>address</td>
             　<td>zip_code</td>
+              <td>Delete</td>
         </tr>
         @for ($i = 0; $i < count($data); $i++)
             <tr>
@@ -27,16 +21,23 @@
     <div hidden id="lo">
         <form action="location" method="post">
         Address:<input type="text" name="address" required><br>
-        Zip_Code:<input type="text" name="zip_code" required><br>
+            <div id="twzipcode"></div>
             <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
             <input type="submit" value="送出">
         </form>
     </div>
-    </body>
+@endsection
+@section('eofScript')
     <script>
         function CreateLocation() {
             $("#lo").toggle();
         }
+        $( document ).ready(function() {
+            $('#twzipcode').twzipcode();
+            $('[name=zipcode]').attr("readonly","readonly");
+            $('[name=county]').prop("required","required");
+            $('[name=district]').prop("required","required");
+        });
     </script>
-
-</html>
+@endsection
+@include('base')

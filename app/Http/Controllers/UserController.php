@@ -80,20 +80,24 @@ class UserController extends BaseController
     {
         $request->session()->flush();
         $request->session()->flash('log', '登出成功');
-        $url = "register";
-        echo "<script>";
-        echo "window.location.href='$url'";
-        echo "</script>";
-
+        return redirect('register');
     }
     public function getUserInfo(Request $request){
         if (!($request->session()->has('user')))
             return redirect()->back();
         $id=$request->session()->get('user')->id;
-        $data = DB::table('user')
-            ->where('user.id','=',$id)
-            ->get();
-        return view('userinfo', ['data' => $data]);
+        if($request->session()->get('user')->role=="A") {
+            $data = DB::table('user')
+                ->get();
+            return view('userinfo', ['data' => $data]);
+        }
+        else
+        {
+            $data = DB::table('user')
+                ->where('user.id', '=', $id)
+                ->get();
+            return view('userinfo', ['data' => $data]);
+        }
     }
     public function ChangePassword(Request $request)
     {
@@ -105,9 +109,9 @@ class UserController extends BaseController
             {
                 $check_user->password=bcrypt(request('newpassword'));
                 $check_user->save();
+                $request->session()->flush();
                 $request->session()->flash('log', '修改成功，請重新登入。');
-                $this->logout($request);
-                return;
+                return redirect('register');
             }
             else
             {

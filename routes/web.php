@@ -25,7 +25,7 @@ Route::post('/register', 'UserController@postReg');
 
 //VERIFICATION
 Route::get('/verification', 'VerificationController@getVerification');
-Route::post('/verification','VerificationController@PostVerification');
+Route::post('/verification','VerificationController@postVerification');
 Route::post('/newverification','VerificationController@Verification');
 
 //USER
@@ -37,4 +37,5 @@ Route::post('/changeemail','UserController@ChangeEmail');
 
 //LOCATION
 Route::get('/location', 'LocationController@getLocation');
-Route::post('/location', 'LocationController@CreateLocation');
+Route::post('/location', 'LocationController@createLocation');
+Route::get('/verify-image/{vid}/{face}', 'VerificationController@getImage');

@@ -1,12 +1,4 @@
-<!doctype html>
-<html lang="{{ app()->getLocale() }}">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Laravel</title>
-    </head>
-    <body>
+@section('content')
     <form action="newverification" method="post" enctype="multipart/form-data">
         <div>
             正面圖片:<input type="file" name="file1" id="uploader1" required><br>
@@ -21,10 +13,8 @@
         <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
         <input type="submit" value="送出">
     </form>
-
-
-    </body>
-</html>
+@endsection
+@section('eofScript')
 <script>
     var re = /\.(jpg|gif|png)$/; //允許的圖片副檔名
     $("#uploader1").change(function(){
@@ -51,3 +41,4 @@
         }
     }
 </script>
+@endsection

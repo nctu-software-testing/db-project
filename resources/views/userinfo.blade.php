@@ -1,13 +1,4 @@
-<!doctype html>
-<html lang="{{ app()->getLocale() }}">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        @include("header")
-        <title>Laravel</title>
-    </head>
-    <body>
+@section('content')
     <div>
     <table border="1">
         <tr>
@@ -20,16 +11,18 @@
             　<td>email</td>
             　<td>驗證</td>
         </tr>
+        @for ($i = 0; $i < count($data); $i++)
             <tr>
-                　<td>{{$data[0]->account}}</td>
-                　<td>{{$data[0]->sn}}</td>
-                　<td>{{$data[0]->name}}</td>
-                　<td>{{$data[0]->role}}</td>
-                　<td>{{$data[0]->birthday}}</td>
-                  <td>{{$data[0]->gender}}</td>
-                  <td>{{$data[0]->email}}</td>
-                  <td>{{$data[0]->enable}}</td>
+                　<td>{{$data[$i]->account}}</td>
+                　<td>{{$data[$i]->sn}}</td>
+                　<td>{{$data[$i]->name}}</td>
+                　<td>{{$data[$i]->role}}</td>
+                　<td>{{$data[$i]->birthday}}</td>
+                  <td>{{$data[$i]->gender}}</td>
+                  <td>{{$data[$i]->email}}</td>
+                  <td>{{$data[$i]->enable}}</td>
             </tr>
+        @endfor
     </table>
         　<td><button onclick="ChagePassword()">修改密碼</button></td>
         　<td><button onclick="ChageEmail()">修改信箱</button></td>
@@ -49,14 +42,16 @@
             <input type="submit" value="送出">
         </form>
     </div>
-    </body>
-    <script>
+@endsection
+@section('eofScript')
+    <Script>
         function ChagePassword() {
             $("#ps").toggle();
         }
         function ChageEmail() {
             $("#em").toggle();
         }
-    </script>
+    </Script>
+@endsection
+@include('base')
 
-</html>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use App\Verification;
 use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Http\File;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -12,6 +13,9 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use DateTime;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Storage;
+
 class VerificationController extends BaseController
 {
     public function getVerification(Request $request){
@@ -21,7 +25,7 @@ class VerificationController extends BaseController
             $data = DB::table('user')
                 ->join('verification', 'user.id', '=', 'verification.user_id')
                 ->get();
-            return view('verification', ['data' => $data]);
+            return view('verification.verification', ['data' => $data]);
         }
         else
         {
@@ -30,10 +34,10 @@ class VerificationController extends BaseController
                 ->join('verification', 'user.id', '=', 'verification.user_id')
                 ->where('user.id','=',$id)
                 ->get();
-            return view('verification', ['data' => $data]);
+            return view('verification.verification', ['data' => $data]);
         }
     }
-    public function PostVerification(Request $request)
+    public function postVerification(Request $request)
     {
         $id = request('id');
         $result = request('result');
@@ -75,5 +79,34 @@ class VerificationController extends BaseController
             $request->session()->flash('log', '圖片出錯');
             return redirect()->back();
         }
+    }
+
+    public function getImage($vid, $face){
+        $role = session('user.role');
+        $verify = Verification::where('id',$vid);
+        if($role!=='A'){
+            $verify->where('user_id', session('user.id', -1));
+        }
+        $verify =$verify->first();
+        if($verify){
+            $imagePath = '';
+            if($face==='front'){
+                $imagePath = $verify->front_picture;
+            }else if ($face==='back'){
+                $imagePath = $verify->back_picture;
+            }
+            if(Storage::exists($imagePath)){
+                $type = Storage::mimeType($imagePath);
+                $content = (Storage::get($imagePath));
+
+
+                $response = Response::make($content, 200);
+                $response->header("Content-Type", $type);
+
+                return $response;
+            }
+        }
+
+        return abort(404);
     }
 }

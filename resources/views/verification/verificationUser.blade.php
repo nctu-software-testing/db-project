@@ -1,13 +1,4 @@
-<!doctype html>
-<html lang="{{ app()->getLocale() }}">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Laravel</title>
-    </head>
-    <body>
-    <div>
+@section('content')
     <table border="1">
         <tr>
             　<td>id</td>
@@ -29,8 +20,8 @@
                 　<td>{{$data[$i]->name}}</td>
                 　<td>{{$data[$i]->account}}</td>
                 　<td>{{$data[$i]->role}}</td>
-                　<td><button onclick="OpenImage('{{$data[$i]->front_picture}}')">圖片</button></td>
-                　<td><button onclick="OpenImage('{{$data[$i]->front_picture}}')">圖片</button></td>
+                　<td><button onclick="OpenImage('{{$data[$i]->id}}','front')">圖片</button></td>
+                　<td><button onclick="OpenImage('{{$data[$i]->id}}','back')">圖片</button></td>
                 　<td>{{$data[$i]->verify_result}}</td>
                 　<td>{{$data[$i]->sign_up_datatime}}</td>
                 　<td>{{$data[$i]->datetime}}</td>
@@ -38,17 +29,18 @@
             </tr>
         @endfor
     </table>
-    </div>
+
     <br><br>
     @if (count($data)==0 or $data[count($data)-1]->verify_result=="驗證失敗")
-        @include("verificationForm")
+        @include("verification.verificationForm")
     @endif
-    </body>
+@endsection
+@section('eofScript')
     <script>
-        function OpenImage(path) {
-            var truepath='{{ env('IMAGE_URL') }}'+path;
-            window.open(truepath, 'Image', config='height=500,width=500');
+        function OpenImage(id,t) {
+            var path='verify-image/'+id+'/'+t;
+            window.open(path, 'Image', config='height=500,width=500');
         }
     </script>
+@endsection
 
-</html>

@@ -24,11 +24,11 @@ class LocationController extends BaseController
             ->get();
         return view('location', ['data' => $data]);
     }
-    public function CreateLocation(Request $request)
+    public function createLocation(Request $request)
     {
         $id=$request->session()->get('user')->id;
         $address = request('address');
-        $zip_code = request('zip_code');
+        $zip_code = request('zipcode');
         $location = new Location();
         $location->user_id=$id;
         $location->address=$address;
