@@ -24,9 +24,10 @@
             </tr>
         @endfor
     </table>
-        　<td><button onclick="ChagePassword()">修改密碼</button></td>
-        　<td><button onclick="ChageEmail()">修改信箱</button></td>
     </div>
+        {{$data->links()}}
+        　<button onclick="ChagePassword()">修改密碼</button>
+        　<button onclick="ChageEmail()">修改信箱</button>
     <div hidden id="ps">
         <form action="changepassword" method="post">
         舊密碼:<input type="password" name="oldpassword" required><br>

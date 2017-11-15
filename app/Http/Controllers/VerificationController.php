@@ -8,32 +8,29 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Http\File;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\DB;
 use DateTime;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 
 class VerificationController extends BaseController
 {
+    public $paginate = 10;
     public function getVerification(Request $request){
         if (!($request->session()->has('user')))
            return redirect()->back();
         if($request->session()->get('user')->role=="A") {
-            $data = DB::table('user')
-                ->join('verification', 'user.id', '=', 'verification.user_id')
-                ->get();
+            $data = User::
+                join('verification', 'user.id', '=', 'verification.user_id')
+                ->paginate($this->paginate);
             return view('verification.verification', ['data' => $data]);
         }
         else
         {
             $id=$request->session()->get('user')->id;
-            $data = DB::table('user')
-                ->join('verification', 'user.id', '=', 'verification.user_id')
+            $data = User::
+                join('verification', 'user.id', '=', 'verification.user_id')
                 ->where('user.id','=',$id)
-                ->get();
+                ->paginate($this->paginate);
             return view('verification.verification', ['data' => $data]);
         }
     }

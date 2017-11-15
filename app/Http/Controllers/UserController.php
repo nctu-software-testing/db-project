@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 
 class UserController extends BaseController
 {
+    public $paginate = 10;
     public function getReg(Request $request){
         return view('register');
     }
@@ -87,15 +88,15 @@ class UserController extends BaseController
             return redirect()->back();
         $id=$request->session()->get('user')->id;
         if($request->session()->get('user')->role=="A") {
-            $data = DB::table('user')
-                ->get();
+            $data = User::
+                paginate($this->paginate);
             return view('userinfo', ['data' => $data]);
         }
         else
         {
-            $data = DB::table('user')
-                ->where('user.id', '=', $id)
-                ->get();
+            $data = User::
+                where('user.id', '=', $id)
+                ->paginate($this->paginate);
             return view('userinfo', ['data' => $data]);
         }
     }

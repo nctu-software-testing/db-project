@@ -15,13 +15,15 @@ use Illuminate\Support\Facades\DB;
 
 class LocationController extends BaseController
 {
+    public $paginate = 10;
     public function getLocation(Request $request){
+
         if (!($request->session()->has('user')))
             return redirect()->back();
         $id=$request->session()->get('user')->id;
-        $data = DB::table('location')
-            ->where('user_id','=',$id)
-            ->get();
+        $data = Location::
+            where('user_id','=',$id)
+            ->paginate($this->paginate);
         return view('location', ['data' => $data]);
     }
     public function createLocation(Request $request)

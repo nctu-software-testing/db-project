@@ -8,16 +8,18 @@
             　<td>zip_code</td>
               <td>Delete</td>
         </tr>
+
         @for ($i = 0; $i < count($data); $i++)
             <tr>
                 　<td>{{$data[$i]->address}}</td>
                 　<td>{{$data[$i]->zip_code}}</td>
+                　<td>刪除</td>
             </tr>
         @endfor
-
     </table>
-        　<td><button onclick="CreateLocation()">新增地址</button></td>
-    </div>
+    {{ $data->links() }}<br>
+     <button onclick="CreateLocation()">新增地址</button></td>
+
     <div hidden id="lo">
         <form action="location" method="post">
         Address:<input type="text" name="address" required><br>
