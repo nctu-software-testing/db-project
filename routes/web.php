@@ -43,3 +43,7 @@ Route::get('/verify-image/{vid}/{face}', 'VerificationController@getImage');
 //CATEGORY
 Route::get('/category', 'CategoryController@getCategory');
 Route::post('/category', 'CategoryController@createCategory');
+
+//PRODUCT
+Route::get('/product', 'ProductController@getProduct');
+Route::get('/item', 'ProductController@getItem');

@@ -1,6 +1,3 @@
-@section('extraScript')
-<script src="https://code.essoduke.org/js/twzipcode/jquery.twzipcode-1.7.14.min.js"></script>
-@endsection
 @section('content')
     <table border="1">
         <tr>
