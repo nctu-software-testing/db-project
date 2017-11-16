@@ -25,7 +25,10 @@
     <h1>商品介紹:</h1><br>
     <textarea rows="4" cols="50" readonly style="resize: none;">{{$data[0]->product_information}}
     </textarea>
-
+    <h1>商品圖片:</h1><br>
+    @for ($i = 0; $i < $count; $i++)
+        <img class="preview{{$i}}" style="max-width: 150px; max-height: 150px;" src="product-image/{{$data[0]->id}}/{{$i}}")>
+    @endfor
 @endsection
 @section('eofScript')
 

@@ -60,8 +60,6 @@ class VerificationController extends BaseController
         //圖片上傳
         if ($request->hasFile('file1') and $request->hasFile('file2')) {
             if ($request->file('file1')->isValid() and $request->file('file2')->isValid()) {
-                $file1 = $request->file1;
-                $file2 = $request->file2;
                 $path1 = $request->file1->store('images');
                 $path2 = $request->file2->store('images');
                 $Verification->front_picture=$path1;

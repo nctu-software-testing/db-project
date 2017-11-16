@@ -47,3 +47,5 @@ Route::post('/category', 'CategoryController@createCategory');
 //PRODUCT
 Route::get('/product', 'ProductController@getProduct');
 Route::get('/item', 'ProductController@getItem');
+Route::post('/sell', 'ProductController@sell');
+Route::get('/product-image/{pid}/{id}', 'ProductController@getImage');
