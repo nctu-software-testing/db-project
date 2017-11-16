@@ -23,8 +23,10 @@
     $("#uploader2").change(function(){
         Check(this,$('.preview2'));
     })
-    function  Check(f,p) {
+    function Check(f,p) {
         var file=f.files[0];
+        if(!f.value)
+            p.attr('src', "");
         if (file.name.length !=0 && !re.test(file.name)) {
             alert("只允許上傳JPG、PNG或GIF影像檔");
             p.attr('src', "");

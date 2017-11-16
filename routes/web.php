@@ -49,3 +49,4 @@ Route::get('/product', 'ProductController@getProduct');
 Route::get('/item', 'ProductController@getItem');
 Route::post('/sell', 'ProductController@sell');
 Route::get('/product-image/{pid}/{id}', 'ProductController@getImage');
+Route::post('/deleteProduct','ProductController@delProduct');

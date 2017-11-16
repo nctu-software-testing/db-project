@@ -26,14 +26,34 @@ class ProductController extends BaseController
 
         if (!($request->session()->has('user')))
             return redirect()->back();
+        $selfid=$request->session()->get('user')->id;
         //商品資訊
         $data = Product::
         join('category', 'on_product.category_id', '=', 'category.id')
-            ->select('on_product.id','product_name','product_information','expiration_date','end_date','price','state','product_type')
+            ->select('on_product.id','product_name','product_information','expiration_date','end_date','price','state','product_type','user_id')
             ->paginate($this->paginate);
-        //類別資訊
-        $category = Category::get();
-        return view('product', ['data' => $data], ['category' => $category]);
+        $id=request("id",0);
+        $editdata= new Product();
+        $count=0;
+        if($id!=0) {
+            $editdata = Product::
+            join('category', 'on_product.category_id', '=', 'category.id')
+                ->where('on_product.id',$id)
+                ->get()->first();
+            $count = Product_Picture::
+            where('product_id','=',$id)
+                ->count();
+        }
+            //類別資訊
+            $category = Category::get();
+        return view('product')->
+        with('category',$category)->
+            with('data', $data)->
+            with('id',$id)->
+            with('count',$count)->
+            with('selfid',$selfid)->
+            with('editdata',$editdata);
+
     }
     public function getItem(Request $request)
     {
@@ -42,7 +62,7 @@ class ProductController extends BaseController
         return redirect()->back();
         $data = Product::
         join('category', 'on_product.category_id', '=', 'category.id')
-            ->select('on_product.id','product_name','product_information','expiration_date','end_date','price','state','product_type')
+            ->select('on_product.id','product_name','product_information','expiration_date','end_date','price','state','product_type','user_id')
             ->where('on_product.id','=',$itemid)
             ->paginate($this->paginate);
         //圖片數量
@@ -55,6 +75,7 @@ class ProductController extends BaseController
     {
         //
         $id=$request->session()->get('user')->id;
+        $edit_id = request('Edit_id');
         $title = request('title');
         $category = request('category');
         $price = request('price');
@@ -70,7 +91,10 @@ class ProductController extends BaseController
             $request->session()->flash('log', '參數錯誤');
             return redirect()->back();
         }
-        $product = new Product();
+        if($edit_id==0)
+            $product = new Product();
+        else
+            $product = Product::Where('id',$edit_id)->first();
         $product->product_name=$title;
         $product->product_information=$info;
         $product->expiration_date=$dt1;
@@ -80,8 +104,16 @@ class ProductController extends BaseController
         $product->user_id=$id;
         $product->state=0;
         $product->save();
+        //移除圖片
+        $image = Product_Picture::where('product_id',$edit_id)->get();
+        for($i=0;$i<5;$i++)
+        {
+            $del=request('delImage'.$i);
+            if($del==1)
+                $image[$i]->delete();
+        }
         //圖片
-        for($i=1;$i<=5;$i++)
+        for($i=0;$i<5;$i++)
         {
             if ($request->hasFile('file'.$i)) {
                 $file = $request->file('file'.$i);
@@ -111,6 +143,13 @@ class ProductController extends BaseController
             }
         }
         return abort(404);
+    }
+    public function delProduct(Request $request)
+    {
+        $id = request('id');
+        $p=Product::where("id",$id)->first();
+        $p->state=2;
+        $p->save();
     }
 }
 

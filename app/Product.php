@@ -22,10 +22,28 @@ class Product extends Model
     {
             if($this->state=="0")return "草稿";
             if($this->state=="1")return "發佈";
-            if($this->state=="2")return "移除";
+            if($this->state=="2")return "已刪除";
     }
     public function GetLink()
     {
         return "item?id=".$this->id;
+    }
+    public function GetDateTime($a)
+    {
+        if(!$this->expiration_date)
+            return"";
+        if($a==0)
+        return explode(" ", $this->expiration_date)[0];
+        if($a==1)
+            return explode(" ", $this->expiration_date)[1];
+        if($a==2)
+            return explode(" ", $this->end_date)[0];
+        if($a==3)
+            return explode(" ", $this->end_date)[1];
+    }
+
+    public function getUserName()
+    {
+        return User::Where('id',$this->user_id)->first()->name;
     }
 }
