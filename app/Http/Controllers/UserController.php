@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 
 class UserController extends BaseController
 {
+    public $paginate = 10;
     public function getReg(Request $request){
         return view('register');
     }
@@ -80,22 +81,26 @@ class UserController extends BaseController
     {
         $request->session()->flush();
         $request->session()->flash('log', '登出成功');
-        $url = "register";
-        echo "<script>";
-        echo "window.location.href='$url'";
-        echo "</script>";
-
+        return redirect('register');
     }
     public function getUserInfo(Request $request){
         if (!($request->session()->has('user')))
             return redirect()->back();
         $id=$request->session()->get('user')->id;
-        $data = DB::table('user')
-            ->where('user.id','=',$id)
-            ->get();
-        return view('userinfo', ['data' => $data]);
+        if($request->session()->get('user')->role=="A") {
+            $data = User::
+                paginate($this->paginate);
+            return view('userinfo', ['data' => $data]);
+        }
+        else
+        {
+            $data = User::
+                where('user.id', '=', $id)
+                ->paginate($this->paginate);
+            return view('userinfo', ['data' => $data]);
+        }
     }
-    public function ChangePassword(Request $request)
+    public function changePassword(Request $request)
     {
         $id=$request->session()->get('user')->id;
         $oldpassword = request('oldpassword');
@@ -105,9 +110,9 @@ class UserController extends BaseController
             {
                 $check_user->password=bcrypt(request('newpassword'));
                 $check_user->save();
+                $request->session()->flush();
                 $request->session()->flash('log', '修改成功，請重新登入。');
-                $this->logout($request);
-                return;
+                return redirect('register');
             }
             else
             {
@@ -116,7 +121,7 @@ class UserController extends BaseController
                 return redirect()->back();
             }
     }
-    public function ChangeEmail(Request $request)
+    public function changeEmail(Request $request)
     {
         $id=$request->session()->get('user')->id;
         $email = request('email');

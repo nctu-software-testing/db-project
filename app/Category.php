@@ -6,9 +6,9 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 
-class Location extends Model
+class Category extends Model
 {
-    protected $table = 'location';
+    protected $table = 'category';
     public $timestamps = false;
     /**
      * The attributes that are mass assignable.
@@ -16,7 +16,7 @@ class Location extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id','address','zip_code',
+        'product_type',
     ];
 
 }

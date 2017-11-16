@@ -1,14 +1,4 @@
-    <!doctype html>
-    <html lang="{{ app()->getLocale() }}">
-        <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        @include("header")
-        <title>Laravel</title>
-
-    </head>
-    <body>
+@section('content')
     <form action="register" method="post">
         註冊<br>
         帳號:<input type="text" name="account" required><br>
@@ -29,7 +19,5 @@
         <input type="submit" value="送出">
 
     </form>
-    </body>
-</html>
-
-
+@endsection
+@include('base')

@@ -1,12 +1,4 @@
-<!doctype html>
-<html lang="{{ app()->getLocale() }}">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Laravel</title>
-    </head>
-    <body>
+@section('content')
     <form action="newverification" method="post" enctype="multipart/form-data">
         <div>
             正面圖片:<input type="file" name="file1" id="uploader1" required><br>
@@ -21,10 +13,8 @@
         <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
         <input type="submit" value="送出">
     </form>
-
-
-    </body>
-</html>
+@endsection
+@section('eofScript')
 <script>
     var re = /\.(jpg|gif|png)$/; //允許的圖片副檔名
     $("#uploader1").change(function(){
@@ -33,8 +23,10 @@
     $("#uploader2").change(function(){
         Check(this,$('.preview2'));
     })
-    function  Check(f,p) {
+    function Check(f,p) {
         var file=f.files[0];
+        if(!f.value)
+            p.attr('src', "");
         if (file.name.length !=0 && !re.test(file.name)) {
             alert("只允許上傳JPG、PNG或GIF影像檔");
             p.attr('src', "");
@@ -51,3 +43,4 @@
         }
     }
 </script>
+@endsection

@@ -5,35 +5,36 @@ namespace App\Http\Controllers;
 use App\User;
 use App\Verification;
 use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Http\File;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\DB;
 use DateTime;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Storage;
+
 class VerificationController extends BaseController
 {
+    public $paginate = 10;
     public function getVerification(Request $request){
         if (!($request->session()->has('user')))
            return redirect()->back();
         if($request->session()->get('user')->role=="A") {
-            $data = DB::table('user')
-                ->join('verification', 'user.id', '=', 'verification.user_id')
-                ->get();
-            return view('verification', ['data' => $data]);
+            $data = User::
+                join('verification', 'user.id', '=', 'verification.user_id')
+                ->paginate($this->paginate);
+            return view('verification.verification', ['data' => $data]);
         }
         else
         {
             $id=$request->session()->get('user')->id;
-            $data = DB::table('user')
-                ->join('verification', 'user.id', '=', 'verification.user_id')
+            $data = User::
+                join('verification', 'user.id', '=', 'verification.user_id')
                 ->where('user.id','=',$id)
-                ->get();
-            return view('verification', ['data' => $data]);
+                ->paginate($this->paginate);
+            return view('verification.verification', ['data' => $data]);
         }
     }
-    public function PostVerification(Request $request)
+    public function postVerification(Request $request)
     {
         $id = request('id');
         $result = request('result');
@@ -53,14 +54,12 @@ class VerificationController extends BaseController
         }
         return;
     }
-    public function Verification(Request $request)
+    public function verification(Request $request)
     {
         $Verification = new Verification;
         //圖片上傳
         if ($request->hasFile('file1') and $request->hasFile('file2')) {
             if ($request->file('file1')->isValid() and $request->file('file2')->isValid()) {
-                $file1 = $request->file1;
-                $file2 = $request->file2;
                 $path1 = $request->file1->store('images');
                 $path2 = $request->file2->store('images');
                 $Verification->front_picture=$path1;
@@ -75,5 +74,33 @@ class VerificationController extends BaseController
             $request->session()->flash('log', '圖片出錯');
             return redirect()->back();
         }
+    }
+    public function getImage($vid, $face){
+        $role = session('user.role');
+        $verify = Verification::where('id',$vid);
+        if($role!=='A'){
+            $verify->where('user_id', session('user.id', -1));
+        }
+        $verify =$verify->first();
+        if($verify){
+            $imagePath = '';
+            if($face==='front'){
+                $imagePath = $verify->front_picture;
+            }else if ($face==='back'){
+                $imagePath = $verify->back_picture;
+            }
+            if(Storage::exists($imagePath)){
+                $type = Storage::mimeType($imagePath);
+                $content = (Storage::get($imagePath));
+
+
+                $response = Response::make($content, 200);
+                $response->header("Content-Type", $type);
+
+                return $response;
+            }
+        }
+
+        return abort(404);
     }
 }

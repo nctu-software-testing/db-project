@@ -25,16 +25,28 @@ Route::post('/register', 'UserController@postReg');
 
 //VERIFICATION
 Route::get('/verification', 'VerificationController@getVerification');
-Route::post('/verification','VerificationController@PostVerification');
-Route::post('/newverification','VerificationController@Verification');
+Route::post('/verification','VerificationController@postVerification');
+Route::post('/newverification','VerificationController@verification');
 
 //USER
 Route::get('/userinfo', 'UserController@getUserInfo');
 
 //CHANGE
-Route::post('/changepassword','UserController@ChangePassword');
-Route::post('/changeemail','UserController@ChangeEmail');
+Route::post('/changepassword','UserController@changePassword');
+Route::post('/changeemail','UserController@changeEmail');
 
 //LOCATION
 Route::get('/location', 'LocationController@getLocation');
-Route::post('/location', 'LocationController@CreateLocation');
+Route::post('/location', 'LocationController@createLocation');
+Route::get('/verify-image/{vid}/{face}', 'VerificationController@getImage');
+
+//CATEGORY
+Route::get('/category', 'CategoryController@getCategory');
+Route::post('/category', 'CategoryController@createCategory');
+
+//PRODUCT
+Route::get('/product', 'ProductController@getProduct');
+Route::get('/item', 'ProductController@getItem');
+Route::post('/sell', 'ProductController@sell');
+Route::get('/product-image/{pid}/{id}', 'ProductController@getImage');
+Route::post('/deleteProduct','ProductController@delProduct');
