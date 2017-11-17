@@ -50,3 +50,7 @@ Route::get('/item', 'ProductController@getItem');
 Route::post('/sell', 'ProductController@sell');
 Route::get('/product-image/{pid}/{id}', 'ProductController@getImage');
 Route::post('/deleteProduct','ProductController@delProduct');
+Route::post('/releaseProduct','ProductController@releaseProduct');
+
+//DISCOUNT
+Route::get('/discount', 'DiscountController@getDiscount');

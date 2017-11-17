@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
+use DateTime;
 
 class ProductController extends BaseController
 {
@@ -27,11 +28,29 @@ class ProductController extends BaseController
         if (!($request->session()->has('user')))
             return redirect()->back();
         $selfid=$request->session()->get('user')->id;
+        $id=$request->session()->get('user')->id;
         //商品資訊
-        $data = Product::
-        join('category', 'on_product.category_id', '=', 'category.id')
-            ->select('on_product.id','product_name','product_information','expiration_date','end_date','price','state','product_type','user_id')
-            ->paginate($this->paginate);
+        $type = request("type");
+        //個人
+        if($type=="self") {
+            $data = Product::
+            join('category', 'on_product.category_id', '=', 'category.id')
+                ->select('on_product.id', 'product_name', 'product_information', 'expiration_date', 'end_date', 'price', 'state', 'product_type', 'user_id')
+                ->where('user_id',$id)
+                ->paginate($this->paginate);
+        }
+        //公開瀏覽
+        else
+        {
+            $now = new DateTime();
+            $data = Product::
+            join('category', 'on_product.category_id', '=', 'category.id')
+                ->select('on_product.id', 'product_name', 'product_information', 'expiration_date', 'end_date', 'price', 'state', 'product_type', 'user_id')
+                ->where('state',1)
+                ->where('expiration_date','<=',$now)
+                ->where('end_date','>=',$now)
+                ->paginate($this->paginate);
+        }
         $id=request("id",0);
         $editdata= new Product();
         $count=0;
@@ -52,7 +71,9 @@ class ProductController extends BaseController
             with('id',$id)->
             with('count',$count)->
             with('selfid',$selfid)->
+            with('type',$type)->
             with('editdata',$editdata);
+
 
     }
     public function getItem(Request $request)
@@ -149,6 +170,13 @@ class ProductController extends BaseController
         $id = request('id');
         $p=Product::where("id",$id)->first();
         $p->state=2;
+        $p->save();
+    }
+    public function releaseProduct(Request $request)
+    {
+        $id = request('id');
+        $p=Product::where("id",$id)->first();
+        $p->state=1;
         $p->save();
     }
 }

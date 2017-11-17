@@ -23,7 +23,7 @@
             <input type="time" name="end_time" value="{{$editdata->GetDateTime(3)}}" id="t2" required>
         </div>
         商品描述:<br>
-        <textarea rows="4" cols="50" name="info" style="resize: none;" required>{{$editdata->product_information}} </textarea><br>
+        <textarea rows="4" cols="50" name="info" style="resize: none;" required>{{$editdata->product_information}}</textarea><br>
         商品圖片:<br>
         @for ($i = 0; $i < $count; $i++)
             <div>
