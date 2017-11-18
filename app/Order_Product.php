@@ -6,7 +6,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 
-class Order extends Model
+class Order_Product extends Model
 {
     protected $table = 'order';
     public $timestamps = false;
@@ -18,5 +18,5 @@ class Order extends Model
     protected $fillable = [
        'order_id','product_id','amount',
     ];
-
+    protected $product;
 }

@@ -51,6 +51,7 @@ Route::post('/sell', 'ProductController@sell');
 Route::get('/product-image/{pid}/{id}', 'ProductController@getImage');
 Route::post('/deleteProduct','ProductController@delProduct');
 Route::post('/releaseProduct','ProductController@releaseProduct');
-
+Route::post('/buy','ProductController@buyProduct');
+Route::get('/shoppingcar', 'ProductController@getShoppingcar');
 //DISCOUNT
 Route::get('/discount', 'DiscountController@getDiscount');

@@ -6,6 +6,7 @@ use App\Category;
 use App\Location;
 use App\Product;
 use App\Product_Picture;
+use App\Order_Product;
 use App\User;
 use App\Verification;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -19,6 +20,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 use DateTime;
+use PhpParser\Node\Expr\Array_;
 
 class ProductController extends BaseController
 {
@@ -27,7 +29,6 @@ class ProductController extends BaseController
 
         if (!($request->session()->has('user')))
             return redirect()->back();
-        $selfid=$request->session()->get('user')->id;
         $id=$request->session()->get('user')->id;
         //商品資訊
         $type = request("type");
@@ -70,7 +71,6 @@ class ProductController extends BaseController
             with('data', $data)->
             with('id',$id)->
             with('count',$count)->
-            with('selfid',$selfid)->
             with('type',$type)->
             with('editdata',$editdata);
 
@@ -178,6 +178,54 @@ class ProductController extends BaseController
         $p=Product::where("id",$id)->first();
         $p->state=1;
         $p->save();
+    }
+    public function buyProduct(Request $request)
+    {
+        $id = request('id');
+        $amount = request('amount');
+        $now = new DateTime();
+        $p=Product::where("id",$id)
+            ->where('expiration_date','<=',$now)
+            ->where('end_date','>=',$now)
+            ->where('state','=','1')
+            ->first();
+        if($p) {
+                if (($request->session()->has('shoppingcar'))) {
+                    $shoppingcar=session()->get('shoppingcar');
+                }
+                else{
+                    $shoppingcar=collect();
+                }
+                $op = new Order_Product();
+                $op->product_id=$id;
+                $op->amount=$amount;
+                $product=Product::where("id",$id)->get()->first();
+                $op->product=$product;
+                $shoppingcar->push($op);
+                $request->session()->put('shoppingcar',$shoppingcar);
+        }
+    }
+    public function getShoppingcar(Request $request)
+    {
+        $shoppingcar=session()->get('shoppingcar');
+        $this->renewShoppingcar($request);
+        $final=session()->get('final');
+        return view('shoppingcar', ['data' => $shoppingcar],['final'=>$final]);
+    }
+    public function renewShoppingcar(Request $request)
+    {
+        if (($request->session()->has('shoppingcar'))) {
+            $shoppingcar=session()->get('shoppingcar');
+        }
+        else{
+            $shoppingcar=collect();
+        }
+        $final=0;
+        for($i=0;$i<count($shoppingcar);$i++)
+        {
+            $final+=$shoppingcar[$i]->product->price*$shoppingcar[$i]->amount;
+            $request->session()->put('final',$final);
+        }
     }
 }
 

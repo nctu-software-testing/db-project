@@ -1,6 +1,7 @@
 @section('content')
     <button type="button"  onclick="Self('{{$data->currentPage()}}')">個人</button></td>
     <button type="button"  onclick="Public('{{$data->currentPage()}}')">公共</button></td>
+    <button type="button"  onclick="Shoppingcar()">購物車</button></td>
     <table border="1">
         <tr>
             　<td>id</td>
@@ -16,6 +17,9 @@
               <td>發佈</td>
               <td>刪除</td>
               @endif
+              @if($type!="self")
+              <td>購買</td>
+              @endif
 
         </tr>
         @for ($i = 0; $i < count($data); $i++)
@@ -29,21 +33,22 @@
                 　<td>{{$data[$i]->end_date}}</td>
                   <td>{{$data[$i]->GetState()}}</td>
                   @if($type=="self")
-                  <td>
-                    @if($data[$i]->GetState()=="草稿" and $data[$i]->user_id == $selfid )
-                        <button onclick="Edit('{{$data[$i]->id}}','{{$data->currentPage()}}')">編輯</button>
-                    @endif
-                  </td>
-                  <td>
-                     @if($data[$i]->GetState()=="草稿" and $data[$i]->user_id == $selfid )
+                    @if($data[$i]->GetState()=="草稿" and $data[$i]->user_id == $id )
+                        <td>
+                            <button onclick="Edit('{{$data[$i]->id}}','{{$data->currentPage()}}')">編輯</button>
+                        </td>
+                        <td>
                             <button onclick="Release('{{$data[$i]->id}}')">發佈</button>
-                     @endif
-                  </td>
-                  <td>
-                    @if($data[$i]->GetState()=="草稿" and $data[$i]->user_id == $selfid )
-                        <button onclick="Delete('{{$data[$i]->id}}')">刪除</button>
+                        </td>
+                        <td>
+                            <button onclick="Delete('{{$data[$i]->id}}')">刪除</button>
+                        </td>
                     @endif
-                  </td>
+                  @endif
+                  @if($type!="self")
+                    <td>
+                        <button onclick="Buy('{{$data[$i]->id}}')">購買</button>
+                    </td>
                   @endif
             </tr>
         @endfor
@@ -61,6 +66,9 @@
         @endif
         function Sell() {
             $("#lo").toggle();
+        }
+        function Shoppingcar() {
+            window.open('/any_buy/public/shoppingcar ', '購物車', config='height=600,width=600');
         }
         function Edit(i,p) {
             location.href="/any_buy/public/product?id="+i+"&page="+p;
@@ -96,6 +104,22 @@
         }
         function Public(p) {
             location.href="/any_buy/public/product";
+        }
+        function Buy(id) {
+
+                var amount=prompt("請輸入購買數量!", "1");
+                if (isNaN(amount)||amount<0) {
+                    alert("請輸入正確數字");
+                    return;
+                }
+                $.post("buy",
+                    {
+                        id:id,
+                        amount:amount,
+                    },
+                    function(data){
+                        location.reload();
+                    });
         }
     </script>
 @endsection
