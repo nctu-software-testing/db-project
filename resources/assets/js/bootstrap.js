@@ -9,8 +9,10 @@ window._ = require('lodash');
 
 try {
     window.$ = window.jQuery = require('jquery');
-
+    require('arrive');
     require('bootstrap-sass');
+    require("bootstrap-material-design/scripts");
+
 } catch (e) {}
 
 /**
