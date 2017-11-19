@@ -33,9 +33,9 @@
                 　<td>{{$data[$i]->end_date}}</td>
                   <td>{{$data[$i]->GetState()}}</td>
                   @if($type=="self")
-                    @if($data[$i]->GetState()=="草稿" and $data[$i]->user_id == $id )
+                    @if($data[$i]->GetState()=="草稿" and $data[$i]->user_id == $uid )
                         <td>
-                            <button onclick="Edit('{{$data[$i]->id}}','{{$data->currentPage()}}')">編輯</button>
+                            <button onclick="Edit('{{$data[$i]->id}}')">編輯</button>
                         </td>
                         <td>
                             <button onclick="Release('{{$data[$i]->id}}')">發佈</button>
@@ -70,8 +70,8 @@
         function Shoppingcar() {
             window.open('/any_buy/public/shoppingcar ', '購物車', config='height=600,width=600');
         }
-        function Edit(i,p) {
-            location.href="/any_buy/public/product?id="+i+"&page="+p;
+        function Edit(i) {
+            location.href=location.href+"&id="+i;
         }
         function Delete(id) {
             var ok=confirm("確認刪除?");
@@ -108,7 +108,7 @@
         function Buy(id) {
 
                 var amount=prompt("請輸入購買數量!", "1");
-                if (isNaN(amount)||amount<0) {
+               if (isNaN(amount)||amount<0||!amount)  {
                     alert("請輸入正確數字");
                     return;
                 }

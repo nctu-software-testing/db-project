@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order_Product extends Model
 {
-    protected $table = 'order';
+    protected $table = 'order_product';
     public $timestamps = false;
     /**
      * The attributes that are mass assignable.
@@ -18,5 +18,5 @@ class Order_Product extends Model
     protected $fillable = [
        'order_id','product_id','amount',
     ];
-    protected $product;
+
 }

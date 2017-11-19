@@ -28,3 +28,4 @@
 <a href="category"><Button>(E)類別管理</Button></a><br>
 <a href="product"><Button>(F)商品瀏覽</Button></a><br>
 <a href="discount"><Button>(G)折價管理</Button></a><br>
+<a href="order"><Button>(H)訂單管理</Button></a><br>
