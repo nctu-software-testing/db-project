@@ -15,34 +15,48 @@ use Illuminate\Http\Request;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::group([
+    'middleware' => ['auth']
+], function(){
+    Route::post('/logout', 'UserController@logout');
+
+    //VERIFICATION
+    Route::get('/verification', 'VerificationController@getVerification');
+    Route::post('/newverification','VerificationController@verification');
+
+//CHANGE
+    Route::post('/changepassword','UserController@changePassword');
+    Route::post('/changeemail','UserController@changeEmail');
+
+//LOCATION
+    Route::get('/location', 'LocationController@getLocation');
+    Route::post('/location', 'LocationController@createLocation');
+    Route::get('/verify-image/{vid}/{face}', 'VerificationController@getImage');
+
+
+//USER
+    Route::get('/userinfo', 'UserController@getUserInfo');
+});
+
+Route::group([
+    'middleware' => ['auth.admin']
+], function(){
+
+    Route::post('/verification','VerificationController@postVerification');
+    Route::post('/category', 'CategoryController@createCategory');
+});
+
 //LOGIN LOGOUT
 Route::post('/login', 'UserController@postLogin');
-Route::post('/logout', 'UserController@logout');
 
 //REGISTER
 Route::get('/register', 'UserController@getReg');
 Route::post('/register', 'UserController@postReg');
 
-//VERIFICATION
-Route::get('/verification', 'VerificationController@getVerification');
-Route::post('/verification','VerificationController@postVerification');
-Route::post('/newverification','VerificationController@verification');
-
-//USER
-Route::get('/userinfo', 'UserController@getUserInfo');
-
-//CHANGE
-Route::post('/changepassword','UserController@changePassword');
-Route::post('/changeemail','UserController@changeEmail');
-
-//LOCATION
-Route::get('/location', 'LocationController@getLocation');
-Route::post('/location', 'LocationController@createLocation');
-Route::get('/verify-image/{vid}/{face}', 'VerificationController@getImage');
 
 //CATEGORY
 Route::get('/category', 'CategoryController@getCategory');
-Route::post('/category', 'CategoryController@createCategory');
 
 //PRODUCT
 Route::get('/product', 'ProductController@getProduct');

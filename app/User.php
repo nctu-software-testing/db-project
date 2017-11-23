@@ -7,6 +7,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
+    public const ADMIN_ROLE = 'A';
+    public const BUSINESS_ROLE = 'B';
+    public const CUSTOMER_ROLE = 'C';
     use Notifiable;
     protected $table = 'user';
     public $timestamps = false;
