@@ -21,7 +21,8 @@
             </li>
             -->
             <li class="nav-item">
-                <a class="nav-link waves-effect waves-light" href="{{action('ProductController@getProduct')}}">商品瀏覽</a>
+                <a class="nav-link waves-effect waves-light" accesskey="f"
+                   href="{{action('ProductController@getProduct')}}">商品瀏覽</a>
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle waves-effect waves-light" id="navAdminBtn" data-toggle="dropdown"
@@ -29,8 +30,18 @@
                     管理
                 </a>
                 <div class="dropdown-menu dropdown-primary" aria-labelledby="navAdminBtn">
-                    <a class="dropdown-item waves-effect waves-light" href="{{action('VerificationController@getVerification')}}">會員驗證</a>
-                    <a class="dropdown-item waves-effect waves-light" href="{{action('CategoryController@getCategory')}}">類別管理</a>
+                    <a class="dropdown-item waves-effect waves-light" accesskey="b"
+                       href="{{action('VerificationController@getVerification')}}">會員驗證</a>
+
+                    <a class="dropdown-item waves-effect waves-light" accesskey="e"
+                       href="{{action('CategoryController@getCategory')}}">類別管理</a>
+
+                    <a class="dropdown-item waves-effect waves-light" accesskey="g"
+                       href="{{action('DiscountController@getDiscount')}}">折價管理</a>
+
+                    <a class="dropdown-item waves-effect waves-light" accesskey="h"
+                       href="{{action('OrderController@getOrder')}}">訂單管理</a>
+
                 </div>
             </li>
             <form class="form-inline">

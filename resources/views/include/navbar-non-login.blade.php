@@ -24,7 +24,7 @@
         <hr>
         <div class="text-right">
             <p class="login-font-small grey-text">還沒有帳號?
-                <a href="#" class="blue-text ml-1" id="pop_signup" data-form="#register">註冊</a></p>
+                <a href="#" class="blue-text ml-1" id="pop_signup" data-form="#register" accesskey="a">註冊</a></p>
         </div>
     </div>
 </form>
