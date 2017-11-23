@@ -1,5 +1,26 @@
 $head-padding: 16px;
 
+.h1, .h2, .h3,.h4, body, h1, h2, h3, h4, h5, h6 {
+  font-family: Roboto, "Noto Sans CJK TC", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei UI", "Microsoft YaHei UI", "Microsoft JhengHei", "Microsoft YaHei", Arial, Helvetica, sans-serif;
+}
+
+.dropdown-menu .divider {
+  background-color: rgba(0,0,0,.12);
+}
+
+.dropdown-menu .divider {
+  height: 1px;
+  margin: 9px 0;
+  overflow: hidden;
+  background-color: #e5e5e5;
+}
+
+#logo-img{
+  height: 2rem;
+  line-height: 0;
+  margin: -.5rem 0 -.25rem 0;
+}
+
 .header-padding {
   height: 50px;
 }

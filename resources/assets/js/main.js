@@ -3,17 +3,15 @@ const ApiPrefix = require('./ApiPrefix');
 
 let CSRF_TOKEN_ELEMENT = document.querySelector('meta[name="csrf-token"]') || {};
 
-$.ajaxSetup({
-    headers: {
-        'X-CSRF-TOKEN': CSRF_TOKEN_ELEMENT.content
-    }
-});
-
 function ajax(method, url, data) {
     method = method.toUpperCase();
     let head = {};
     data = data || {};
     head['X-CSRF-TOKEN'] = CSRF_TOKEN_ELEMENT.content;
+
+    if(data instanceof HTMLFormElement) {
+        data = new FormData(data);
+    }
 
     let conf = {
         data: data,

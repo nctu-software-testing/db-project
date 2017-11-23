@@ -16,7 +16,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 //LOGIN LOGOUT
-Route::post('/login', 'UserController@login');
+Route::post('/login', 'UserController@postLogin');
 Route::post('/logout', 'UserController@logout');
 
 //REGISTER

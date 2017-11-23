@@ -6,12 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     @include("include.head")
 </head>
-<body>
+<body class="mdb-skin-custom currency-eur">
+@include('include.navbar')
 @include("log")
 @include("login")
-@yield('content')
-
-<script type="text/javascript" src="{{asset('dist/js/app.js')}}"></script>
+<main>
+    <div class="container">
+        @yield('content')
+    </div>
+</main>
+@include('include.egg')
 @yield('eofScript')
 </body>
 </html>
