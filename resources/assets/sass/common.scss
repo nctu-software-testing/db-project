@@ -771,14 +771,6 @@ hr[data-text] {
   max-height: 150px;
 }
 
-.like-btn {
-
-  &.liked {
-    color: $brand-primary !important;
-    background-color: rgba(153, 153, 153, 0.2);
-  }
-}
-
 .fb-like__container{
   overflow: hidden;
 }

@@ -1,0 +1,5 @@
+@charset "UTF-8";
+@import url(https://fonts.googleapis.com/icon?family=Material+Icons);
+@import url(mdbootstrap.4.4.0.min.css);
+@import url(materialicons.css);
+@import url(../dist/css/app.css);

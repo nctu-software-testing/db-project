@@ -4,8 +4,6 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 require('./helper');
-require('./bootstrap');
-require('./extra/jquery.dropdown.js');
 require('./extra/jquery.tmpl.js');
 let main = require('./main');
 require('./after.dom.loaded');

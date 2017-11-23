@@ -13,10 +13,7 @@
   "devDependencies": {
     "arrive": "^2.4.1",
     "axios": "^0.17",
-    "bootstrap-material-design": "^0.5.10",
-    "bootstrap-sass": "^3.3.7",
     "cross-env": "^3.2.3",
-    "jquery": "^3.2",
     "laravel-mix": "1.*",
     "lodash": "^4.17.4",
     "postcss-css-variables": "^0.8.0"
