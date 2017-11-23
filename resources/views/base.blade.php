@@ -4,14 +4,18 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    @include("header")
-    <title>Laravel</title>
+    @include("include.head")
 </head>
-<body>
+<body class="mdb-skin-custom currency-eur">
+@include('include.navbar')
 @include("log")
 @include("login")
-
-@yield('content')
+<main>
+    <div class="container">
+        @yield('content')
+    </div>
+</main>
+@include('include.egg')
 @yield('eofScript')
 </body>
 </html>

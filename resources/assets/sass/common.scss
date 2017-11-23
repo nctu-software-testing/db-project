@@ -1,57 +1,28 @@
 $head-padding: 16px;
 
-.header-padding {
-  height: 50px;
+.h1, .h2, .h3,.h4, body, h1, h2, h3, h4, h5, h6 {
+  font-family: Roboto, "Noto Sans CJK TC", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei UI", "Microsoft YaHei UI", "Microsoft JhengHei", "Microsoft YaHei", Arial, Helvetica, sans-serif;
 }
 
-#banner {
-  border-bottom: none
+.dropdown-menu .divider {
+  background-color: rgba(0,0,0,.12);
 }
 
-.page-header h1 {
-  font-size: 4em
+.dropdown-menu .divider {
+  height: 1px;
+  margin: 9px 0;
+  overflow: hidden;
+  background-color: #e5e5e5;
 }
 
-.bs-docs-section {
-  margin-top: 8em
+#logo-img{
+  height: 2rem;
+  line-height: 0;
+  margin: -.5rem 0 -.25rem 0;
 }
 
-.bs-component {
-  position: relative
-}
-
-.bs-component .modal {
-  position: relative;
-  top: auto;
-  right: auto;
-  left: auto;
-  bottom: auto;
-  z-index: 1;
-  display: block
-}
-
-.bs-component .modal-dialog {
-  width: 90%
-}
-
-.bs-component .popover {
-  position: relative;
-  display: inline-block;
-  width: 220px;
-  margin: 20px
-}
-
-#source-button {
-  position: absolute;
-  top: 0;
-  right: 0;
-  z-index: 100;
-  font-weight: bold;
-  padding: 5px 10px;
-}
-
-.progress {
-  margin-bottom: 10px
+main{
+  padding-top: 5.5rem;
 }
 
 footer {
@@ -769,14 +740,6 @@ hr[data-text] {
 
 .loading > .page__loading {
   max-height: 150px;
-}
-
-.like-btn {
-
-  &.liked {
-    color: $brand-primary !important;
-    background-color: rgba(153, 153, 153, 0.2);
-  }
 }
 
 .fb-like__container{

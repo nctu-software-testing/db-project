@@ -1,24 +1,10 @@
-
 // Fonts
 @import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600);
-@import url(https://fonts.googleapis.com/icon?family=Material+Icons);
 @import url(https://fonts.googleapis.com/earlyaccess/notosanstc.css);
-@import url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css);
 
-
-// Variables
-@import "variables";
-
-// jQuery dropdown
-@import "../css/jquery.dropdown.css";
+// Material Design for Bootstrap 4
 @import "../css/ecss.css";
-
-// Bootstrap
-@import "../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
-
-// Bootstrap Material
-@import "../../../node_modules/bootstrap-material-design/sass/bootstrap-material-design.scss";
-@import "../../../node_modules/bootstrap-material-design/sass/ripples.scss";
+@import "ajaxAuth";
 
 // Common style
 @import "common";
