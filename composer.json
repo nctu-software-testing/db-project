@@ -56,6 +56,14 @@
             "php artisan ide-helper:meta",
             "php artisan ide-helper:models --nowrite",
             "php artisan optimize"
+        ],
+        "deploy": [
+            "git pull",
+            "npm install",
+            "composer install",
+            "php artisan config:cache",
+            "npm run prod",
+            "php artisan optimize"
         ]
     },
     "config": {
