@@ -56,6 +56,24 @@
             "php artisan ide-helper:meta",
             "php artisan ide-helper:models --nowrite",
             "php artisan optimize"
+        ],
+        "cache-clear": [
+            "php artisan cache:clear",
+            "php artisan config:clear",
+            "php artisan debugbar:clear",
+            "php artisan route:clear",
+            "php artisan view:clear"
+        ],
+        "do-cache": [
+            "php artisan config:cache",
+            "php artisan route:cache"
+        ],
+        "deploy": [
+            "git pull",
+            "npm install",
+            "composer install",
+            "composer run cache-clear",
+            "npm run prod"
         ]
     },
     "config": {
