@@ -25,17 +25,17 @@ Route::group([
     Route::get('/verification', 'VerificationController@getVerification');
     Route::post('/newverification','VerificationController@verification');
 
-//CHANGE
+    //CHANGE
     Route::post('/changepassword','UserController@changePassword');
     Route::post('/changeemail','UserController@changeEmail');
 
-//LOCATION
+    //LOCATION
     Route::get('/location', 'LocationController@getLocation');
     Route::post('/location', 'LocationController@createLocation');
     Route::get('/verify-image/{vid}/{face}', 'VerificationController@getImage');
 
 
-//USER
+    //USER
     Route::get('/userinfo', 'UserController@getUserInfo');
 });
 
@@ -47,12 +47,17 @@ Route::group([
     Route::post('/category', 'CategoryController@createCategory');
 });
 
-//LOGIN LOGOUT
-Route::post('/login', 'UserController@postLogin');
+Route::group([
+    'middleware' => ['auth.non']
+], function(){
+    //REGISTER
+    Route::get('/register', 'UserController@getReg');
+    Route::post('/register', 'UserController@postReg');
 
-//REGISTER
-Route::get('/register', 'UserController@getReg');
-Route::post('/register', 'UserController@postReg');
+    //LOGIN LOGOUT
+    Route::post('/login', 'UserController@postLogin');
+});
+
 
 
 //CATEGORY

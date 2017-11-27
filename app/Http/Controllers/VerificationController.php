@@ -22,18 +22,19 @@ class VerificationController extends BaseController
     {
         if (!($request->session()->has('user')))
             return redirect()->back();
-        if ($request->session()->get('user')->role == "A") {
+        if ($request->session()->get('user.role') === "A") {
             $data = User::
             join('verification', 'user.id', '=', 'verification.user_id')
                 ->paginate($this->paginate);
-            return view('verification.verification', ['data' => $data]);
+            return view('verification.verificationAdmin', ['data' => $data]);
         } else {
             $id = $request->session()->get('user')->id;
             $data = User::
-            join('verification', 'user.id', '=', 'verification.user_id')
+            join('verification as v', 'user.id', '=', 'v.user_id')
                 ->where('user.id', '=', $id)
-                ->paginate($this->paginate);
-            return view('verification.verification', ['data' => $data]);
+                ->orderBy('v.upload_datetime', 'DESC')
+                ->first();
+            return view('verification.verificationUser', ['data' => $data]);
         }
     }
 

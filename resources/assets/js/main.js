@@ -2,6 +2,9 @@ const Bezier = require('./Bezier');
 const ApiPrefix = require('./ApiPrefix');
 
 let CSRF_TOKEN_ELEMENT = document.querySelector('meta[name="csrf-token"]') || {};
+$.ajaxSetup({
+    headers: {'X-CSRF-TOKEN': CSRF_TOKEN_ELEMENT.content}
+});
 
 function ajax(method, url, data) {
     method = method.toUpperCase();
@@ -9,7 +12,7 @@ function ajax(method, url, data) {
     data = data || {};
     head['X-CSRF-TOKEN'] = CSRF_TOKEN_ELEMENT.content;
 
-    if(data instanceof HTMLFormElement) {
+    if (data instanceof HTMLFormElement) {
         data = new FormData(data);
     }
 
@@ -67,7 +70,6 @@ function bAlert(title, body) {
 
     return m;
 }
-
 
 
 require('./safariWarning');
@@ -137,6 +139,5 @@ module.exports = {
     Bezier: Bezier,
     Imgur: require('./Imgur'),
     ShowImg: require('./ImgModal').ShowImg,
-    Modules: {
-    }
+    Modules: {}
 };

@@ -104,7 +104,7 @@
                                     <div class="col-md-6">
                                         <div class="md-form form-group">
                                             <input type="text" id="sn" name="sn"
-                                                   placeholder="不可為空"
+                                                   placeholder="請輸入證件號碼"
                                                    class="form-control validate" required>
                                             <label for="sn">
                                                 <span class="for-b">商家統一編號</span>
