@@ -9,6 +9,11 @@ class CategoryController extends BaseController
 {
     public $paginate = 10;
 
+    public function __construct()
+    {
+        parent::__construct('category');
+    }
+
     public function getCategory(Request $request)
     {
 

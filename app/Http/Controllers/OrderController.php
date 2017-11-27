@@ -7,11 +7,15 @@ use App\Order;
 use App\Order_Product;
 use App\Product;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller as BaseController;
 
 class OrderController extends BaseController
 {
     public $paginate = 10;
+
+    public function __construct()
+    {
+        parent::__construct('order');
+    }
 
     public function getOrder(Request $request)
     {
