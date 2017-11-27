@@ -216,7 +216,7 @@ class ProductController extends BaseController
         }
     }
 
-    public function getShoppingcar(Request $request)
+    public function getShoppingCar(Request $request)
     {
         $shoppingcar = session()->get('shoppingcar');
         $this->renewShoppingcar($request);

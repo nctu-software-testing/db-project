@@ -15,6 +15,7 @@
         @yield('content')
     </div>
 </main>
+@include('include.footer')
 @include('include.egg')
 @yield('eofScript')
 </body>

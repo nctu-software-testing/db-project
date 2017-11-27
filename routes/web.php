@@ -72,7 +72,7 @@ Route::post('/deleteProduct','ProductController@delProduct');
 Route::post('/releaseProduct','ProductController@releaseProduct');
 //購物車
 Route::post('/buy','ProductController@buyProduct');
-Route::get('/shoppingcar', 'ProductController@getShoppingcar');
+Route::get('/shoppingcar', 'ProductController@getShoppingCar');
 Route::post('/changeAmount','ProductController@changeAmount');
 Route::post('/removeProductFromShoppingcar','ProductController@removeProductFromShoppingcar');
 //DISCOUNT

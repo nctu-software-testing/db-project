@@ -50,7 +50,7 @@
     <li class="nav-item">
         <a id="navbar-static-login" class="nav-link waves-effect waves-light" data-form="#login">
             <i class="fa fa-sign-in mr-1"></i>
-            <span class="clearfix d-none d-sm-inline-block">Log In</span>
+            <span class="clearfix d-none d-sm-inline-block">登入</span>
         </a>
     </li>
 @endsection
