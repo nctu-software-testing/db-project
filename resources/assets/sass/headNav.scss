@@ -1,13 +1,13 @@
-.navbar > .container .navbar-brand {
-  padding-top: 20px;
-  padding-bottom: 20px;
-  height: 25px;
-  line-height: 25px;
-  box-sizing: content-box;
-  @media (max-width: 1199px) {
-    padding-top: 15px;
-    padding-bottom: 15px;
-    height: 27px;
-    line-height: 27px;
+#headNav{
+  .material-icons{
+    font-size: 2rem;
+    line-height: 2rem;
+    vertical-align: middle;
   }
+
+  .dropdown-header{
+    padding-left: .5rem;
+    padding-right: .5rem;
+  }
+  .flex-center>
 }
