@@ -51,6 +51,7 @@ class UserController extends BaseController
         if ($check_user!==0) {
             return $this->result('已有相同帳戶', false);
         } else {
+            $new_user->save();
             return $this->result('註冊成功', true);
         }
     }
