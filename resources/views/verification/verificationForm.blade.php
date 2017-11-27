@@ -1,46 +1,51 @@
-@section('content')
-    <form action="newverification" method="post" enctype="multipart/form-data">
-        <div>
-            正面圖片:<input type="file" name="file1" id="uploader1" required><br>
-            <img class="preview1" style="max-width: 150px; max-height: 150px;">
-            <div class="size"></div>
+<hr/>
+<h4>上船證件</h4>
+<form action="{{action('VerificationController@verification')}}" method="post" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-12">
+            <div class="id-card">
+                <img src="{{asset("images/card_front.png")}}"/>
+                <input type="file" class="img-uploader" name="file1" id="uploader1" required accept="image/*">
+            </div>
+
+            <div class="id-card">
+                <img src="{{asset("images/card_back.png")}}"/>
+                <input type="file" class="img-uploader" name="file2" id="uploader2" required accept="image/*">
+            </div>
         </div>
-        <div>
-            背面圖片:<input type="file" name="file2" id="uploader2" required><br>
-            <img class="preview2" style="max-width: 150px; max-height: 150px;">
-            <div class="size"></div>
+        <div class="col-12">
+
+            <button type="submit" name="_token"
+                    value="{{csrf_token()}}"
+                    class="btn btn-dtc waves-effect waves-light">
+                送出
+            </button>
         </div>
-        <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
-        <input type="submit" value="送出">
-    </form>
-@endsection
+    </div>
+</form>
 @section('eofScript')
-<script>
-    var re = /\.(jpg|gif|png)$/; //允許的圖片副檔名
-    $("#uploader1").change(function(){
-        Check(this,$('.preview1'));
-    })
-    $("#uploader2").change(function(){
-        Check(this,$('.preview2'));
-    })
-    function Check(f,p) {
-        var file=f.files[0];
-        if(!f.value)
-            p.attr('src', "");
-        if (file.name.length !=0 && !re.test(file.name)) {
-            alert("只允許上傳JPG、PNG或GIF影像檔");
-            p.attr('src', "");
-            f.value="";
-            return false;
-        }
-        else
-        {
+    <script>
+        $('.img-uploader').change(function () {
+            const DEF_ATTR = 'data-default';
+            let imgObj = this.parentNode.querySelector('img');
+            let defaultSrc = imgObj.getAttribute(DEF_ATTR) || imgObj.src;
+            imgObj.setAttribute(DEF_ATTR, defaultSrc);
+
+            let f = this.files[0];
+            if (!this.value || !f.type.startsWith("image/")) {
+                if (this.value) {
+                    toastr.error("請選擇圖片檔");
+                }
+                this.value = "";
+                imgObj.src = defaultSrc;
+                return;
+            }
+
             var reader = new FileReader();
             reader.onload = function (e) {
-                p.attr('src', e.target.result);
-            }
-            reader.readAsDataURL(file);
-        }
-    }
-</script>
+                imgObj.src = this.result;
+            };
+            reader.readAsDataURL(f);
+        });
+    </script>
 @endsection
