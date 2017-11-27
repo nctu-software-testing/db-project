@@ -1,39 +1,40 @@
-@if (session('user'))
-    Hello, {{ session('user')->name}}
-    @if (session('user')->enable==1)
-        你已通過驗證，可以正常使用該網站的功能
-    @else
-        你未通過驗證，快去驗證
-    @endif
-
-    <form action="logout" method="post">
-        <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
-        <input type="submit" value="登出">
-    </form>
+<div id="temppp">
+@if (session('user.enable', 0)!==1)
+<script>
+    $(()=>toastr.warning('你未通過驗證，快去驗證', '', {
+        positionClass: 'toast-bottom-right',
+        timeOut: 1e20
+    }));
+</script>
 @endif
-<div class="hidden">
+
+<div>
+    <br/>
+    <br/>
+    <br/>
     <a href="register">
         <Button>(A)註冊</Button>
-    </a><br>
+    </a>
     <a href="verification">
         <Button>(B)會員驗證</Button>
-    </a><br>
+    </a>
     <a href="userinfo">
         <Button>(C)會員資料</Button>
-    </a><br>
+    </a>
     <a href="location">
         <Button>(D)地址管理</Button>
-    </a><br>
+    </a>
     <a href="category">
         <Button>(E)類別管理</Button>
-    </a><br>
+    </a>
     <a href="product">
         <Button>(F)商品瀏覽</Button>
-    </a><br>
+    </a>
     <a href="discount">
         <Button>(G)折價管理</Button>
-    </a><br>
+    </a>
     <a href="order">
         <Button>(H)訂單管理</Button>
     </a><br>
+</div>
 </div>

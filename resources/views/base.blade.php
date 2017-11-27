@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     @include("include.head")
 </head>
-<body class="mdb-skin-custom currency-eur">
+<body class="mdb-skin-custom currency-eur page-{{$pageName ?? 'base'}}">
 @include('include.navbar')
 @include("log")
 @include("login")

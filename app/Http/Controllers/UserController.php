@@ -10,6 +10,11 @@ class UserController extends BaseController
 {
     public $paginate = 10;
 
+    public function __construct()
+    {
+        parent::__construct('user');
+    }
+
     public function getReg(Request $request)
     {
         return view('register');
@@ -22,20 +27,18 @@ class UserController extends BaseController
         $password = bcrypt(request('password'));
         $name = request('name');
         $role = request('role');
-        if (!preg_match("/B|C/", $role)) {
-            $request->session()->flash('log', '參數錯誤');
-            return redirect()->back();
+        if (!preg_match("/^(B|C)$/", $role)) {
+            return $this->result('參數錯誤', false);
         }
         $sn = request('sn');
         $gender = request('gender');
-        if (!preg_match("/男|女/", $gender)) {
-            $request->session()->flash('log', '參數錯誤');
-            return redirect()->back();
+        if (!preg_match("/^(男|女)$/", $gender)) {
+            return $this->result('參數錯誤', false);
         }
         $email = request('email');
         $birthday = request('birthday');
         //資料封裝
-        $new_user = new User;
+        $new_user = new User();
         $new_user->account = $account;
         $new_user->password = $password;
         $new_user->role = $role;
@@ -44,14 +47,11 @@ class UserController extends BaseController
         $new_user->gender = $gender;
         $new_user->email = $email;
         $new_user->birthday = $birthday;
-        $check_user = User::where('account', '=', $account)->first();
-        if ($check_user) {
-            $request->session()->flash('log', '已有相同帳戶');
-            return redirect()->back();
+        $check_user = User::where('account', $account)->count();
+        if ($check_user!==0) {
+            return $this->result('已有相同帳戶', false);
         } else {
-            $new_user->save();
-            $request->session()->flash('log', '註冊成功');
-            return redirect()->back();
+            return $this->result('註冊成功', true);
         }
     }
 

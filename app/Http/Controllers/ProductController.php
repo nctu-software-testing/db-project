@@ -9,7 +9,6 @@ use App\Product;
 use App\Product_Picture;
 use DateTime;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 
@@ -17,6 +16,11 @@ use Illuminate\Support\Facades\Storage;
 class ProductController extends BaseController
 {
     public $paginate = 10;
+
+    public function __construct()
+    {
+        parent::__construct('product');
+    }
 
     public function getProduct(Request $request)
     {

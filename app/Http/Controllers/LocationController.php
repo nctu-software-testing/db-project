@@ -9,6 +9,11 @@ class LocationController extends BaseController
 {
     public const PAGINATE = 10;
 
+    public function __construct()
+    {
+        parent::__construct('location');
+    }
+
     public function getLocation(Request $request)
     {
 

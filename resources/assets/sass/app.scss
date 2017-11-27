@@ -5,9 +5,14 @@
 // Material Design for Bootstrap 4
 @import "../css/ecss.css";
 @import "ajaxAuth";
+@import "form";
 
 // Common style
 @import "common";
+
+.page-user{
+  @import "pageUser";
+}
 
 // Img modal style
 @import "img-modal";

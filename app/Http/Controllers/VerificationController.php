@@ -6,13 +6,17 @@ use App\User;
 use App\Verification;
 use DateTime;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 
 class VerificationController extends BaseController
 {
     public $paginate = 10;
+
+    public function __construct()
+    {
+        parent::__construct('verification');
+    }
 
     public function getVerification(Request $request)
     {

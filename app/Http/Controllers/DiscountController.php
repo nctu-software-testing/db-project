@@ -4,11 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Discount;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller as BaseController;
 
 class DiscountController extends BaseController
 {
     public $paginate = 10;
+
+    public function __construct()
+    {
+        parent::__construct('discount');
+    }
 
     public function getDiscount(Request $request)
     {
