@@ -5,6 +5,7 @@
             <a href="{{action('ProductController@getShoppingCar')}}" class="nav-link waves-light">
                 <i class="material-icons">shopping_cart</i>
                 <span class="name">購物車</span>
+                <span class="num">87</span>
             </a>
         </div>
         &emsp;

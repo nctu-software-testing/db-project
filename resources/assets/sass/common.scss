@@ -4,16 +4,16 @@ $head-padding: 16px;
   box-sizing: border-box;
 }
 
-body{
+body {
   background-color: #eee;
 }
 
-.h1, .h2, .h3,.h4, body, h1, h2, h3, h4, h5, h6 {
+.h1, .h2, .h3, .h4, body, h1, h2, h3, h4, h5, h6 {
   font-family: Roboto, "Noto Sans CJK TC", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei UI", "Microsoft YaHei UI", "Microsoft JhengHei", "Microsoft YaHei", Arial, Helvetica, sans-serif;
 }
 
 .dropdown-menu .divider {
-  background-color: rgba(0,0,0,.12);
+  background-color: rgba(0, 0, 0, .12);
 }
 
 .dropdown-menu .divider {
@@ -23,17 +23,48 @@ body{
   background-color: #e5e5e5;
 }
 
-#logo-img{
+#logo-img {
   height: 2rem;
   line-height: 0;
   margin: -.5rem 0 -.25rem 0;
 }
 
-.navPadding{
+.navPadding {
   margin-bottom: 5rem;
 }
 
-main{
+main {
   min-height: calc(100vh - 13vh);
   margin-top: .5rem;
 }
+
+.nav-item {
+  & {
+    position: relative;
+  }
+  .num {
+    & {
+      height: 1rem;
+      line-height: 1rem;
+      color: #fff;
+      background-color: #d0021b;
+      border-radius: 1rem;
+      position: absolute;
+      padding: 1px 3px;
+      font-size: .8rem;
+      bottom: 2px;
+      left: 6px;
+      min-width: 1rem;
+      z-index: 30;
+      text-align: center;
+      box-sizing: content-box;
+      box-shadow: rgba(0, 0, 0, .3) 1px 1px 3px;
+      font-family: sans-serif;
+    }
+    &:empty {
+      display: none;
+    }
+
+  }
+}
+
