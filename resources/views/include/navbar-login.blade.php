@@ -13,7 +13,7 @@
                aria-haspopup="true">
                 <i class="material-icons">account_circle</i>
             </a>
-            <div class="dropdown-menu" aria-labelledby="userDropdown"
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown"
                  data-dropdown-in="fadeIn" data-dropdown-out="fadeOut" style="position: absolute;">
                 <h6 class="dropdown-header">
 
