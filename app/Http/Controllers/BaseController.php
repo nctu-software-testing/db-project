@@ -25,4 +25,11 @@ class BaseController extends \Illuminate\Routing\Controller
             'success' => $success,
         ]);
     }
+
+    protected function setMessage($message, $type = 'info'){
+        return session()->flash('log', [
+            'message'   =>  $message,
+            'type'  =>  $type
+        ]);
+    }
 }

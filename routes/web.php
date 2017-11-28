@@ -63,9 +63,10 @@ Route::group([
 Route::get('/category', 'CategoryController@getCategory');
 
 //PRODUCT
-Route::get('/product', 'ProductController@getProduct');
+Route::get('/products', 'ProductController@getProducts');
 Route::get('/item', 'ProductController@getItem');
-Route::post('/sell', 'ProductController@sell');
+Route::get('/sell/{id}', 'ProductController@getSell');
+Route::post('/sell', 'ProductController@postSell');
 Route::get('/product-image/{pid}/{id}', 'ProductController@getImage');
 Route::post('/deleteProduct', 'ProductController@delProduct');
 Route::post('/releaseProduct', 'ProductController@releaseProduct');
