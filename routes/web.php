@@ -83,3 +83,8 @@ Route::post('/checkout', 'ProductController@checkOut');
 //ORDER
 Route::get('/order', 'OrderController@getOrder');
 Route::get('/orderDetail', 'OrderController@getOrderDetail');
+
+
+Route::get('/function', function(){
+    return view('function');
+});
