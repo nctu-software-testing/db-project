@@ -78,7 +78,7 @@ class UserController extends BaseController
     {
         $request->session()->flush();
         $request->session()->flash('log', '登出成功');
-        return redirect('register');
+        return redirect('/');
     }
 
     public function getUserInfo(Request $request)
@@ -109,7 +109,7 @@ class UserController extends BaseController
             $check_user->save();
             $request->session()->flush();
             $request->session()->flash('log', '修改成功，請重新登入。');
-            return redirect('register');
+            return redirect('/');
         } else {
             $request->session()->put('user', $check_user);
             $request->session()->flash('log', '密碼不符合');
