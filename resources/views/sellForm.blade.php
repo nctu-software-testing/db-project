@@ -1,7 +1,7 @@
  <form action="sell" method="post" enctype="multipart/form-data" id="Form">
         <input type="hidden" name="Edit_id" id="Edit_id" value={{$id}}>
         商品名稱:<input type="text" name="title" value="{{$editdata->product_name}}" required><br>
-        商品類別:<select name="category"required>
+        商品類別:<select name="category"required  class="mdb-select">
         @for ($i = 0; $i < count($category); $i++)
                 　<option value={{$category[$i]->id}}
                 @if($category[$i]->id==$editdata->category_id)

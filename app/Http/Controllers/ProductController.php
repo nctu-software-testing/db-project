@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Category;
+use App\Location;
 use App\Order;
 use App\Order_Product;
 use App\Product;

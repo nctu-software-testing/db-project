@@ -25,4 +25,6 @@ $(function () {
         });
         e.preventDefault();
     });
+
+    $('select').material_select();
 });
