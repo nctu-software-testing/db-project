@@ -11,8 +11,10 @@
 */
 
 Route::get('/', function () {
+    $category = \App\Category::orderBy('id')->get();
     return view('welcome', [
-        'pageName' => 'index'
+        'pageName' => 'index',
+        'category' => $category,
     ]);
 });
 
