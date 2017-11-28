@@ -11,9 +11,14 @@
 @include("log")
 @yield('header')
 <main>
-    <div class="container">
-        @yield('content')
-    </div>
+    @hasSection('content-full')
+        @yield('content-full')
+    @else
+        <div class="container">
+            @yield('content')
+        </div>
+    @endif
+
 </main>
 @include('include.footer')
 @include('include.egg')
