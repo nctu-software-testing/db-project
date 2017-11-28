@@ -1,4 +1,3 @@
-
 <script>
     window.onload=function() {
         @if (session('log'))

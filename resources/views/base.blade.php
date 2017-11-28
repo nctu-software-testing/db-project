@@ -9,14 +9,20 @@
 <body class="mdb-skin-custom currency-eur page-{{$pageName ?? 'base'}}">
 @include('include.navbar')
 @include("log")
-@include("login")
+@yield('header')
 <main>
-    <div class="container">
-        @yield('content')
-    </div>
+    @hasSection('content-full')
+        @yield('content-full')
+    @else
+        <div class="container">
+            @yield('content')
+        </div>
+    @endif
+
 </main>
 @include('include.footer')
 @include('include.egg')
+@include("verification.notice")
 @yield('eofScript')
 </body>
 </html>

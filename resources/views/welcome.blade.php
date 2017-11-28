@@ -1,71 +1,73 @@
 @extends('base')
-@section('content')
-<!-- Styles -->
-<style>
-    html, body {
-        background-color: #fff;
-        color: #636b6f;
-        font-weight: 100;
-        height: 100vh;
-        margin: 0;
-    }
-
-    .full-height {
-        height: 100vh;
-    }
-
-    .flex-center {
-        align-items: center;
-        display: flex;
-        justify-content: center;
-    }
-
-    .position-ref {
-        position: relative;
-    }
-
-    .top-right {
-        position: absolute;
-        right: 10px;
-        top: 18px;
-    }
-
-    .content {
-        text-align: center;
-        font-family: 'Raleway', sans-serif;
-    }
-
-    .title {
-        font-size: 84px;
-    }
-
-    .links > a {
-        color: #636b6f;
-        padding: 0 25px;
-        font-size: 12px;
-        font-weight: 600;
-        letter-spacing: .1rem;
-        text-decoration: none;
-        text-transform: uppercase;
-    }
-
-    .m-b-md {
-        margin-bottom: 30px;
-    }
-</style>
-<div class="flex-center position-ref full-height">
-    <div class="content">
-        <div class="title m-b-md">
-            Laravel
+@section('header')
+    <section id="banner">
+        <div class="container">
+            <!--Carousel Wrapper-->
+            <div id="carousel" class="carousel slide carousel-fade" data-ride="carousel">
+                <!--Indicators-->
+                <ol class="carousel-indicators">
+                </ol>
+                <!--/.Indicators-->
+                <!--Slides-->
+                <div class="carousel-inner" role="listbox">
+                </div>
+                <!--/.Slides-->
+                <!--Controls-->
+                <a class="carousel-control-prev" href="#carousel" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carousel" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+                <!--/.Controls-->
+            </div>
+            <!--/.Carousel Wrapper-->
         </div>
 
-        <div class="links">
-            <a href="https://laravel.com/docs">Documentation</a>
-            <a href="https://laracasts.com">Laracasts</a>
-            <a href="https://laravel-news.com">News</a>
-            <a href="https://forge.laravel.com">Forge</a>
-            <a href="https://github.com/laravel/laravel">GitHub</a>
-        </div>
-    </div>
-</div>
+        @endsection
+        @section('content-full')
+
+            <section id="features">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-4 feature">
+                            <div class="icon-container">
+                                <img src="{{asset('images/icons/shipping.png')}}"/>
+                            </div>
+                            <div class="text-container">
+                        <span class="desc">
+                            提供宅配與店取服務
+                        </span>
+                            </div>
+                        </div>
+                        <div class="col-4 feature">
+                            <div class="icon-container">
+                                <img src="{{asset('images/icons/payment.png')}}"/>
+                            </div>
+                            <div class="text-container">
+                        <span class="desc">
+                            簡易又安全的付款方式
+                        </span>
+                            </div>
+                        </div>
+                        <div class="col-4 feature">
+                            <div class="icon-container">
+                                <img src="{{asset('images/icons/protect.png')}}"/>
+                            </div>
+                            <div class="text-container">
+                            <span class="desc">
+                                買家保障&amp;購物無憂
+                            </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        @endsection
+        @section('eofScript')
+            <script>
+                window.Pages.Index.init();
+            </script>
 @endsection

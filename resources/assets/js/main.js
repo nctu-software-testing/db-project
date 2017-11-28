@@ -139,5 +139,8 @@ module.exports = {
     Bezier: Bezier,
     Imgur: require('./Imgur'),
     ShowImg: require('./ImgModal').ShowImg,
-    Modules: {}
+    Modules: {},
+    Pages: {
+        Index: require('./pages/index'),
+    },
 };
