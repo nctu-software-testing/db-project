@@ -16,7 +16,7 @@ class Product extends Model
      * @var array
      */
     protected $fillable = [
-        'product_name','product_information','expiration_date','end_date','price','state','category_id','user_id',
+        'product_name','product_information','start_date','end_date','price','state','category_id','user_id',
     ];
     public function GetState()
     {
@@ -30,12 +30,12 @@ class Product extends Model
     }
     public function GetDateTime($a)
     {
-        if(!$this->expiration_date)
+        if(!$this->start_date)
             return"";
         if($a==0)
-        return explode(" ", $this->expiration_date)[0];
+        return explode(" ", $this->start_date)[0];
         if($a==1)
-            return explode(" ", $this->expiration_date)[1];
+            return explode(" ", $this->start_date)[1];
         if($a==2)
             return explode(" ", $this->end_date)[0];
         if($a==3)

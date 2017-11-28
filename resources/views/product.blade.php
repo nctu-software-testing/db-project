@@ -29,7 +29,7 @@
                 　<td>{{$data[$i]->product_type}}</td>
                   <td>{{$data[$i]->getUserName()}}</td>
                   <td>{{$data[$i]->price}}元</td>
-                　<td>{{$data[$i]->expiration_date}}</td>
+                　<td>{{$data[$i]->start_date}}</td>
                 　<td>{{$data[$i]->end_date}}</td>
                   <td>{{$data[$i]->GetState()}}</td>
                   @if($type=="self")

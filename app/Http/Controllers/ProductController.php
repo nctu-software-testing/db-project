@@ -35,7 +35,7 @@ class ProductController extends BaseController
         if ($type == "self") {
             $data = Product::
             join('category', 'on_product.category_id', '=', 'category.id')
-                ->select('on_product.id', 'product_name', 'product_information', 'expiration_date', 'end_date', 'price', 'state', 'product_type', 'user_id')
+                ->select('on_product.id', 'product_name', 'product_information', 'start_date', 'end_date', 'price', 'state', 'product_type', 'user_id')
                 ->where('user_id', $uid)
                 ->paginate($this->paginate);
         } //公開瀏覽
@@ -43,9 +43,9 @@ class ProductController extends BaseController
             $now = new DateTime();
             $data = Product::
             join('category', 'on_product.category_id', '=', 'category.id')
-                ->select('on_product.id', 'product_name', 'product_information', 'expiration_date', 'end_date', 'price', 'state', 'product_type', 'user_id')
+                ->select('on_product.id', 'product_name', 'product_information', 'start_date', 'end_date', 'price', 'state', 'product_type', 'user_id')
                 ->where('state', 1)
-                ->where('expiration_date', '<=', $now)
+                ->where('start_date', '<=', $now)
                 ->where('end_date', '>=', $now)
                 ->paginate($this->paginate);
         }
@@ -82,7 +82,7 @@ class ProductController extends BaseController
             return redirect()->back();
         $data = Product::
         join('category', 'on_product.category_id', '=', 'category.id')
-            ->select('on_product.id', 'product_name', 'product_information', 'expiration_date', 'end_date', 'price', 'state', 'product_type', 'user_id')
+            ->select('on_product.id', 'product_name', 'product_information', 'start_date', 'end_date', 'price', 'state', 'product_type', 'user_id')
             ->where('on_product.id', '=', $itemid)
             ->paginate($this->paginate);
         //圖片數量
@@ -100,7 +100,7 @@ class ProductController extends BaseController
         $title = request('title');
         $category = request('category');
         $price = request('price');
-        $d1 = request('expiration_date');
+        $d1 = request('start_date');
         $t1 = request('expiration_time');
         $d2 = request('end_date');
         $t2 = request('end_time');
@@ -117,7 +117,7 @@ class ProductController extends BaseController
             $product = Product::Where('id', $edit_id)->first();
         $product->product_name = $title;
         $product->product_information = $info;
-        $product->expiration_date = $dt1;
+        $product->start_date = $dt1;
         $product->end_date = $dt2;
         $product->price = $price;
         $product->category_id = $category;
@@ -188,7 +188,7 @@ class ProductController extends BaseController
         $amount = request('amount');
         $now = new DateTime();
         $p = Product::where("id", $id)
-            ->where('expiration_date', '<=', $now)
+            ->where('start_date', '<=', $now)
             ->where('end_date', '>=', $now)
             ->where('state', '=', '1')
             ->first();
