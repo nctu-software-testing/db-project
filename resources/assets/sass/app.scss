@@ -10,6 +10,14 @@
 // Common style
 @import "common";
 
+.page-index{
+  @import "pageIndex";
+}
+
+.page-user{
+  @import "pageUser";
+}
+
 .page-user{
   @import "pageUser";
 }

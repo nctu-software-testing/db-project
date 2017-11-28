@@ -9,25 +9,25 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-use App\User;
-use Illuminate\Http\Request;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('welcome', [
+        'pageName' => 'index'
+    ]);
 });
 
 Route::group([
     'middleware' => ['auth']
-], function(){
+], function () {
     Route::post('/logout', 'UserController@logout');
 
     //VERIFICATION
     Route::get('/verification', 'VerificationController@getVerification');
-    Route::post('/newverification','VerificationController@verification');
+    Route::post('/newverification', 'VerificationController@verification');
 
     //CHANGE
-    Route::post('/changepassword','UserController@changePassword');
-    Route::post('/changeemail','UserController@changeEmail');
+    Route::post('/changepassword', 'UserController@changePassword');
+    Route::post('/changeemail', 'UserController@changeEmail');
 
     //LOCATION
     Route::get('/location', 'LocationController@getLocation');
@@ -41,15 +41,15 @@ Route::group([
 
 Route::group([
     'middleware' => ['auth.admin']
-], function(){
+], function () {
 
-    Route::post('/verification','VerificationController@postVerification');
+    Route::post('/verification', 'VerificationController@postVerification');
     Route::post('/category', 'CategoryController@createCategory');
 });
 
 Route::group([
     'middleware' => ['auth.non']
-], function(){
+], function () {
     //REGISTER
     Route::get('/register', 'UserController@getReg');
     Route::post('/register', 'UserController@postReg');
@@ -57,7 +57,6 @@ Route::group([
     //LOGIN LOGOUT
     Route::post('/login', 'UserController@postLogin');
 });
-
 
 
 //CATEGORY
@@ -68,13 +67,13 @@ Route::get('/product', 'ProductController@getProduct');
 Route::get('/item', 'ProductController@getItem');
 Route::post('/sell', 'ProductController@sell');
 Route::get('/product-image/{pid}/{id}', 'ProductController@getImage');
-Route::post('/deleteProduct','ProductController@delProduct');
-Route::post('/releaseProduct','ProductController@releaseProduct');
+Route::post('/deleteProduct', 'ProductController@delProduct');
+Route::post('/releaseProduct', 'ProductController@releaseProduct');
 //購物車
-Route::post('/buy','ProductController@buyProduct');
+Route::post('/buy', 'ProductController@buyProduct');
 Route::get('/shoppingcar', 'ProductController@getShoppingCar');
-Route::post('/changeAmount','ProductController@changeAmount');
-Route::post('/removeProductFromShoppingcar','ProductController@removeProductFromShoppingcar');
+Route::post('/changeAmount', 'ProductController@changeAmount');
+Route::post('/removeProductFromShoppingcar', 'ProductController@removeProductFromShoppingcar');
 //DISCOUNT
 Route::get('/discount', 'DiscountController@getDiscount');
 //CHECKOUT
@@ -85,6 +84,6 @@ Route::get('/order', 'OrderController@getOrder');
 Route::get('/orderDetail', 'OrderController@getOrderDetail');
 
 
-Route::get('/function', function(){
+Route::get('/function', function () {
     return view('function');
 });
