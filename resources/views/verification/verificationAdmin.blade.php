@@ -45,7 +45,7 @@
                 　
                 <td>{{$data[$i]->verify_result}}</td>
                 　
-                <td>{{$data[$i]->sign_up_datatime}}</td>
+                <td>{{$data[$i]->sign_up_datetime}}</td>
                 　
                 <td>{{$data[$i]->datetime}}</td>
                 <td>{{$data[$i]->description}}</td>
