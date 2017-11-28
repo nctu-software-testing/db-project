@@ -18,7 +18,7 @@
             <div class="navbar-nav col-9 flex-row">
                 <div class="nav-item">
                     <a class="nav-link waves-effect waves-light" accesskey="f"
-                       href="{{action('ProductController@getProduct')}}">商品瀏覽</a>
+                       href="{{action('ProductController@getProducts')}}">商品瀏覽</a>
                 </div>
 
                 <form class="form-inline" style="flex: 1">

@@ -54,24 +54,21 @@
         @endfor
     </table>
     {{ $data->links() }}<br>
-    <button type="button"  onclick="Sell()">上架/編輯商品</button></td>
-    <div hidden id="lo">
-            @include("sellForm")
-    </div>
+    <button type="button"  onclick="Sell('add')">上架/編輯商品</button></td>
 @endsection
 @section('eofScript')
     <script>
         @if($id!=0)
-        Sell()
+        Sell();
         @endif
-        function Sell() {
-            $("#lo").toggle();
+        function Sell(id) {
+            location.href='{{action('ProductController@getSell', '')}}/'+id;
         }
         function Shoppingcar() {
             window.open('/any_buy/public/shoppingcar ', '購物車', config='height=600,width=600');
         }
         function Edit(i) {
-            location.href=location.href+"&id="+i;
+            Sell(i);
         }
         function Delete(id) {
             var ok=confirm("確認刪除?");
@@ -100,10 +97,10 @@
             }
         }
         function Self(p) {
-            location.href="/any_buy/public/product?type="+"self";
+            location.href="{{action('ProductController@getProducts')}}?type=self";
         }
         function Public(p) {
-            location.href="/any_buy/public/product";
+            location.href="{{action('ProductController@getProducts')}}";
         }
         function Buy(id) {
 

@@ -23,7 +23,7 @@ class ProductController extends BaseController
         parent::__construct('product');
     }
 
-    public function getProduct(Request $request)
+    public function getProducts(Request $request)
     {
 
         if (!($request->session()->has('user')))
@@ -50,29 +50,47 @@ class ProductController extends BaseController
                 ->paginate($this->paginate);
         }
         $id = request("id", 0);
-        $editdata = new Product();
         $count = 0;
         if ($id != 0) {
-            $editdata = Product::
-            join('category', 'on_product.category_id', '=', 'category.id')
-                ->where('on_product.id', $id)
-                ->get()->first();
-            $count = Product_Picture::
-            where('product_id', '=', $id)
-                ->count();
+
         }
         //類別資訊
         $category = Category::get();
-        return view('product')->
+        return view('products.list')->
         with('category', $category)->
         with('data', $data)->
         with('id', $id)->
         with('uid', $uid)->
-        with('count', $count)->
-        with('type', $type)->
-        with('editdata', $editdata);
+        with('type', $type);
+    }
 
+    public function getSell(Request $request, $id)
+    {
+        $editdata = null;
+        $count = 0;
+        if ($id === 'add') {
+            $editdata = new Product();
+        } else {
+            $id = intval($id, 10);
+            $editdata = Product::
+            join('category', 'on_product.category_id', '=', 'category.id')
+                ->where('on_product.id', $id)
+                ->get()->first();
+            if (is_null($editdata)) {
+                return abort(404);
+            }
+            $count = Product_Picture::
+            where('product_id', '=', $id)
+                ->count();
+        }
 
+        $category = Category::all();
+
+        return view('products.modify')
+            ->with('id', $id)
+            ->with('category', $category)
+            ->with('editdata', $editdata)
+            ->with('count', $count);
     }
 
     public function getItem(Request $request)
@@ -89,10 +107,10 @@ class ProductController extends BaseController
         $count = Product_Picture::
         where('product_id', '=', $itemid)
             ->count();
-        return view('item', ['data' => $data], ['count' => $count]);
+        return view('products.item', ['data' => $data], ['count' => $count]);
     }
 
-    public function sell(Request $request)
+    public function postSell(Request $request)
     {
         //
         $id = $request->session()->get('user')->id;
@@ -144,8 +162,11 @@ class ProductController extends BaseController
                 }
             }
         }
-        $request->session()->flash('log', '建立成功');
-        return redirect()->back();
+        if($edit_id===0)
+            $request->session()->flash('log', '建立成功');
+        else
+            $request->session()->flash('log', '修改成功');
+        return redirect()->action('ProductController@getProducts');
     }
 
     public function getImage($pid, $id)

@@ -1,3 +1,7 @@
+@extends('base')
+@section('extraScript')
+    <script type="text/javascript" src="{{asset('js/ckeditor/ckeditor.js')}}"></script>
+@endsection
 @section('content')
     <table border="1">
         <tr>
@@ -23,14 +27,27 @@
         @endfor
     </table>
     <h1>商品介紹:</h1><br>
-    <textarea rows="4" cols="50" readonly style="resize: none;">{{$data[0]->product_information}}
-    </textarea>
+    <div id="description" hidden>{{$data[0]->product_information}}</div>
+
     <h1>商品圖片:</h1><br>
     @for ($i = 0; $i < $count; $i++)
         <img class="preview{{$i}}" style="max-width: 150px; max-height: 150px;" src="product-image/{{$data[0]->id}}/{{$i}}")>
     @endfor
 @endsection
 @section('eofScript')
+<script>
+    function getBBCodeFromHtml(code){
+        let fragment = CKEDITOR.htmlParser.fragment.fromBBCode( code ),
+            writer = new CKEDITOR.htmlParser.basicWriter();
+        fragment.writeHtml(writer);
+        return writer.getHtml();
+    }
+    $(()=>{
+        let desc = $("#description");
+        let html = getBBCodeFromHtml(desc.text());
+        desc.empty().html(html);
+        desc.removeAttr('hidden');
+    });
+</script>
 
 @endsection
-@include('base')
