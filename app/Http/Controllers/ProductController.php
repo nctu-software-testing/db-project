@@ -36,8 +36,7 @@ class ProductController extends BaseController
             $data = Product::
             join('category', 'on_product.category_id', '=', 'category.id')
                 ->select('on_product.id', 'product_name', 'product_information', 'start_date', 'end_date', 'price', 'state', 'product_type', 'user_id')
-                ->where('user_id', $uid)
-                ->paginate($this->paginate);
+                ->where('user_id', $uid);
         } //公開瀏覽
         else {
             $now = new DateTime();
@@ -46,14 +45,14 @@ class ProductController extends BaseController
                 ->select('on_product.id', 'product_name', 'product_information', 'start_date', 'end_date', 'price', 'state', 'product_type', 'user_id')
                 ->where('state', 1)
                 ->where('start_date', '<=', $now)
-                ->where('end_date', '>=', $now)
-                ->paginate($this->paginate);
+                ->where('end_date', '>=', $now);
         }
+        if (is_numeric($request->get('category'))) {
+            $data->where('on_product.category_id', $request->get('category'));
+        }
+        $data = $data->paginate($this->paginate);
         $id = request("id", 0);
         $count = 0;
-        if ($id != 0) {
-
-        }
         //類別資訊
         $category = Category::get();
         return view('products.list')->
@@ -162,7 +161,7 @@ class ProductController extends BaseController
                 }
             }
         }
-        if($edit_id===0)
+        if ($edit_id === 0)
             $request->session()->flash('log', '建立成功');
         else
             $request->session()->flash('log', '修改成功');

@@ -64,6 +64,26 @@
             </div>
         </div>
     </section>
+    <section id="category">
+        <div class="container">
+            <h2>分類</h2>
+            <div class="row align-content-start flex-wrap">
+                <?php $i = 0;$colNum = 8;?>
+                @foreach($category as $cat)
+                    <a class="category-item col" href="{{action('ProductController@getProducts')}}?category={{$cat->id}}">
+                        <i class="material-icons">attach_money</i>
+                        <p>{{$cat->product_type}}</p>
+                    </a>
+                    @if((++$i)%$colNum===0)
+                        <div class="w-100"></div>
+                    @endif
+                @endforeach
+                @while(($i++)%$colNum!==0)
+                    <div class="category-item col empty"></div>
+                @endwhile
+            </div>
+        </div>
+    </section>
 @endsection
 @section('eofScript')
     <script>
