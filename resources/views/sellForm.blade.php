@@ -14,7 +14,7 @@
         價格:<input type="number" name="price" id="price" value="{{$editdata->price}}" min="0" required><br>
         上架日期:
         <div>
-        <input type="date" name="expiration_date" value="{{$editdata->GetDateTime(0)}}" id="d1" required>
+        <input type="date" name="start_date" value="{{$editdata->GetDateTime(0)}}" id="d1" required>
         <input type="time" name="expiration_time" value="{{$editdata->GetDateTime(1)}}" id="t1" required>
         </div>
         下架日期:
