@@ -25,49 +25,48 @@
             </div>
             <!--/.Carousel Wrapper-->
         </div>
-
-        @endsection
-        @section('content-full')
-
-            <section id="features">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-4 feature">
-                            <div class="icon-container">
-                                <img src="{{asset('images/icons/shipping.png')}}"/>
-                            </div>
-                            <div class="text-container">
+    </section>
+@endsection
+@section('content-full')
+    <section id="features">
+        <div class="container">
+            <div class="row">
+                <div class="col-4 feature">
+                    <div class="icon-container">
+                        <img src="{{asset('images/icons/shipping.png')}}"/>
+                    </div>
+                    <div class="text-container">
                         <span class="desc">
                             提供宅配與店取服務
                         </span>
-                            </div>
-                        </div>
-                        <div class="col-4 feature">
-                            <div class="icon-container">
-                                <img src="{{asset('images/icons/payment.png')}}"/>
-                            </div>
-                            <div class="text-container">
+                    </div>
+                </div>
+                <div class="col-4 feature">
+                    <div class="icon-container">
+                        <img src="{{asset('images/icons/payment.png')}}"/>
+                    </div>
+                    <div class="text-container">
                         <span class="desc">
                             簡易又安全的付款方式
                         </span>
-                            </div>
-                        </div>
-                        <div class="col-4 feature">
-                            <div class="icon-container">
-                                <img src="{{asset('images/icons/protect.png')}}"/>
-                            </div>
-                            <div class="text-container">
+                    </div>
+                </div>
+                <div class="col-4 feature">
+                    <div class="icon-container">
+                        <img src="{{asset('images/icons/protect.png')}}"/>
+                    </div>
+                    <div class="text-container">
                             <span class="desc">
                                 買家保障&amp;購物無憂
                             </span>
-                            </div>
-                        </div>
                     </div>
                 </div>
-            </section>
-        @endsection
-        @section('eofScript')
-            <script>
-                window.Pages.Index.init();
-            </script>
+            </div>
+        </div>
+    </section>
+@endsection
+@section('eofScript')
+    <script>
+        window.Pages.Index.init();
+    </script>
 @endsection
