@@ -112,13 +112,15 @@ class ProductController extends BaseController
         $data = Product::
         join('category', 'on_product.category_id', '=', 'category.id')
             ->select('on_product.id', 'product_name', 'product_information', 'start_date', 'end_date', 'price', 'state', 'product_type', 'user_id')
-            ->where('on_product.id', '=', $id)
-            ->paginate($this->paginate);
+            ->where('on_product.id', '=', $id)->first();
+        if (!$data) {
+            return abort(404);
+        }
         //圖片數量
         $count = ProductPicture::
         where('product_id', '=', $id)
             ->count();
-        return view('products.item', ['data' => $data], ['count' => $count]);
+        return view('products.item', ['p' => $data, 'count' => $count]);
     }
 
     public function postSell(Request $request)
@@ -183,7 +185,7 @@ class ProductController extends BaseController
     public function getImage($pid, $id)
     {
         $image = ProductPicture::where('product_id', $pid)->get();
-        $image = $image[$id];
+        $image = $image[$id] ?? null;
         if ($image) {
             $imagePath = $image->path;
             if (Storage::exists($imagePath)) {

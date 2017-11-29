@@ -14,24 +14,22 @@
             <td>狀態</td>
         </tr>
 
-        @for ($i = 0; $i < count($data); $i++)
             <tr>
-                　<td>{{$data[$i]->id}}</td>
-                　<td>{{$data[$i]->product_name}}</td>
-                　<td>{{$data[$i]->product_type}}</td>
-                  <td>{{$data[$i]->price}}元</td>
-                　<td>{{$data[$i]->start_date}}</td>
-                　<td>{{$data[$i]->end_date}}</td>
-                <td>{{$data[$i]->GetState()}}</td>
+                　<td>{{$p->id}}</td>
+                　<td>{{$p->product_name}}</td>
+                　<td>{{$p->product_type}}</td>
+                  <td>{{$p->price}}元</td>
+                　<td>{{$p->start_date}}</td>
+                　<td>{{$p->end_date}}</td>
+                <td>{{$p->GetState()}}</td>
             </tr>
-        @endfor
     </table>
     <h1>商品介紹:</h1><br>
-    <div id="description" hidden>{{$data[0]->product_information}}</div>
+    <div id="description" hidden>{{$p->product_information}}</div>
 
     <h1>商品圖片:</h1><br>
     @for ($i = 0; $i < $count; $i++)
-        <img class="preview{{$i}}" style="max-width: 150px; max-height: 150px;" src="product-image/{{$data[0]->id}}/{{$i}}")>
+        <img class="preview{{$i}}" style="max-width: 150px; max-height: 150px;" src="{{action('ProductController@getImage', ['pid'=>$p->id, 'id'=>$i])}}">
     @endfor
 @endsection
 @section('eofScript')
