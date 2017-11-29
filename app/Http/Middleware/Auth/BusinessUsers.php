@@ -17,7 +17,8 @@ class BusinessUsers
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        if (session('user.role') !== User::BUSINESS_ROLE) {
+        $role = session('user.role');
+        if ($role !== User::BUSINESS_ROLE && $role!==User::ADMIN_ROLE) {
             return redirect('/');
         }
 

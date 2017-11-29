@@ -2,6 +2,8 @@
 
 namespace App;
 
+use DateTime;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
@@ -11,6 +13,7 @@ class Product extends Model
     public const STATE_DRAFT = 0;
     public const STATE_RELEASE = 1;
     public const STATE_DELETED = 2;
+    private const HOT_MAX_COUNT = 8;
 
     /**
      * The attributes that are mass assignable.
@@ -52,5 +55,32 @@ class Product extends Model
     public function getUserName()
     {
         return User::Where('id', $this->user_id)->first()->name;
+    }
+
+    public function pictures()
+    {
+        return $this->hasMany('\App\ProductPicture');
+    }
+
+    public static function getOnProductsBuilder(Builder $builder = null): Builder
+    {
+        $now = new DateTime();
+        if (is_null($builder)) {
+            $builder = Product::whereRaw('1=1');
+        }
+        $builder
+            ->where('state', self::STATE_RELEASE)
+            ->where('start_date', '<=', $now)
+            ->where('end_date', '>=', $now);
+
+        return $builder;
+    }
+
+    public static function getHotProducts(Builder $builder = null): \Illuminate\Database\Eloquent\Collection
+    {
+        return
+            self::getOnProductsBuilder($builder)
+                ->limit(self::HOT_MAX_COUNT)
+                ->get();
     }
 }

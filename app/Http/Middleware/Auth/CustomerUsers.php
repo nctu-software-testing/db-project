@@ -17,7 +17,8 @@ class CustomerUsers
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        if (session('user.role') !== User::CUSTOMER_ROLE) {
+        $role = session('user.role');
+        if ($role !== User::CUSTOMER_ROLE && $role!==User::ADMIN_ROLE) {
             return redirect('/');
         }
 

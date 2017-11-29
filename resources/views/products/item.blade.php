@@ -17,7 +17,7 @@
         @for ($i = 0; $i < count($data); $i++)
             <tr>
                 　<td>{{$data[$i]->id}}</td>
-                　<td>{{$data[$i]->title}}</td>
+                　<td>{{$data[$i]->product_name}}</td>
                 　<td>{{$data[$i]->product_type}}</td>
                   <td>{{$data[$i]->price}}元</td>
                 　<td>{{$data[$i]->start_date}}</td>

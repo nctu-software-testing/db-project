@@ -25,26 +25,15 @@ class ProductController extends BaseController
 
     public function getProducts(Request $request)
     {
-
-        if (!($request->session()->has('user')))
-            return redirect()->back();
-        $uid = $request->session()->get('user')->id;
         //商品資訊
         $type = request("type");
-        //個人
         $data = Product
             ::join('category', 'on_product.category_id', '=', 'category.id')
             ->select('on_product.id', 'product_name', 'product_information', 'start_date', 'end_date', 'price', 'state', 'product_type', 'user_id');
-        if ($type == "self") {
-            $data->where('user_id', $uid);
-        } else {
-            //公開瀏覽
-            $now = new DateTime();
-            $data = $data
-                ->where('state', Product::STATE_RELEASE)
-                ->where('start_date', '<=', $now)
-                ->where('end_date', '>=', $now);
-        }
+
+        //公開瀏覽
+        $now = new DateTime();
+        $data = Product::getOnProductsBuilder($data);
 
         if (is_numeric($request->get('category'))) {
             $data->where('on_product.category_id', $request->get('category'));
@@ -58,7 +47,32 @@ class ProductController extends BaseController
         with('category', $category)->
         with('data', $data)->
         with('id', $id)->
-        with('uid', $uid)->
+        with('type', $type);
+    }
+
+    public function getSelfProducts(Request $request)
+    {
+        //商品資訊
+        $type = request("type");
+        $data = Product
+            ::join('category', 'on_product.category_id', '=', 'category.id')
+            ->select('on_product.id', 'product_name', 'product_information', 'start_date', 'end_date', 'price', 'state', 'product_type', 'user_id');
+
+        $uid = session('user.id');
+        $data->where('user_id', $uid);
+
+        if (is_numeric($request->get('category'))) {
+            $data->where('on_product.category_id', $request->get('category'));
+        }
+        $data = $data->paginate($this->paginate);
+        $id = request("id", 0);
+        $count = 0;
+        //類別資訊
+        $category = Category::get();
+        return view('products.manage')->
+        with('category', $category)->
+        with('data', $data)->
+        with('id', $id)->
         with('type', $type);
     }
 
@@ -91,19 +105,18 @@ class ProductController extends BaseController
             ->with('count', $count);
     }
 
-    public function getItem(Request $request)
+    public function getItem(Request $request, $id)
     {
-        $itemid = request('id');
-        if (!$itemid)
-            return redirect()->back();
+        if (!$id)
+            return redirect('/');
         $data = Product::
         join('category', 'on_product.category_id', '=', 'category.id')
             ->select('on_product.id', 'product_name', 'product_information', 'start_date', 'end_date', 'price', 'state', 'product_type', 'user_id')
-            ->where('on_product.id', '=', $itemid)
+            ->where('on_product.id', '=', $id)
             ->paginate($this->paginate);
         //圖片數量
         $count = ProductPicture::
-        where('product_id', '=', $itemid)
+        where('product_id', '=', $id)
             ->count();
         return view('products.item', ['data' => $data], ['count' => $count]);
     }

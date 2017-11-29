@@ -10,7 +10,9 @@
             <td>上架日期</td>
             <td>下架日期</td>
             <td>狀態</td>
-            <td>購買</td>
+            <td>編輯</td>
+            <td>發佈</td>
+            <td>刪除</td>
 
         </tr>
         @for ($i = 0; $i < count($data); $i++)
@@ -30,30 +32,40 @@
                 <td>{{$data[$i]->end_date}}</td>
                 <td>{{$data[$i]->GetState()}}</td>
                 <td>
-                    <button onclick="Buy('{{$data[$i]->id}}')">購買</button>
+                    <button onclick="Edit('{{$data[$i]->id}}')">編輯</button>
+                </td>
+                <td>
+                    <button onclick="Release('{{$data[$i]->id}}')">發佈</button>
+                </td>
+                <td>
+                    <button onclick="Delete('{{$data[$i]->id}}')">刪除</button>
                 </td>
             </tr>
         @endfor
     </table>
     {{ $data->links() }}<br>
+    <button type="button" onclick="Sell('add')">上架/編輯商品</button>
 @endsection
 @section('eofScript')
     <script>
-        function Buy(id) {
+        function Edit(i) {
+            Sell(i);
+        }
 
-            var amount = prompt("請輸入購買數量!", "1");
-            if (isNaN(amount) || amount < 0 || !amount) {
-                alert("請輸入正確數字");
-                return;
+        function Delete(id) {
+            var ok = confirm("確認刪除?");
+            if (ok) {
+                ajax('POST', '{{action('ProductController@delProduct')}}', {id: id})
+                    .then(() => location.reload());
             }
-            $.post("buy",
-                {
-                    id: id,
-                    amount: amount,
-                },
-                function (data) {
-                    location.reload();
-                });
+        }
+
+        function Release(id) {
+            var ok = confirm("確認發佈? 發佈後不可進行修改即及刪除");
+            if (ok) {
+                ajax('POST', '{{action('ProductController@releaseProduct')}}', {id: id})
+                    .then(()=>location.reload());
+            }
         }
     </script>
 @endsection

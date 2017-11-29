@@ -62,7 +62,8 @@
             "php artisan config:clear",
             "php artisan debugbar:clear",
             "php artisan route:clear",
-            "php artisan view:clear"
+            "php artisan view:clear",
+            "composer dump-autoload"
         ],
         "do-cache": [
             "php artisan config:cache",
@@ -73,7 +74,8 @@
             "npm install",
             "composer install",
             "composer run cache-clear",
-            "npm run prod"
+            "npm run prod",
+            "composer dump-autoload"
         ]
     },
     "config": {
