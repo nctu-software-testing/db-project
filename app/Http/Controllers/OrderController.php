@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Location;
 use App\Order;
-use App\Order_Product;
+use App\OrderProduct;
 use App\Product;
 use Illuminate\Http\Request;
 
@@ -41,7 +41,7 @@ class OrderController extends BaseController
             ->first();
         if (!$order)
             return abort(404);
-        $data = Order_Product::
+        $data = OrderProduct::
         where('order_id', $orderid)
             ->paginate($this->paginate);
         $location = Location::

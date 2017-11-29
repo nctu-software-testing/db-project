@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use App\Category;
 use App\Location;
 use App\Order;
-use App\Order_Product;
+use App\OrderProduct;
 use App\Product;
-use App\Product_Picture;
+use App\ProductPicture;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
@@ -32,21 +32,20 @@ class ProductController extends BaseController
         //商品資訊
         $type = request("type");
         //個人
+        $data = Product
+            ::join('category', 'on_product.category_id', '=', 'category.id')
+            ->select('on_product.id', 'product_name', 'product_information', 'start_date', 'end_date', 'price', 'state', 'product_type', 'user_id');
         if ($type == "self") {
-            $data = Product::
-            join('category', 'on_product.category_id', '=', 'category.id')
-                ->select('on_product.id', 'product_name', 'product_information', 'start_date', 'end_date', 'price', 'state', 'product_type', 'user_id')
-                ->where('user_id', $uid);
-        } //公開瀏覽
-        else {
+            $data->where('user_id', $uid);
+        } else {
+            //公開瀏覽
             $now = new DateTime();
-            $data = Product::
-            join('category', 'on_product.category_id', '=', 'category.id')
-                ->select('on_product.id', 'product_name', 'product_information', 'start_date', 'end_date', 'price', 'state', 'product_type', 'user_id')
-                ->where('state', 1)
+            $data = $data
+                ->where('state', Product::STATE_RELEASE)
                 ->where('start_date', '<=', $now)
                 ->where('end_date', '>=', $now);
         }
+
         if (is_numeric($request->get('category'))) {
             $data->where('on_product.category_id', $request->get('category'));
         }
@@ -78,7 +77,7 @@ class ProductController extends BaseController
             if (is_null($editdata)) {
                 return abort(404);
             }
-            $count = Product_Picture::
+            $count = ProductPicture::
             where('product_id', '=', $id)
                 ->count();
         }
@@ -103,7 +102,7 @@ class ProductController extends BaseController
             ->where('on_product.id', '=', $itemid)
             ->paginate($this->paginate);
         //圖片數量
-        $count = Product_Picture::
+        $count = ProductPicture::
         where('product_id', '=', $itemid)
             ->count();
         return view('products.item', ['data' => $data], ['count' => $count]);
@@ -139,10 +138,10 @@ class ProductController extends BaseController
         $product->price = $price;
         $product->category_id = $category;
         $product->user_id = $id;
-        $product->state = 0;
+        $product->state = Product::STATE_DRAFT;
         $product->save();
         //移除圖片
-        $image = Product_Picture::where('product_id', $edit_id)->get();
+        $image = ProductPicture::where('product_id', $edit_id)->get();
         for ($i = 0; $i < 5; $i++) {
             $del = request('delImage' . $i);
             if ($del == 1)
@@ -154,7 +153,7 @@ class ProductController extends BaseController
                 $file = $request->file('file' . $i);
                 if ($file->isValid()) {
                     $path[$i] = $file->store('images');
-                    $pp = new Product_Picture();
+                    $pp = new ProductPicture();
                     $pp->product_id = $product->id;
                     $pp->path = $path[$i];
                     $pp->save();
@@ -170,7 +169,7 @@ class ProductController extends BaseController
 
     public function getImage($pid, $id)
     {
-        $image = Product_Picture::where('product_id', $pid)->get();
+        $image = ProductPicture::where('product_id', $pid)->get();
         $image = $image[$id];
         if ($image) {
             $imagePath = $image->path;
@@ -189,7 +188,7 @@ class ProductController extends BaseController
     {
         $id = request('id');
         $p = Product::where("id", $id)->first();
-        $p->state = 2;
+        $p->state = Product::STATE_DELETED;
         $p->save();
     }
 
@@ -197,7 +196,7 @@ class ProductController extends BaseController
     {
         $id = request('id');
         $p = Product::where("id", $id)->first();
-        $p->state = 1;
+        $p->state = Product::STATE_RELEASE;
         $p->save();
     }
 
@@ -210,7 +209,7 @@ class ProductController extends BaseController
         $p = Product::where("id", $id)
             ->where('start_date', '<=', $now)
             ->where('end_date', '>=', $now)
-            ->where('state', '=', '1')
+            ->where('state', Product::STATE_RELEASE)
             ->first();
         if ($p) {
             if (($request->session()->has('shoppingcar'))) {
@@ -227,7 +226,7 @@ class ProductController extends BaseController
                 }
             }
             if ($flag) return;
-            $op = new Order_Product();
+            $op = new OrderProduct();
             $op->product_id = $id;
             $op->amount = $amount;
             $product = Product::where("id", $id)->get()->first();
@@ -317,7 +316,7 @@ class ProductController extends BaseController
         $order = new Order();
         $order->location_id = $locationid;
         $order->customer_id = $uid;
-        $order->state = '0';
+        $order->state = Product::STATE_DRAFT;
         $order->final_cost = $final;
         $order->save();
         $date = date('Y-m-d H:i:s', strtotime('+1hour'));
@@ -328,7 +327,7 @@ class ProductController extends BaseController
         //裝填貨物
         $shoppingcar = session()->get('shoppingcar');
         for ($i = 0; $i < count($shoppingcar); $i++) {
-            $op = new Order_Product();
+            $op = new OrderProduct();
             $op->product_id = $shoppingcar[$i]->product->id;
             $op->amount = $shoppingcar[$i]->amount;
             $op->order_id = $order->id;
