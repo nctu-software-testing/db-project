@@ -82,7 +82,7 @@ h2 {
   background: #FEFEFE;
   .card-wrap {
     & {
-      margin: 0 15px 15px;
+      margin: 0 0 15px;
       flex: 1;
     }
 
@@ -111,15 +111,19 @@ h2 {
 
     .product-info {
       display: flex;
+      color: inherit;
 
-      & > .title {
+      & > .product-title {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
         flex: 1;
         margin: 0;
+        color: #333;
+        font-weight: 500;
       }
-      & > .price {
+
+      & > .product-price {
         color: #FF5000;
         font-size: 1.25rem;
         font-weight: 500;
