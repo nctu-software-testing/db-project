@@ -91,38 +91,46 @@
         <div class="container">
             <h2>推薦商品</h2>
             <div class="row">
-                <?php $i=0;?>
+                <?php $i = 0;$colNum = 3;?>
                 @foreach($products as $p)
-                    <div class="col-3">
+                    <div class="card-wrap">
                         <!--Card-->
-                        <div class="card">
+                        <a class="card" href="{{action('ProductController@getItem', $p->id)}}">
                             <!--Card image-->
                             <div class="view overlay hm-white-slight">
                                 <img src="{{action('ProductController@getImage', [
                                 'pid'=>$p->id,
                                 'id'    => 0
                             ])}}" class="img-fluid" alt="photo">
-                                <a href="#">
-                                    <div class="mask"></div>
-                                </a>
+                                <div class="mask">
+                                    <div class="buy-now">
+                                        立即購買
+                                        <i class="material-icons">keyboard_arrow_right</i>
+                                    </div>
+                                </div>
                             </div>
 
                             <!--Card content-->
                             <div class="card-body">
-                                <!--Title-->
-                                <h4 class="card-title">{{$p->product_name}}</h4>
-                                <!--Text-->
-                                <p class="card-text"></p>
-                                <!--<a href="#" class="btn btn-primary">Button</a>-->
+                                <div class="product-info">
+                                    <h5 class="title">{{$p->product_name}}</h5>
+                                    <div class="price">
+                                        <i class="ntd">NT$</i>
+                                        {{$p->price}}
+                                    </div>
+                                </div>
                             </div>
 
-                        </div>
+                        </a>
                         <!--/.Card-->
                     </div>
-                    @if((++$i) %4===0)
-                        <p class="w-100">&nbsp;</p>
+                    @if((++$i) %$colNum === 0)
+                        <p class="w-100"></p>
                     @endif
                 @endforeach
+                @while(($i++)%$colNum!==0)
+                    <div class="card-wrap empty"></div>
+                @endwhile
             </div>
         </div>
     </section>

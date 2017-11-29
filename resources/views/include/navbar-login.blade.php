@@ -24,7 +24,7 @@
                 </h6>
 
                 <a class="dropdown-item waves-effect waves-light" accesskey="c"
-                   href="{{action('UserController@getUserInfo')}}">會員資料</a>
+                   href="{{action('UserController@getUserInfo')}}">(ABC)會員資料</a>
 
                 <div class="divider"></div>
 
@@ -33,18 +33,21 @@
                     管理
                 </h6>
                 <a class="dropdown-item waves-effect waves-light" accesskey="d"
-                   href="{{action('LocationController@getLocation')}}">地址管理</a>
+                   href="{{action('LocationController@getLocation')}}">(ABC)地址管理</a>
                 <a class="dropdown-item waves-effect waves-light" accesskey="b"
-                   href="{{action('VerificationController@getVerification')}}">會員驗證</a>
+                   href="{{action('VerificationController@getVerification')}}">(ABC)會員驗證</a>
 
                 <a class="dropdown-item waves-effect waves-light" accesskey="e"
-                   href="{{action('CategoryController@getCategory')}}">類別管理</a>
+                   href="{{action('CategoryController@getCategory')}}">(A)類別管理</a>
+
+                <a class="dropdown-item waves-effect waves-light" accesskey="f"
+                   href="{{action('ProductController@getSelfProducts')}}">(AB)商品管理</a>
 
                 <a class="dropdown-item waves-effect waves-light" accesskey="g"
-                   href="{{action('DiscountController@getDiscount')}}">折價管理</a>
+                   href="{{action('DiscountController@getDiscount')}}">(A)折價管理</a>
 
                 <a class="dropdown-item waves-effect waves-light" accesskey="h"
-                   href="{{action('OrderController@getOrder')}}">訂單管理</a>
+                   href="{{action('OrderController@getOrder')}}">(BC)訂單管理</a>
 
 
                 <div class="divider"></div>

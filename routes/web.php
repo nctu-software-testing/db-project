@@ -52,6 +52,17 @@ Route::group([
 });
 
 Route::group([
+    'middleware' => ['auth.business']
+], function () {
+    Route::get('/sell/{id}', 'ProductController@getSell');
+    Route::post('/sell', 'ProductController@postSell');
+
+    //PRODUCT
+    Route::get('/products/edit', 'ProductController@getSelfProducts');
+    Route::post('/releaseProduct', 'ProductController@releaseProduct');
+});
+
+Route::group([
     'middleware' => ['auth.non']
 ], function () {
     //REGISTER
@@ -68,12 +79,9 @@ Route::get('/category', 'CategoryController@getCategory');
 
 //PRODUCT
 Route::get('/products', 'ProductController@getProducts');
-Route::get('/item', 'ProductController@getItem');
-Route::get('/sell/{id}', 'ProductController@getSell');
-Route::post('/sell', 'ProductController@postSell');
+Route::get('/item/{id}', 'ProductController@getItem');
 Route::get('/product-image/{pid}/{id}', 'ProductController@getImage');
 Route::post('/deleteProduct', 'ProductController@delProduct');
-Route::post('/releaseProduct', 'ProductController@releaseProduct');
 //購物車
 Route::post('/buy', 'ProductController@buyProduct');
 Route::get('/shoppingcar', 'ProductController@getShoppingCar');
