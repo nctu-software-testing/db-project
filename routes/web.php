@@ -12,9 +12,11 @@
 
 Route::get('/', function () {
     $category = \App\Category::orderBy('id')->get();
+    $hotProducts = \App\Product::getHotProducts();
     return view('welcome', [
         'pageName' => 'index',
         'category' => $category,
+        'products' => $hotProducts
     ]);
 });
 

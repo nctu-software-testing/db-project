@@ -40,10 +40,7 @@ class ProductController extends BaseController
         } else {
             //公開瀏覽
             $now = new DateTime();
-            $data = $data
-                ->where('state', Product::STATE_RELEASE)
-                ->where('start_date', '<=', $now)
-                ->where('end_date', '>=', $now);
+            $data = Product::getOnProductsBuilder($data);
         }
 
         if (is_numeric($request->get('category'))) {

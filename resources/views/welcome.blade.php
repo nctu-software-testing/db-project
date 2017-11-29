@@ -67,20 +67,62 @@
     <section id="category">
         <div class="container">
             <h2>分類</h2>
-            <div class="row align-content-start flex-wrap">
-                <?php $i = 0;$colNum = 8;?>
-                @foreach($category as $cat)
-                    <a class="category-item col" href="{{action('ProductController@getProducts')}}?category={{$cat->id}}">
-                        <i class="material-icons">attach_money</i>
-                        <p>{{$cat->product_type}}</p>
-                    </a>
-                    @if((++$i)%$colNum===0)
-                        <div class="w-100"></div>
+            <div id="category-wrap">
+                <div class="row align-content-start flex-wrap">
+                    <?php $i = 0;$colNum = 6;?>
+                    @foreach($category as $cat)
+                        <a class="category-item col"
+                           href="{{action('ProductController@getProducts')}}?category={{$cat->id}}">
+                            <i class="material-icons">attach_money</i>
+                            <p>{{$cat->product_type}}</p>
+                        </a>
+                        @if((++$i)%$colNum===0)
+                            <div class="w-100"></div>
+                        @endif
+                    @endforeach
+                    @while(($i++)%$colNum!==0)
+                        <div class="category-item col empty"></div>
+                    @endwhile
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="hotProducts">
+        <div class="container">
+            <h2>推薦商品</h2>
+            <div class="row">
+                <?php $i=0;?>
+                @foreach($products as $p)
+                    <div class="col-3">
+                        <!--Card-->
+                        <div class="card">
+                            <!--Card image-->
+                            <div class="view overlay hm-white-slight">
+                                <img src="{{action('ProductController@getImage', [
+                                'pid'=>$p->id,
+                                'id'    => 0
+                            ])}}" class="img-fluid" alt="photo">
+                                <a href="#">
+                                    <div class="mask"></div>
+                                </a>
+                            </div>
+
+                            <!--Card content-->
+                            <div class="card-body">
+                                <!--Title-->
+                                <h4 class="card-title">{{$p->product_name}}</h4>
+                                <!--Text-->
+                                <p class="card-text"></p>
+                                <!--<a href="#" class="btn btn-primary">Button</a>-->
+                            </div>
+
+                        </div>
+                        <!--/.Card-->
+                    </div>
+                    @if((++$i) %4===0)
+                        <p class="w-100">&nbsp;</p>
                     @endif
                 @endforeach
-                @while(($i++)%$colNum!==0)
-                    <div class="category-item col empty"></div>
-                @endwhile
             </div>
         </div>
     </section>

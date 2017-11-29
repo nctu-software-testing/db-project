@@ -42,16 +42,20 @@ h2 {
 }
 
 #category {
+  $icon-height: 3rem;
+  $padding: 1rem;
+  $text-margin: .5rem;
+  $border: 0.0625rem; //1px
   & {
     @extend .index-section;
   }
 
   .category-item {
     &{
-      border: 1px solid #eee;
+      border: $border solid #eee;
       text-align: center;
       background: #FFF;
-      padding: 1rem .5rem;
+      padding: $padding .5rem;
       transition: .25s;
       position:relative;
       color: inherit;
@@ -60,10 +64,10 @@ h2 {
       visibility: hidden;
     }
     &>.material-icons{
-      font-size: 3rem;
+      font-size: $icon-height;
     }
     &>p{
-      margin-top: .25rem;
+      margin: $text-margin 0;
     }
 
     &:hover{
