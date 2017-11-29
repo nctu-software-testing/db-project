@@ -6,7 +6,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 
-class Product_Picture extends Model
+class ProductPicture extends Model
 {
     protected $table = 'product_picture';
     public $timestamps = false;
