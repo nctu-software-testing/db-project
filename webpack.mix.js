@@ -11,14 +11,15 @@ let mix = require('laravel-mix');
  |
  */
 const SourceMapType = 'cheap-module-source-map';
-console.warn(path.resolve(__dirname, './node_modules/'));
+console.log(path.resolve(__dirname, './node_modules/'));
+mix.options({processCssUrls: false});
 mix.js('resources/assets/js/app.js', 'dist/js').sourceMaps(undefined, SourceMapType);
 
 mix.sass('resources/assets/sass/app.scss', 'dist/css', {
-	includePaths: [
-		'node_modules',
-		'node_modules/bootstrap-sass/assets/stylesheets',
-	],
+    includePaths: [
+        'node_modules',
+        'node_modules/bootstrap-sass/assets/stylesheets',
+    ],
 }).sourceMaps(undefined, SourceMapType).options({
     postCss: [
         require('postcss-css-variables')()

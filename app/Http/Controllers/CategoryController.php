@@ -16,12 +16,8 @@ class CategoryController extends BaseController
 
     public function getCategory(Request $request)
     {
-
-        if (!($request->session()->has('user')))
-            return redirect()->back();
-        $data = Category::
-        paginate($this->paginate);
-        return view('category', ['data' => $data]);
+        $data = Category::orderBy('id')->get();
+        return view('category', ['category' => $data]);
     }
 
     public function createCategory(Request $request)

@@ -1,0 +1,63 @@
+#category {
+  $icon-width: 3rem;
+  $icon-height: 7rem;
+  $padding: 1rem;
+  $text-margin: .5rem;
+  $border: 0.0625rem; //1px
+  & {
+    @extend .index-section;
+  }
+
+  .category-item {
+    & {
+      border: $border solid #eee;
+      text-align: center;
+      background: #FFF;
+      padding: $padding .5rem;
+      transition: .25s;
+      position: relative;
+      color: inherit;
+    }
+    &.empty {
+      visibility: hidden;
+    }
+    & > .icon-wrapper {
+      position: relative;
+      height: $icon-height;
+      & > .material-icons {
+        font-size: $icon-width;
+        line-height: $icon-height;
+      }
+
+      & > .category-icon {
+        $img-width: 20rem;
+        $img-height: 17.5rem;
+        $img-max-length: 22;
+        transform-origin: top center !important;
+        background: url("#{$image_path}/category-items.png") no-repeat;
+        background-size: 320px #{$img-max-length * $img-height};
+        height: $img-height;
+        width: $img-height;
+        display: block;
+        transform: scale(#{$icon-height / $img-height}) translateX(-55%);
+        margin: 0 auto;
+        position: absolute;
+
+        @for $i from 0 through ($img-max-length - 1) {
+          &[data-index="#{$i}"] {
+            $offset: -$i * $img-height;
+            background-position: 0 #{$offset};
+          }
+        }
+      }
+    }
+    & > p {
+      margin: $text-margin 0;
+    }
+    
+    &:hover {
+      box-shadow: rgba(0, 0, 0, .25) 0 0 1.3rem 0;
+      z-index: 99;
+    }
+  }
+}

@@ -41,42 +41,6 @@ h2 {
   }
 }
 
-#category {
-  $icon-height: 3rem;
-  $padding: 1rem;
-  $text-margin: .5rem;
-  $border: 0.0625rem; //1px
-  & {
-    @extend .index-section;
-  }
-
-  .category-item {
-    & {
-      border: $border solid #eee;
-      text-align: center;
-      background: #FFF;
-      padding: $padding .5rem;
-      transition: .25s;
-      position: relative;
-      color: inherit;
-    }
-    &.empty {
-      visibility: hidden;
-    }
-    & > .material-icons {
-      font-size: $icon-height;
-    }
-    & > p {
-      margin: $text-margin 0;
-    }
-
-    &:hover {
-      box-shadow: rgba(0, 0, 0, .25) 0 0 1.3rem 0;
-      z-index: 999;
-    }
-  }
-}
-
 #hotProducts {
   @extend .index-section;
   background: #FEFEFE;

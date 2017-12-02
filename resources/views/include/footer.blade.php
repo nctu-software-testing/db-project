@@ -9,7 +9,7 @@
 
                 <!--Grid column-->
                 <div class="col-md-6 col-lg-5 text-center text-md-left mb-4 mb-md-0">
-                    <h6 class="mb-0 white-text">Get connected with us on social networks!</h6>
+                    <h6 class="mb-0 white-text">想要獲得新資訊嗎?</h6>
                 </div>
                 <!--Grid column-->
 
@@ -39,32 +39,34 @@
 
             <!--First column-->
             <div class="col-md-3 col-lg-4 col-xl-3 mb-r">
-                <h6 class="footer-title font-bold"><strong>Company name</strong></h6>
+                <h6 class="footer-title font-bold"><strong>Any Buy</strong></h6>
                 <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
-                <p>Here you can use rows and columns here to organize your footer content. Lorem ipsum dolor sit
-                    amet, consectetur adipisicing elit.</p>
+                <p>
+                    任購網（Any Buy）一個線上B2C購物網站，讓使用者及賣家可以自由使用此網站愉快的購物。
+                </p>
             </div>
             <!--/.First column-->
 
             <!--Second column-->
             <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-r">
-                <h6 class="footer-title font-bold"><strong>Products</strong></h6>
+                <h6 class="footer-title font-bold"><strong>主要功能</strong></h6>
                 <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
-                <p><a href="#!">MDBootstrap</a></p>
-                <p><a href="#!">MDWordPress</a></p>
-                <p><a href="#!">BrandFlow</a></p>
-                <p><a href="#!">Bootstrap Angular</a></p>
+                <p>顧客可以自由瀏覽選購</p>
+                <p>賣家可以上架任何想要販賣物品</p>
+                <p>買家賣家品質皆由網站把控</p>
+                <p>買家可以查詢訂單處理狀況</p>
+
             </div>
             <!--/.Second column-->
 
             <!--Third column-->
             <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-r">
-                <h6 class="footer-title font-bold"><strong>Useful links</strong></h6>
+                <h6 class="footer-title font-bold"><strong>常用連結</strong></h6>
                 <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
-                <p><a href="#!">Your Account</a></p>
-                <p><a href="#!">Become an Affiliate</a></p>
-                <p><a href="#!">Shipping Rates</a></p>
-                <p><a href="#!">Help</a></p>
+                <p><a href="#!">官方粉絲團</a></p>
+                <p><a href="#!">成為企業家</a></p>
+                <p><a href="#!">熱門商品</a></p>
+                <p><a href="#!">幫助</a></p>
             </div>
             <!--/.Third column-->
 
@@ -72,8 +74,8 @@
             <div class="col-md-4 col-lg-3 col-xl-3">
                 <h6 class="footer-title font-bold"><strong>Contact</strong></h6>
                 <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
-                <p><i class="fa fa-home mr-3"></i> New York, NY 10012, US</p>
-                <p><i class="fa fa-envelope mr-3"></i> info@example.com</p>
+                <p><i class="fa fa-home mr-3"></i> NTUT</p>
+                <p><i class="fa fa-envelope mr-3"></i> admin@anybuy.tk</p>
                 <p><i class="fa fa-phone mr-3"></i> + 01 234 567 88</p>
                 <p><i class="fa fa-print mr-3"></i> + 01 234 567 89</p>
             </div>
@@ -86,7 +88,7 @@
     <!-- Copyright-->
     <div class="footer-copyright">
         <div class="container-fluid">
-            © 2017 Copyright: <a href="{{asset('/')}}"><strong> NTUT</strong></a>
+            © 2017 Copyright: <a href="{{asset('/')}}"><strong> NTUT CSIE</strong></a>
         </div>
     </div>
     <!--/.Copyright -->
