@@ -77,7 +77,7 @@
                     <?php $i = 0;$colNum = 6;?>
                     @foreach($category as $cat)
                         <a class="category-item col"
-                           href="{{action('ProductController@getProducts')}}?category={{$cat->id}}">
+                           href="{{action('ProductController@getProducts')}}?search[category]={{$cat->id}}">
                             <div class="icon-wrapper">
                                 @if($cat->hasCustomIcon())
                                     <i data-index="{{$cat->image_index}}"

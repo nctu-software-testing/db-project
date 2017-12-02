@@ -2,8 +2,7 @@
 @section('productList')
     <div id="products" class="d-flex">
         <?php $i = 0;$colNum = 4;?>
-        @foreach($data as $p)
-
+        @forelse($data as $p)
             <div class="product-wrap">
                 <!--Card-->
                 <a class="card" href="{{action('ProductController@getItem', $p->id)}}">
@@ -38,16 +37,29 @@
             @if((++$i) %$colNum === 0)
                 <div class="w-100"></div>
             @endif
-        @endforeach
+
+        @empty
+            <p class="no-data"></p>
+        @endforelse
 
         @while(($i++)%$colNum!==0)
             <div class="product-wrap empty"></div>
         @endwhile
     </div>
-
-    {{ $data->render('pagination::mdb') }}
+    {{ $data->appends(request()->except('page'))->render('pagination::mdb') }}
 @endsection
 @section('content')
+    <form action="{{action('ProductController@getProducts')}}" hidden id="searchForm">
+        <?php
+        foreach ($searchList as $sk) {
+            $value = $search[$sk] ?? null;
+            if ($value) { ?>
+               <input type="hidden" name="search[{{$sk}}]" value="{{$value}}"/>
+        <?php
+            }
+        }
+        ?>
+    </form>
     <div class="row">
         <div class="col-2">
             @include('products.category-list')
@@ -56,60 +68,27 @@
             @yield('productList')
         </div>
     </div>
-    <table border="1">
-        <tr>
-            　
-            <td>id</td>
-            <td>Title</td>
-            <td>Category</td>
-            <td>User</td>
-            <td>Price</td>
-            <td>上架日期</td>
-            <td>下架日期</td>
-            <td>狀態</td>
-            <td>購買</td>
 
-        </tr>
-        @for ($i = 0; $i < count($data); $i++)
-            <tr>
-                <td>{{$data[$i]->id}}</td>
-                　
-                <td>
-                    <a href="{{action('ProductController@getItem', ['id'=>$data[$i]->id])}}"> {{$data[$i]->	product_name}} </a>
-                </td>
-                　
-                <td>{{$data[$i]->product_type}}</td>
-                <td>{{$data[$i]->price}}元</td>
-                　
-                <td>{{$data[$i]->start_date}}</td>
-                　
-                <td>{{$data[$i]->end_date}}</td>
-                <td>{{$data[$i]->GetState()}}</td>
-                <td>
-                    <button onclick="Buy('{{$data[$i]->id}}')">購買</button>
-                </td>
-            </tr>
-        @endfor
-    </table>
-    <br>
 @endsection
 @section('eofScript')
     <script>
-        function Buy(id) {
+        $('.price-search').on('click', function(){
+            let t = $(this);
+            let min = t.data('min') || -1;
+            let max = t.data('max') || -1;
+            let form = $("#searchForm");
+            form.find('input[name="search[minPrice]"], input[name="search[maxPrice]"]').remove();
 
-            var amount = prompt("請輸入購買數量!", "1");
-            if (isNaN(amount) || amount < 0 || !amount) {
-                alert("請輸入正確數字");
-                return;
-            }
-            $.post("buy",
-                {
-                    id: id,
-                    amount: amount,
-                },
-                function (data) {
-                    location.reload();
-                });
-        }
+            let minInput = $('<input type="hidden" name="search[minPrice]">');
+            let maxInput = $('<input type="hidden" name="search[maxPrice]">');
+            minInput.val(min);
+            maxInput.val(max);
+
+            if(min>=0) form.append(minInput);
+            if(max>=0) form.append(maxInput);
+
+            form.submit();
+
+        })
     </script>
 @endsection
