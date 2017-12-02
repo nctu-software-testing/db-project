@@ -49,19 +49,21 @@ function ajax(method, url, data) {
  * @param title
  * @param [body]
  */
-function bAlert(title, body) {
+function bAlert(title, body, closeBtn = '關閉') {
     let m = $(`<div class="modal fade" tabindex="-1">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title">${body ? title : ''}</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
       </div>
       <div class="modal-body">
         ${body ? body : title}
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">關閉</button>
+        <button type="button" class="btn btn-amber" data-dismiss="modal">${closeBtn}</button>
       </div>
     </div>
   </div>

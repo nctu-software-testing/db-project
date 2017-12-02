@@ -34,7 +34,7 @@
                             <span class="label">Email</span>
                             <span class="content">
                                 {{$data->email}}
-                                <a class="edit-link waves-effect" href="#">
+                                <a class="edit-link waves-effect" href="javascript: ChangeEmail()">
                                     修改
                                     <i class="material-icons">keyboard_arrow_right</i>
                                 </a>
@@ -48,7 +48,7 @@
                             <span class="label">密碼</span>
                             <span class="content">
                                 &nbsp;
-                                <a class="edit-link waves-effect" href="#">
+                                <a class="edit-link waves-effect" href="javascript: ChangePwd()">
                                     修改
                                     <i class="material-icons">keyboard_arrow_right</i>
                                 </a>
@@ -60,68 +60,65 @@
             <!--/.Panel-->
         </div>
     </div>
-    <div>
-        <table border="1">
-            <tr>
-                　
-                <td>account</td>
-                　
-                <td>sn</td>
-                <td>name</td>
-                <td>身份</td>
-                <td>birthday</td>
-                　
-                <td>gender</td>
-                　
-                <td>email</td>
-                　
-                <td>驗證</td>
-            </tr>
-            <tr>
-                　
-                <td>{{$data->account}}</td>
-                　
-                <td>{{$data->sn}}</td>
-                　
-                <td>{{$data->name}}</td>
-                　
-                <td>{{$data->role}}</td>
-                　
-                <td>{{$data->birthday}}</td>
-                <td>{{$data->gender}}</td>
-                <td>{{$data->email}}</td>
-                <td>{{$data->enable}}</td>
-            </tr>
-        </table>
-    </div>
-    　
-    <button onclick="ChagePassword()">修改密碼</button>
-    　
-    <button onclick="ChageEmail()">修改信箱</button>
-    <div hidden id="ps">
-        <form action="changepassword" method="post">
-            舊密碼:<input type="password" name="oldpassword" required><br>
-            新密碼:<input type="password" name="newpassword" required><br>
-            <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
-            <input type="submit" value="送出">
-        </form>
-    </div>
-    <div hidden id="em">
-        <form action="changeemail" method="post">
-            信箱:<input type="text" name="email" required><br>
-            <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
-            <input type="submit" value="送出">
-        </form>
-    </div>
 @endsection
 @section('eofScript')
     <script>
-        function ChagePassword() {
-            $("#ps").toggle();
+        function ChangePwd() {
+            let alert = bAlert('修改密碼', `
+            <form class="form">
+                <div class="md-form form-group">
+                    <input type="password" id="oldPwdInput" class="form-control validate" required>
+                    <label for="emailInput">Type your current password</label>
+                </div>
+                <div class="md-form form-group">
+                    <input type="password" id="newPwdInput" class="form-control validate" required>
+                    <label for="newPwdInput">Type your new password</label>
+                </div>
+                <div class="text-right">
+                    <button type="submit" class="btn btn-sm btn-amber">更改</button>
+                </div>
+            </form>
+            `);
+            alert.find('.modal-footer').remove();
+            alert.find('form').on('submit', function () {
+                ajax('POST', '{{action('UserController@changePassword')}}', {oldpassword: $("#oldPwdInput").val(), newpassword: $("#newPwdInput").val()})
+                    .then(d => {
+                        if (d.success) {
+                            toastr.success(d.result);
+                            location.reload();
+                        } else {
+                            toastr.error(d.result);
+                        }
+                    });
+            });
         }
 
-        function ChageEmail() {
-            $("#em").toggle();
+        function ChangeEmail() {
+            let alert = bAlert('更換信箱', `
+            <form class="form">
+                <div class="md-form form-group">
+                    <input type="email" id="emailInput" class="form-control validate" required>
+                    <label for="emailInput">Type your email</label>
+                </div>
+                <div class="text-right">
+                    <button type="submit" class="btn btn-sm btn-amber">更改</button>
+                </div>
+            </form>
+            `);
+            alert.find('.modal-footer').remove();
+            alert.find('form').on('submit', function () {
+                let email = alert.find('#emailInput')[0];
+                toastr.info('Updating...');
+                ajax('POST', '{{action('UserController@changeEmail')}}', {email: email.value})
+                    .then(d => {
+                        if (d.success) {
+                            toastr.success('Updated, Refresh page.');
+                            location.reload();
+                        } else {
+                            toastr.error(d.result);
+                        }
+                    });
+            });
         }
 
         $("#avatar").change(function () {

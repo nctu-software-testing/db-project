@@ -102,13 +102,10 @@ class UserController extends BaseController
         if (Hash::check($oldpassword, $dbpassword)) {
             $check_user->password = bcrypt(request('newpassword'));
             $check_user->save();
-            $request->session()->flush();
-            $request->session()->flash('log', '修改成功，請重新登入。');
-            return redirect('/');
+            $this->logout($request);
+            return $this->result('修改成功，請重新登入。', true);
         } else {
-            $request->session()->put('user', $check_user);
-            $request->session()->flash('log', '密碼不符合');
-            return redirect()->back();
+            return $this->result('密碼不符合', false);
         }
     }
 
@@ -131,9 +128,8 @@ class UserController extends BaseController
         $email = request('email');
         $check_user = User::where('id', '=', $id)->first();
         $check_user->email = $email;
-        $check_user->save();
-        $request->session()->flash('log', '修改成功。');
-        return redirect()->back();
+        $this->updateUser($check_user);
+        return $this->result('修改成功', true);
     }
 
     private function updateUser(User $user) : User
