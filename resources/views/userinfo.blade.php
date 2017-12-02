@@ -1,3 +1,4 @@
+@extends('base')
 @section('content')
     <div>
     <table border="1">
@@ -54,5 +55,3 @@
         }
     </Script>
 @endsection
-@include('base')
-

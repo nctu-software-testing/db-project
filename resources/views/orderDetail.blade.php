@@ -1,3 +1,4 @@
+@extends('base')
 @section('extraScript')
 <script src="https://code.essoduke.org/js/twzipcode/jquery.twzipcode-1.7.14.min.js"></script>
 @endsection
@@ -26,4 +27,3 @@
 @endsection
 @section('eofScript')
 @endsection
-@include('base')
