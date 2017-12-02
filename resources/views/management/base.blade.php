@@ -1,6 +1,7 @@
 @extends('base')
 @section('content-full')
-    <div class="container">
+    <div class="container management">
+        <p class="row"></p>
         <div class="row">
             <div class="col-3">
                 @include('management.menu.menu')

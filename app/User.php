@@ -38,4 +38,18 @@ class User extends Model
             return 'https://i.imgur.com/' . $this->avatar . 'b.jpg';
         }
     }
+
+    public function roleCh()
+    {
+        switch ($this->role) {
+            case self::ADMIN_ROLE:
+                return '管理員';
+            case self::BUSINESS_ROLE:
+                return '商家';
+            case self::CUSTOMER_ROLE:
+                return '顧客';
+            default:
+                return 'Unknown';
+        }
+    }
 }

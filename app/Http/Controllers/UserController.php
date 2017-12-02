@@ -67,7 +67,7 @@ class UserController extends BaseController
             if (Hash::check($password, $dbpassword)) {
                 //TODO: Check references
                 //$request->session()->put('user', json_decode($check_user->toJson()));
-                $request->session()->put('user', $check_user);
+                $this->updateUser($check_user);
                 return $this->result('登入成功', true);
             }
         }
@@ -83,10 +83,12 @@ class UserController extends BaseController
 
     public function getUserInfo(Request $request)
     {
-        $id = $request->session()->get('user')->id;
-        $data = User::
-        where('user.id', '=', $id)
-            ->paginate($this->paginate);
+        $id = session('user.id');
+        $data = User::find($id);
+        if(!$data){
+            return $this->logout($request);
+        }
+
         return view('management.user-info', ['data' => $data])
             ->with('title', '會員資料');
     }
@@ -110,6 +112,19 @@ class UserController extends BaseController
         }
     }
 
+    public function postChangeAvatar(Request $request){
+        $id = session('user.id');
+        $user = User::find($id);
+        $avatar = $request->get('avatar');
+        if(!is_string($avatar)) $avatar = '';
+        $user->avatar = trim($avatar);
+        $this->updateUser($user);
+
+        return $this->result([
+            'url'   => $user->getAvatarUrl()
+        ], true);
+    }
+
     public function changeEmail(Request $request)
     {
         $id = $request->session()->get('user')->id;
@@ -119,5 +134,13 @@ class UserController extends BaseController
         $check_user->save();
         $request->session()->flash('log', '修改成功。');
         return redirect()->back();
+    }
+
+    private function updateUser(User $user) : User
+    {
+        $user->save();
+        session()->put('user', $user);
+
+        return $user;
     }
 }
