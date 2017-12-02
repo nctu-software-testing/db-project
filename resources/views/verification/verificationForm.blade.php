@@ -1,5 +1,5 @@
 <hr/>
-<h4>上船證件</h4>
+<h4>上傳證件</h4>
 <form action="{{action('VerificationController@verification')}}" method="post" enctype="multipart/form-data">
     <div class="row">
         <div class="col-12">
