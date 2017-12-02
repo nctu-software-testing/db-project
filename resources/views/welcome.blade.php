@@ -66,14 +66,26 @@
     </section>
     <section id="category">
         <div class="container">
-            <h2>分類</h2>
+            <h2>
+                分類
+                <a href="{{action('CategoryController@getCategory')}}" style="font-size:initial">
+                    所有分類 &gt;
+                </a>
+            </h2>
             <div id="category-wrap">
                 <div class="row align-content-start flex-wrap">
                     <?php $i = 0;$colNum = 6;?>
                     @foreach($category as $cat)
                         <a class="category-item col"
                            href="{{action('ProductController@getProducts')}}?category={{$cat->id}}">
-                            <i class="material-icons">attach_money</i>
+                            <div class="icon-wrapper">
+                                @if($cat->hasCustomIcon())
+                                    <i data-index="{{$cat->image_index}}"
+                                       class="category-icon"></i>
+                                @else
+                                    <i class="material-icons">attach_money</i>
+                                @endif
+                            </div>
                             <p>{{$cat->product_type}}</p>
                         </a>
                         @if((++$i)%$colNum===0)

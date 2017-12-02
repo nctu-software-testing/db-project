@@ -2,8 +2,6 @@
 
 namespace App;
 
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model
@@ -18,5 +16,10 @@ class Category extends Model
     protected $fillable = [
         'product_type',
     ];
+
+    public function hasCustomIcon()
+    {
+        return $this->image_index !== -1;
+    }
 
 }
