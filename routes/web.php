@@ -40,7 +40,7 @@ Route::group([
 
 
     //USER
-    Route::get('/userinfo', 'UserController@getUserInfo');
+    Route::get('profile', 'UserController@getUserInfo');
 });
 
 Route::group([

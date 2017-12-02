@@ -48,7 +48,7 @@ class UserController extends BaseController
         $new_user->email = $email;
         $new_user->birthday = $birthday;
         $check_user = User::where('account', $account)->count();
-        if ($check_user!==0) {
+        if ($check_user !== 0) {
             return $this->result('已有相同帳戶', false);
         } else {
             $new_user->save();
@@ -83,19 +83,12 @@ class UserController extends BaseController
 
     public function getUserInfo(Request $request)
     {
-        if (!($request->session()->has('user')))
-            return redirect()->back();
         $id = $request->session()->get('user')->id;
-        if ($request->session()->get('user')->role == "A") {
-            $data = User::
-            paginate($this->paginate);
-            return view('userinfo', ['data' => $data]);
-        } else {
-            $data = User::
-            where('user.id', '=', $id)
-                ->paginate($this->paginate);
-            return view('userinfo', ['data' => $data]);
-        }
+        $data = User::
+        where('user.id', '=', $id)
+            ->paginate($this->paginate);
+        return view('management.user-info', ['data' => $data])
+            ->with('title', '會員資料');
     }
 
     public function changePassword(Request $request)

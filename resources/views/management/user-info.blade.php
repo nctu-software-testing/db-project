@@ -1,4 +1,4 @@
-@extends('base')
+@extends('management.base')
 @section('content')
     <div>
     <table border="1">
