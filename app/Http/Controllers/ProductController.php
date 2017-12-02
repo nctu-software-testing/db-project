@@ -9,6 +9,7 @@ use App\OrderProduct;
 use App\Product;
 use App\ProductPicture;
 use DateTime;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
@@ -16,7 +17,8 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductController extends BaseController
 {
-    public $paginate = 10;
+    public $paginate = 12;
+    private const SEARCH_KEY = ['name', 'category', 'minPrice', 'maxPrice', 'sort'];
 
     public function __construct()
     {
@@ -25,29 +27,76 @@ class ProductController extends BaseController
 
     public function getProducts(Request $request)
     {
+        $search = request('search', []);
         //商品資訊
-        $type = request("type");
         $data = Product
             ::join('category', 'on_product.category_id', '=', 'category.id')
-            ->select('on_product.id', 'product_name', 'product_information', 'start_date', 'end_date', 'price', 'state', 'product_type', 'user_id');
+            ->select(
+                'on_product.id',
+                'product_name',
+                'product_information',
+                'start_date',
+                'end_date',
+                'price',
+                'state',
+                'product_type'
+            )
+            ->selectRaw('GetDiffUserBuyProduct(on_product.id) as diffBuy');
 
         //公開瀏覽
         $now = new DateTime();
         $data = Product::getOnProductsBuilder($data);
+        $data = $this->applySearchCond($data, $search);
 
-        if (is_numeric($request->get('category'))) {
-            $data->where('on_product.category_id', $request->get('category'));
-        }
         $data = $data->paginate($this->paginate);
         $id = request("id", 0);
         $count = 0;
         //類別資訊
-        $category = Category::get();
-        return view('products.list')->
-        with('category', $category)->
-        with('data', $data)->
-        with('id', $id)->
-        with('type', $type);
+        $category = Category::orderBy('id')->get();
+        return view('products.list')
+            ->with('category', $category)
+            ->with('data', $data)
+            ->with('id', $id)
+            ->with('searchList', self::SEARCH_KEY)
+            ->with('search', $search);
+    }
+
+    private function applySearchCond(Builder $builder, array $search): Builder
+    {
+        $data = [];
+        foreach (self::SEARCH_KEY as $k)
+            $data[$k] = isset($search[$k]) && is_string($search[$k]) ? trim($search[$k]) : null;
+
+        if ($data['category'] !== null)
+            $builder->where('on_product.category_id', $data['category']);
+
+        if ($data['name'] != null)
+            $builder->where('on_product.product_name', 'LIKE', '%'.$data['name'].'%');
+
+        if(is_numeric($data['minPrice']))
+            $builder->where('on_product.price', '>=', $data['minPrice']);
+
+        if(is_numeric($data['maxPrice']))
+            $builder->where('on_product.price', '<=', $data['maxPrice']);
+
+        //Apply Sort
+        switch(intval($data['sort'])){
+            case 2:
+                $builder->orderBy('on_product.price', 'ASC');
+                break;
+            case 3:
+                $builder->orderBy('on_product.price', 'DESC');
+                break;
+            case 4:
+                $builder->orderBy('diffBuy', 'DESC');
+                break;
+            default:
+                $builder->orderBy('on_product.start_date', 'DESC');
+                break;
+        }
+        $builder->orderBy('on_product.id', 'ASC');
+
+        return $builder;
     }
 
     public function getSelfProducts(Request $request)
@@ -188,13 +237,16 @@ class ProductController extends BaseController
         $image = $image[$id] ?? null;
         if ($image) {
             $imagePath = $image->path;
-            if (Storage::exists($imagePath)) {
-                $type = Storage::mimeType($imagePath);
-                $content = (Storage::get($imagePath));
-                $response = Response::make($content, 200);
-                $response->header("Content-Type", $type);
-                return $response;
-            }
+        }
+        if (is_null($image) || !Storage::exists($imagePath)) {
+            $imagePath = 'public/product-no-image.png';
+        }
+        if (Storage::exists($imagePath)) {
+            $type = Storage::mimeType($imagePath);
+            $content = (Storage::get($imagePath));
+            $response = Response::make($content, 200);
+            $response->header("Content-Type", $type);
+            return $response;
         }
         return abort(404);
     }

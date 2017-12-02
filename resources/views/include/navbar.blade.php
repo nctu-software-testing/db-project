@@ -21,8 +21,12 @@
                        href="{{action('ProductController@getProducts')}}">商品瀏覽</a>
                 </div>
 
-                <form class="form-inline" style="flex: 1">
-                    <input class="form-control mr-sm-4" type="search" placeholder="Search" aria-label="Search" style="width: 100%">
+                <form class="form-inline" style="flex: 1"
+                      action="{{action('ProductController@getProducts')}}"
+                >
+                    <input class="form-control mr-sm-4" type="search" placeholder="Search" aria-label="Search" style="width: 100%"
+                        name="search[name]" value="{{request('search')['name']??''}}"
+                    >
                 </form>
             </div>
             <div class="navbar-nav ml-auto">

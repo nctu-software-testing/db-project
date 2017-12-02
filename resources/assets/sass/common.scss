@@ -68,3 +68,20 @@ main {
   }
 }
 
+.no-data{
+  margin-top: 2rem;
+  text-align: center;
+  background: no-repeat top center url("#{$image_path}/no-data.png");
+  flex: none;
+  clear:both;
+  width: 100%;
+  height: 230px;
+  position: relative;
+  &:after{
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    content:"沒有資料";
+  }
+}

@@ -77,7 +77,7 @@
                     <?php $i = 0;$colNum = 6;?>
                     @foreach($category as $cat)
                         <a class="category-item col"
-                           href="{{action('ProductController@getProducts')}}?category={{$cat->id}}">
+                           href="{{action('ProductController@getProducts')}}?search[category]={{$cat->id}}">
                             <div class="icon-wrapper">
                                 @if($cat->hasCustomIcon())
                                     <i data-index="{{$cat->image_index}}"
@@ -105,7 +105,7 @@
             <div class="row">
                 <?php $i = 0;$colNum = 3;?>
                 @foreach($products as $p)
-                    <div class="card-wrap col-4">
+                    <div class="product-wrap col-4">
                         <!--Card-->
                         <a class="card" href="{{action('ProductController@getItem', $p->id)}}">
                             <!--Card image-->
@@ -141,7 +141,7 @@
                     @endif
                 @endforeach
                 @while(($i++)%$colNum!==0)
-                    <div class="card-wrap empty"></div>
+                    <div class="product-wrap empty"></div>
                 @endwhile
             </div>
         </div>

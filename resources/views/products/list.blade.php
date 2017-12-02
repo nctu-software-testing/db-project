@@ -1,60 +1,129 @@
-@section('content')
-    <table border="1">
-        <tr>
-            　
-            <td>id</td>
-            <td>Title</td>
-            <td>Category</td>
-            <td>User</td>
-            <td>Price</td>
-            <td>上架日期</td>
-            <td>下架日期</td>
-            <td>狀態</td>
-            <td>購買</td>
+@extends('base')
+@section('productList')
+    <div id="products" class="d-flex">
+        <?php $i = 0;$colNum = 4;?>
+        @forelse($data as $p)
+            <div class="product-wrap">
+                <!--Card-->
+                <a class="card" href="{{action('ProductController@getItem', $p->id)}}">
+                    <!--Card image-->
+                    <div class="view overlay hm-white-slight">
+                        <img src="{{action('ProductController@getImage', [
+                                'pid'=>$p->id,
+                                'id'    => 0
+                            ])}}" class="img-fluid" alt="photo">
+                        <div class="mask">
 
-        </tr>
-        @for ($i = 0; $i < count($data); $i++)
-            <tr>
-                <td>{{$data[$i]->id}}</td>
-                　
-                <td>
-                    <a href="{{action('ProductController@getItem', ['id'=>$data[$i]->id])}}"> {{$data[$i]->	product_name}} </a>
-                </td>
-                　
-                <td>{{$data[$i]->product_type}}</td>
-                <td>{{$data[$i]->getUserName()}}</td>
-                <td>{{$data[$i]->price}}元</td>
-                　
-                <td>{{$data[$i]->start_date}}</td>
-                　
-                <td>{{$data[$i]->end_date}}</td>
-                <td>{{$data[$i]->GetState()}}</td>
-                <td>
-                    <button onclick="Buy('{{$data[$i]->id}}')">購買</button>
-                </td>
-            </tr>
-        @endfor
-    </table>
-    {{ $data->links() }}<br>
+                        </div>
+                    </div>
+
+                    <!--Card content-->
+                    <div class="card-body">
+                        <div class="product-info">
+                            <h5 class="product-title">{{$p->product_name}}</h5>
+                            <div class="product-price">
+                                <i class="ntd">NT$</i>
+                                {{$p->price}}
+                            </div>
+                        </div>
+                        <div class="product-order-info">
+                            <p>{{$p->diffBuy}}人訂購</p>
+                        </div>
+                    </div>
+
+                </a>
+                <!--/.Card-->
+            </div>
+            @if((++$i) %$colNum === 0)
+                <div class="w-100"></div>
+            @endif
+
+        @empty
+            <p class="no-data"></p>
+        @endforelse
+
+        @while(($i++)%$colNum!==0)
+            <div class="product-wrap empty"></div>
+        @endwhile
+    </div>
+    {{ $data->appends(request()->except('page'))->render('pagination::mdb') }}
+@endsection
+@section('content')
+    <form action="{{action('ProductController@getProducts')}}" hidden id="searchForm">
+        <?php
+        foreach ($searchList as $sk) {
+        $value = $search[$sk] ?? null;
+        if ($value) { ?>
+        <input type="hidden" name="search[{{$sk}}]" value="{{$value}}"/>
+        <?php
+        }
+        }
+        ?>
+    </form>
+    <div class="row">
+        <div class="col-2">
+            @include('products.category-list')
+        </div>
+        <div class="col-10">
+            <section class="row section">
+                <div class="col">
+                    <h3>商品</h3>
+                </div>
+                <div class="col text-right">
+
+                    <!-- Small button group -->
+                    <div class="btn-group">
+                        <button class="btn btn-amber btn-sm dropdown-toggle" type="button"
+                                data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                            排序
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item sort-set" href="#" data-type="1">依上架日期</a>
+                            <a class="dropdown-item sort-set" href="#" data-type="2">依照價錢 (便宜)</a>
+                            <a class="dropdown-item sort-set" href="#" data-type="3">依照價錢 (貴)</a>
+                            <a class="dropdown-item sort-set" href="#" data-type="4">依購買人數</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            @yield('productList')
+        </div>
+    </div>
+
 @endsection
 @section('eofScript')
     <script>
-        function Buy(id) {
+        function createSearchInput(name){
+            return $('<input type="hidden" name="search['+name+']">');
 
-            var amount = prompt("請輸入購買數量!", "1");
-            if (isNaN(amount) || amount < 0 || !amount) {
-                alert("請輸入正確數字");
-                return;
-            }
-            $.post("buy",
-                {
-                    id: id,
-                    amount: amount,
-                },
-                function (data) {
-                    location.reload();
-                });
         }
+        $('.price-search').on('click', function () {
+            let t = $(this);
+            let min = t.data('min') || -1;
+            let max = t.data('max') || -1;
+            let form = $("#searchForm");
+            form.find('input[name="search[minPrice]"], input[name="search[maxPrice]"]').remove();
+
+            let minInput = createSearchInput('minPrice');
+            let maxInput = createSearchInput('maxPrice');
+            minInput.val(min);
+            maxInput.val(max);
+
+            if (min >= 0) form.append(minInput);
+            if (max >= 0) form.append(maxInput);
+
+            form.submit();
+
+        });
+        $('.sort-set').on('click', function(){
+            let t = $(this);
+            let form = $("#searchForm");
+            form.find('input[name="search[sort]"]').remove();
+            let input = createSearchInput('sort');
+            input.val(t.data('type'));
+            form.append(input);
+            form.submit();
+        });
     </script>
 @endsection
-@include('base')

@@ -12,7 +12,10 @@
 // Common style
 @import "common";
 
+//Components
 @import "category";
+@import "productItem";
+@import "pagination";
 
 .page-index{
   @import "pageIndex";

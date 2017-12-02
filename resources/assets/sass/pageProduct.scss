@@ -1,0 +1,27 @@
+#products {
+  & {
+    margin-right: -1rem;
+    flex-wrap: wrap;
+    flex-direction: row;
+  }
+  .product-wrap {
+    margin-right: 1rem;
+
+    p{
+      margin-bottom: 0;
+    }
+  }
+}
+
+#searchList{
+  .row.section{
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #DDD;
+
+    &:last-of-type{
+      border-bottom: 0;
+    }
+  }
+
+}

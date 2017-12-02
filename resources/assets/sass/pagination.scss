@@ -1,0 +1,16 @@
+.pagination{
+  .page-link{
+    border: 1px solid #ddd;
+    background: #FFF;
+
+  }
+
+  .page-item{
+    &.disabled .page-link{
+      background: transparent;
+    }
+    &.active .page-link{
+      border: none;
+    }
+  }
+}
