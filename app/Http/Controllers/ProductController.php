@@ -246,6 +246,7 @@ class ProductController extends BaseController
             $content = (Storage::get($imagePath));
             $response = Response::make($content, 200);
             $response->header("Content-Type", $type);
+            $response->header("Cache-Control", 'public, max-age=3600');
             return $response;
         }
         return abort(404);
