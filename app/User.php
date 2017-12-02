@@ -2,15 +2,14 @@
 
 namespace App;
 
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable
+use Illuminate\Database\Eloquent\Model;
+
+class User extends Model
 {
     public const ADMIN_ROLE = 'A';
     public const BUSINESS_ROLE = 'B';
     public const CUSTOMER_ROLE = 'C';
-    use Notifiable;
     protected $table = 'user';
     public $timestamps = false;
     /**
@@ -19,7 +18,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'account', 'sn', 'password', 'role','name','birthday','gender','email','enable'
+        'account', 'sn', 'password', 'role', 'name', 'birthday', 'gender', 'email', 'enable', 'avatar'
     ];
 
     /**
@@ -30,4 +29,13 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
     ];
+
+    public function getAvatarUrl()
+    {
+        if (empty($this->avatar)) {
+            return asset('images/avatar.svg');
+        } else {
+            return 'https://i.imgur.com/' . $this->avatar . 'b.jpg';
+        }
+    }
 }

@@ -11,7 +11,7 @@ Imgur.UploadImage = function (file) {
     return fetch(API_URL, {
         method: 'POST',
         headers: header,
-        mode: 'cors',
+        // mode: 'cors',
         body: file
     })
         .then(resp => resp.json());
