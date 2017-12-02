@@ -1,4 +1,61 @@
+@extends('base')
+@section('productList')
+    <div id="products" class="d-flex">
+        <?php $i = 0;$colNum = 4;?>
+        @foreach($data as $p)
+
+            <div class="product-wrap">
+                <!--Card-->
+                <a class="card" href="{{action('ProductController@getItem', $p->id)}}">
+                    <!--Card image-->
+                    <div class="view overlay hm-white-slight">
+                        <img src="{{action('ProductController@getImage', [
+                                'pid'=>$p->id,
+                                'id'    => 0
+                            ])}}" class="img-fluid" alt="photo">
+                        <div class="mask">
+
+                        </div>
+                    </div>
+
+                    <!--Card content-->
+                    <div class="card-body">
+                        <div class="product-info">
+                            <h5 class="product-title">{{$p->product_name}}</h5>
+                            <div class="product-price">
+                                <i class="ntd">NT$</i>
+                                {{$p->price}}
+                            </div>
+                        </div>
+                        <div class="product-order-info">
+                            <p>{{$p->diffBuy}}人訂購</p>
+                        </div>
+                    </div>
+
+                </a>
+                <!--/.Card-->
+            </div>
+            @if((++$i) %$colNum === 0)
+                <div class="w-100"></div>
+            @endif
+        @endforeach
+
+        @while(($i++)%$colNum!==0)
+            <div class="product-wrap empty"></div>
+        @endwhile
+    </div>
+
+    {{ $data->render('pagination::mdb') }}
+@endsection
 @section('content')
+    <div class="row">
+        <div class="col-2">
+            @include('products.category-list')
+        </div>
+        <div class="col-10">
+            @yield('productList')
+        </div>
+    </div>
     <table border="1">
         <tr>
             　
@@ -22,7 +79,6 @@
                 </td>
                 　
                 <td>{{$data[$i]->product_type}}</td>
-                <td>{{$data[$i]->getUserName()}}</td>
                 <td>{{$data[$i]->price}}元</td>
                 　
                 <td>{{$data[$i]->start_date}}</td>
@@ -35,7 +91,7 @@
             </tr>
         @endfor
     </table>
-    {{ $data->links() }}<br>
+    <br>
 @endsection
 @section('eofScript')
     <script>
@@ -57,4 +113,3 @@
         }
     </script>
 @endsection
-@include('base')

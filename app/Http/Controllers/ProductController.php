@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductController extends BaseController
 {
-    public $paginate = 10;
+    public $paginate = 12;
 
     public function __construct()
     {
@@ -29,7 +29,16 @@ class ProductController extends BaseController
         $type = request("type");
         $data = Product
             ::join('category', 'on_product.category_id', '=', 'category.id')
-            ->select('on_product.id', 'product_name', 'product_information', 'start_date', 'end_date', 'price', 'state', 'product_type', 'user_id');
+            ->select(
+                'on_product.id',
+                'product_name',
+                'product_information',
+                'start_date',
+                'end_date',
+                'price',
+                'state',
+                'product_type'
+            )->selectRaw('GetDiffUserBuyProduct(on_product.id) as diffBuy');
 
         //公開瀏覽
         $now = new DateTime();
@@ -42,7 +51,7 @@ class ProductController extends BaseController
         $id = request("id", 0);
         $count = 0;
         //類別資訊
-        $category = Category::get();
+        $category = Category::orderBy('id')->get();
         return view('products.list')->
         with('category', $category)->
         with('data', $data)->
@@ -188,13 +197,16 @@ class ProductController extends BaseController
         $image = $image[$id] ?? null;
         if ($image) {
             $imagePath = $image->path;
-            if (Storage::exists($imagePath)) {
-                $type = Storage::mimeType($imagePath);
-                $content = (Storage::get($imagePath));
-                $response = Response::make($content, 200);
-                $response->header("Content-Type", $type);
-                return $response;
-            }
+        }
+        if (is_null($image) || !Storage::exists($imagePath)) {
+            $imagePath = 'public/product-no-image.png';
+        }
+        if (Storage::exists($imagePath)) {
+            $type = Storage::mimeType($imagePath);
+            $content = (Storage::get($imagePath));
+            $response = Response::make($content, 200);
+            $response->header("Content-Type", $type);
+            return $response;
         }
         return abort(404);
     }

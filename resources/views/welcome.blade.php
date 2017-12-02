@@ -105,7 +105,7 @@
             <div class="row">
                 <?php $i = 0;$colNum = 3;?>
                 @foreach($products as $p)
-                    <div class="card-wrap col-4">
+                    <div class="product-wrap col-4">
                         <!--Card-->
                         <a class="card" href="{{action('ProductController@getItem', $p->id)}}">
                             <!--Card image-->
@@ -141,7 +141,7 @@
                     @endif
                 @endforeach
                 @while(($i++)%$colNum!==0)
-                    <div class="card-wrap empty"></div>
+                    <div class="product-wrap empty"></div>
                 @endwhile
             </div>
         </div>

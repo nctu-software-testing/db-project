@@ -13,7 +13,7 @@ class Product extends Model
     public const STATE_DRAFT = 0;
     public const STATE_RELEASE = 1;
     public const STATE_DELETED = 2;
-    private const HOT_MAX_COUNT = 8;
+    private const HOT_MAX_COUNT = 6;
 
     /**
      * The attributes that are mass assignable.

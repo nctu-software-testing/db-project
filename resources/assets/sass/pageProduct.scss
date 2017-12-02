@@ -1,0 +1,14 @@
+#products {
+  & {
+    margin-right: -1rem;
+    flex-wrap: wrap;
+    flex-direction: row;
+  }
+  .product-wrap {
+    margin-right: 1rem;
+
+    p{
+      margin-bottom: 0;
+    }
+  }
+}
