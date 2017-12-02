@@ -9,7 +9,7 @@ $activeClass = 'active border-warning amber';
 <div id="searchList">
     <div class="row section">
         <div class="col">
-            <h4>分類</h4>
+            <h5>分類</h5>
             <div class="list-group">
                 <a class="list-group-item list-group-item-action {{$isCurrentCategory(0)?$activeClass:''}}"
                    href="{{action('ProductController@getProducts')}}" data-index="0"
@@ -27,7 +27,7 @@ $activeClass = 'active border-warning amber';
 
     <div class="row section">
         <div class="col">
-            <h4>價錢</h4>
+            <h5>價錢</h5>
             <div class="list-group">
                 <button class="list-group-item list-group-item-action price-search"
                         data-min="0" data-max="100"

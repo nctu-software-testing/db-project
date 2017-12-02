@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Storage;
 class ProductController extends BaseController
 {
     public $paginate = 12;
-    private const SEARCH_KEY = ['name', 'category', 'minPrice', 'maxPrice'];
+    private const SEARCH_KEY = ['name', 'category', 'minPrice', 'maxPrice', 'sort'];
 
     public function __construct()
     {
@@ -78,6 +78,23 @@ class ProductController extends BaseController
 
         if(is_numeric($data['maxPrice']))
             $builder->where('on_product.price', '<=', $data['maxPrice']);
+
+        //Apply Sort
+        switch(intval($data['sort'])){
+            case 2:
+                $builder->orderBy('on_product.price', 'ASC');
+                break;
+            case 3:
+                $builder->orderBy('on_product.price', 'DESC');
+                break;
+            case 4:
+                $builder->orderBy('diffBuy', 'DESC');
+                break;
+            default:
+                $builder->orderBy('on_product.start_date', 'DESC');
+                break;
+        }
+        $builder->orderBy('on_product.id', 'ASC');
 
         return $builder;
     }
