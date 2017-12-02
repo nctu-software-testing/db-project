@@ -34,10 +34,12 @@ class CategoryTableSeeder extends Seeder
 代買代購
 其他類別"));
 
+        $i = 0;
         foreach ($type as $t) {
             if (!DB::table('category')->where('product_type', $t)->exists()) {
                 DB::table('category')->insert([
                     'product_type' => $t,
+                    'image_index' => $i++,
                 ]);
             }
         }

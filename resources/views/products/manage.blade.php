@@ -1,3 +1,4 @@
+@extends('base')
 @section('content')
     <table border="1">
         <tr>
@@ -69,4 +70,3 @@
         }
     </script>
 @endsection
-@include('base')

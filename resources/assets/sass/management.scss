@@ -1,0 +1,42 @@
+.edit-link {
+  display: inline-block;
+  position: relative;
+  margin-left: .5rem;
+  padding-right: 1.5rem;
+  vertical-align: top;
+  & > .material-icons {
+    position: absolute;
+    top: 0;
+    right: 0;
+    line-height: 1.25rem;
+  }
+}
+
+.profile-avatar {
+  margin: 1rem 0 2rem;
+  text-align: center;
+
+  & > .img-container {
+    width: 10rem;
+    height: 10rem;
+    overflow: hidden;
+    position: relative;
+    margin: 0 auto;
+
+    &>img{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    &>input{
+      display: block;
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+    }
+  }
+}

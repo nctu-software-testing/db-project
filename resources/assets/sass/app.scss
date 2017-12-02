@@ -3,38 +3,40 @@
 // Fonts
 @import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600);
 @import url(https://fonts.googleapis.com/earlyaccess/notosanstc.css);
-
 // Material Design for Bootstrap 4
 @import "../css/ecss.css";
 @import "ajaxAuth";
 @import "form";
-
 // Common style
 @import "common";
-
 //Components
 @import "category";
 @import "productItem";
 @import "pagination";
+@import "menu";
 
-.page-index{
+.page-index {
   @import "pageIndex";
 }
 
-.page-user{
+.page-user {
   @import "pageUser";
 }
 
-.page-user{
+.page-user {
   @import "pageUser";
 }
 
-.page-verification{
+.page-verification {
   @import "pageVerification";
 }
 
-.page-product{
+.page-product {
   @import "pageProduct";
+}
+
+.management {
+  @import "management";
 }
 
 // Img modal style

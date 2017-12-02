@@ -40,7 +40,8 @@ Route::group([
 
 
     //USER
-    Route::get('/userinfo', 'UserController@getUserInfo');
+    Route::get('profile', 'UserController@getUserInfo');
+    Route::post('profile/avatar', 'UserController@postChangeAvatar');
 });
 
 Route::group([

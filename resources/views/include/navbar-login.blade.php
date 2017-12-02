@@ -12,7 +12,7 @@
         <div class="nav-item dropdown">
             <a class="nav-link dropdown-toggle waves-effect" href="#" id="navbar-account" data-toggle="dropdown"
                aria-haspopup="true">
-                <i class="material-icons">account_circle</i>
+                <img src="{{session('user')->getAvatarUrl()}}" class="avatar"/>
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown"
                  data-dropdown-in="fadeIn" data-dropdown-out="fadeOut" style="position: absolute;">

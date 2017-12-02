@@ -48,7 +48,7 @@ class UserController extends BaseController
         $new_user->email = $email;
         $new_user->birthday = $birthday;
         $check_user = User::where('account', $account)->count();
-        if ($check_user!==0) {
+        if ($check_user !== 0) {
             return $this->result('已有相同帳戶', false);
         } else {
             $new_user->save();
@@ -67,7 +67,7 @@ class UserController extends BaseController
             if (Hash::check($password, $dbpassword)) {
                 //TODO: Check references
                 //$request->session()->put('user', json_decode($check_user->toJson()));
-                $request->session()->put('user', $check_user);
+                $this->updateUser($check_user);
                 return $this->result('登入成功', true);
             }
         }
@@ -83,19 +83,14 @@ class UserController extends BaseController
 
     public function getUserInfo(Request $request)
     {
-        if (!($request->session()->has('user')))
-            return redirect()->back();
-        $id = $request->session()->get('user')->id;
-        if ($request->session()->get('user')->role == "A") {
-            $data = User::
-            paginate($this->paginate);
-            return view('userinfo', ['data' => $data]);
-        } else {
-            $data = User::
-            where('user.id', '=', $id)
-                ->paginate($this->paginate);
-            return view('userinfo', ['data' => $data]);
+        $id = session('user.id');
+        $data = User::find($id);
+        if(!$data){
+            return $this->logout($request);
         }
+
+        return view('management.user-info', ['data' => $data])
+            ->with('title', '會員資料');
     }
 
     public function changePassword(Request $request)
@@ -107,14 +102,24 @@ class UserController extends BaseController
         if (Hash::check($oldpassword, $dbpassword)) {
             $check_user->password = bcrypt(request('newpassword'));
             $check_user->save();
-            $request->session()->flush();
-            $request->session()->flash('log', '修改成功，請重新登入。');
-            return redirect('/');
+            $this->logout($request);
+            return $this->result('修改成功，請重新登入。', true);
         } else {
-            $request->session()->put('user', $check_user);
-            $request->session()->flash('log', '密碼不符合');
-            return redirect()->back();
+            return $this->result('密碼不符合', false);
         }
+    }
+
+    public function postChangeAvatar(Request $request){
+        $id = session('user.id');
+        $user = User::find($id);
+        $avatar = $request->get('avatar');
+        if(!is_string($avatar)) $avatar = '';
+        $user->avatar = trim($avatar);
+        $this->updateUser($user);
+
+        return $this->result([
+            'url'   => $user->getAvatarUrl()
+        ], true);
     }
 
     public function changeEmail(Request $request)
@@ -123,8 +128,15 @@ class UserController extends BaseController
         $email = request('email');
         $check_user = User::where('id', '=', $id)->first();
         $check_user->email = $email;
-        $check_user->save();
-        $request->session()->flash('log', '修改成功。');
-        return redirect()->back();
+        $this->updateUser($check_user);
+        return $this->result('修改成功', true);
+    }
+
+    private function updateUser(User $user) : User
+    {
+        $user->save();
+        session()->put('user', $user);
+
+        return $user;
     }
 }

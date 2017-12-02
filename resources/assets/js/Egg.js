@@ -6,7 +6,7 @@ window.StartE = function () {
 
 
     eContainer[0].style.transform = stTag;
-    setTimeout(() => location.href = '/', 7500);
+    setTimeout(() => location.href = atob('aHR0cHM6Ly93ZWItcHJvZ3JhbW1pbmctczE3dS5zOTExNDE1LnRrLw=='), 7500);
 };
 
 window.StartK = function () {
