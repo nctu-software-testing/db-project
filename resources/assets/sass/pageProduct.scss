@@ -25,3 +25,116 @@
   }
 
 }
+
+.product-header {
+  padding-top: 50px;
+}
+.product-information, .introduce, .checkout-info{
+  background-color: white;
+  padding: 32px;
+  border-radius: 2px;
+  box-shadow: 0 1px 1px 0 rgba(0,0,0,.05);
+}
+
+.product-price, .price-amount {
+  color: #ff5722;
+  font-weight: 700;
+}
+
+.info-header, .info-about {
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid rgba(0,0,0,.09);
+}
+
+.info-about {
+  padding-top: 10px;
+  line-height: 16px;
+}
+
+.info-price {
+  padding-top: 15px;
+}
+
+.buy-btn {
+  margin-top: 30px;
+}
+
+.suggest {
+  color: rgba(0,0,0,.54);
+}
+
+#amount {
+  width: 250px;
+}
+
+.remaining
+{
+  color: rgba(0,0,0,.54);
+  font-size: 0.58em;
+}
+
+.introduce {
+  margin-top: 50px;
+}
+
+.introduce-title {
+  border-bottom: 1px solid rgba(0,0,0,.09);
+  padding-left: 0px;
+  padding-top: 10px;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+}
+
+.product-image {
+  margin-left: 37.5px;
+  width: 450px;
+  height: auto;
+  border-radius: 4px;
+}
+
+.shoppingCar-image {
+  max-width: 200px;
+  max-height: 200px;
+  overflow: hidden;
+}
+
+.shopping-table td, .shopping-table th{
+  vertical-align:middle;
+}
+
+.shopping-table {
+  padding-bottom: 20px;
+  margin-bottom: 50px;
+  border-bottom: 3px solid rgba(0,0,0,.09);
+}
+
+.discount-code {
+  width: 150px;
+  display: inline;
+}
+
+.buy-info {
+  font-size: 35px;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid rgba(0,0,0,.09);
+}
+
+.btn-check-out {
+  margin-left: 0px;
+}
+
+.checkout-info {
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+.payment-method {
+  background-color: white;
+  padding: 32px;
+}
+
+.payment-method td{
+  border-top: none;
+}
