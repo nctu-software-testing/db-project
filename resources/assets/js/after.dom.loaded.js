@@ -26,5 +26,29 @@ $(function () {
         e.preventDefault();
     });
 
-    $('select').material_select();
+    $('select').each(function () {
+        const WAIT = 250;
+        let s = $(this);
+        let timer = null;
+
+        // configuration of the observer:
+        let config = {attributes: true, childList: true, characterData: true};
+
+        // create an observer instance
+        let observer = new MutationObserver(mutations => {
+            if (timer) clearInterval(timer);
+            
+            timer = setTimeout(() => {
+                observer.disconnect();
+                s.material_select('destroy');
+                s.material_select();
+                observer.observe(this, config);
+                timer = null;
+            }, WAIT);
+        });
+
+        // pass in the target node, as well as the observer options
+        s.material_select();
+        observer.observe(this, config);
+    });
 });
