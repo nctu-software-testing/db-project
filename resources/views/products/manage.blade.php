@@ -39,13 +39,17 @@
                     <button onclick="Release('{{$data[$i]->id}}')">發佈</button>
                 </td>
                 <td>
+                    <a href="{{action('ProductController@getSell', $data[$i]->id)}}">EDIT商品</a>
+                </td>
+                <td>
                     <button onclick="Delete('{{$data[$i]->id}}')">刪除</button>
                 </td>
             </tr>
         @endfor
     </table>
     {{ $data->links() }}<br>
-    <button type="button" onclick="Sell('add')">上架/編輯商品</button>
+
+    <a href="{{action('ProductController@getSell', 'add')}}">上架商品</a>
 @endsection
 @section('eofScript')
     <script>
