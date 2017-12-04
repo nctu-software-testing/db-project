@@ -49,7 +49,9 @@ Route::group([
 ], function () {
 
     Route::post('/verification', 'VerificationController@postVerification');
-    Route::post('/category', 'CategoryController@createCategory');
+    Route::get('/category/manage', 'CategoryController@getManageCategory');
+    Route::post('/category/manage', 'CategoryController@postManageCategory');
+    Route::delete('/category/manage/delete', 'CategoryController@deleteCategory');
 });
 
 Route::group([
@@ -61,6 +63,7 @@ Route::group([
     //PRODUCT
     Route::get('/products/edit', 'ProductController@getSelfProducts');
     Route::post('/releaseProduct', 'ProductController@releaseProduct');
+    Route::post('/products/deleteProduct', 'ProductController@delProduct');
 });
 
 Route::group([
@@ -80,9 +83,8 @@ Route::get('/category', 'CategoryController@getCategory');
 
 //PRODUCT
 Route::get('/products', 'ProductController@getProducts');
-Route::get('/item/{id}', 'ProductController@getItem');
-Route::get('/product-image/{pid}/{id}', 'ProductController@getImage');
-Route::post('/deleteProduct', 'ProductController@delProduct');
+Route::get('/products/item/{id}', 'ProductController@getItem');
+Route::get('/products/item-image/{pid}/{id}', 'ProductController@getImage');
 //購物車
 Route::post('/buy', 'ProductController@buyProduct');
 Route::get('/shoppingcar', 'ProductController@getShoppingCar');

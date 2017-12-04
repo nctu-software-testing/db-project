@@ -11,11 +11,11 @@
 
         <a class="list-group-item list-group-item-action"
            href="{{action('CategoryController@getCategory')}}"
-        >管理分類@</a>
+        >管理分類</a>
 
         <a class="list-group-item list-group-item-action"
            href="{{action('ProductController@getProducts')}}"
-        >管理商品@</a>
+        >管理商品</a>
 
         <a class="list-group-item list-group-item-action"
            href="{{action('DiscountController@getDiscount')}}"

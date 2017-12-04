@@ -38,7 +38,7 @@
                    href="{{action('VerificationController@getVerification')}}">(ABC)會員驗證</a>
 
                 <a class="dropdown-item waves-effect waves-light" accesskey="e"
-                   href="{{action('CategoryController@getCategory')}}">(A)類別管理</a>
+                   href="{{action('CategoryController@getManageCategory')}}">(A)管理分類</a>
 
                 <a class="dropdown-item waves-effect waves-light" accesskey="f"
                    href="{{action('ProductController@getSelfProducts')}}">(AB)商品管理</a>
