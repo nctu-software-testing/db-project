@@ -23,7 +23,7 @@
                      <th>{{$i + 1}}</th>
                      <td>
                          <img class = "shoppingCar-image" alt="placeholder" src="{{action('ProductController@getImage', ['pid'=>$data[$i]->product_id, 'id'=>0])}}">
-                         <a href="{{$data[$i]->product->GetLink()}}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{$data[$i]->product->product_name}} </a>
+                         <a href="{{action('ProductController@getItem', $data[$i]->product->id)}}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{$data[$i]->product->product_name}} </a>
                      </td>
                      <td>{{$data[$i]->product->price}}</td>
                      　<td>{{$data[$i]->amount}}</td>

@@ -160,7 +160,8 @@ class ProductController extends BaseController
             return redirect('/');
         $data = Product::
         join('category', 'on_product.category_id', '=', 'category.id')
-            ->select('on_product.id', 'product_name', 'product_information', 'start_date', 'end_date', 'price', 'state', 'product_type', 'user_id')
+            ->select('on_product.id', 'product_name', 'product_information', 'start_date', 'end_date', 'price', 'state', 'product_type', 'user_id', 'category_id', 'amount')
+            ->selectRaw('GetSellCount(on_product.id) as sell')
             ->where('on_product.id', '=', $id)->first();
         if (!$data) {
             return abort(404);
