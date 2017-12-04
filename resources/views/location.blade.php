@@ -57,11 +57,9 @@
             document.getElementById('lo').style.display='none';
             document.getElementById('newlocation').style.display='';
         }
-        $( document ).ready(function() {
-            $('#twzipcode').twzipcode();
-            $('[name=zipcode]').attr("readonly","readonly");
-            $('[name=county]').prop("required","required");
-            $('[name=district]').prop("required","required");
-        });
+        $('#twzipcode').twzipcode();
+        $('[name=zipcode]').attr("readonly","readonly");
+        $('[name=county]').prop("required","required");
+        $('[name=district]').prop("required","required");
     </script>
 @endsection
