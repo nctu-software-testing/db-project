@@ -22,7 +22,7 @@
                         <tr>
                             <th>{{$i + 1}}</th>
                             <td>
-                                <a href="{{$data[$i]->product->GetLink()}}">{{$data[$i]->product->product_name}} </a>
+                                <a href="{{action('ProductController@getItem', $data[$i]->product->id)}}">{{$data[$i]->product->product_name}} </a>
                             </td>
                             <td>{{$data[$i]->product->price}}</td>
                             　<td>{{$data[$i]->amount}}</td>

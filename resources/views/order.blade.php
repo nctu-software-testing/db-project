@@ -12,7 +12,7 @@
         </tr>
         @for ($i = 0; $i < count($data); $i++)
             <tr>
-                　<td><a href="{{$data[$i]->GetLink()}}"> 編號{{$data[$i]->	GetID()}} </a></td>
+                　<td><a href="{{action('ProductController@getItem', $data[$i]->product->id)}}"> 編號{{$data[$i]->	GetID()}} </a></td>
                   <td>{{$data[$i]->Getstate()}}</td>
                   <td>{{$data[$i]->order_time}}</td>
                 　<td>{{$data[$i]->	final_cost}}</td>

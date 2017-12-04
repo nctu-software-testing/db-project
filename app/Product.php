@@ -5,6 +5,7 @@ namespace App;
 use DateTime;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Product extends Model
 {
@@ -57,9 +58,28 @@ class Product extends Model
         return User::Where('id', $this->user_id)->first()->name;
     }
 
+    public function provider(){
+        return $this->belongsTo('App\User', 'user_id', 'id');
+    }
+
     public function pictures()
     {
         return $this->hasMany('\App\ProductPicture');
+    }
+
+    public function getSell() : int
+    {
+        if(isset($this->sell)){
+            return $this->sell;
+        }else{
+            $res = DB::select('SELECT GetSellCount(:pid) as c', ['pid'=>$this->id])[0];
+            return $res->c;
+        }
+    }
+
+    public function getRemaining() : int
+    {
+        return $this->amount - $this->getSell();
     }
 
     public static function getOnProductsBuilder(Builder $builder = null): Builder
