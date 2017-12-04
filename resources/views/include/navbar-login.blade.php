@@ -32,8 +32,12 @@
                 <h6 class="dropdown-header">
                     管理
                 </h6>
+                <a class="dropdown-item waves-effect waves-light" accesskey="i"
+                   href="{{action('AdminController@getUsersManager')}}">(A)會員資料管理</a>
+
                 <a class="dropdown-item waves-effect waves-light" accesskey="d"
                    href="{{action('LocationController@getLocation')}}">(ABC)地址管理</a>
+
                 <a class="dropdown-item waves-effect waves-light" accesskey="b"
                    href="{{action('VerificationController@getVerification')}}">(ABC)會員驗證</a>
 

@@ -1,29 +1,41 @@
 @extends('base')
 @section('extraScript')
-<script src="https://code.essoduke.org/js/twzipcode/jquery.twzipcode-1.7.14.min.js"></script>
+    <script src="https://code.essoduke.org/js/twzipcode/jquery.twzipcode-1.7.14.min.js"></script>
 @endsection
 @section('content')
-    <table border="1">
-        <tr>
-            　<td>address</td>
-            　<td>zip_code</td>
-              <td>Delete</td>
-        </tr>
+     <!--Table-->
+            <table class="table">
 
-        @for ($i = 0; $i < count($data); $i++)
-            <tr>
-                　<td>{{$data[$i]->address}}</td>
-                　<td>{{$data[$i]->zip_code}}</td>
-                　<td>刪除</td>
-            </tr>
-        @endfor
-    </table>
+                <!--Table head-->
+                <thead class="blue-grey lighten-4">
+                    <tr>
+                        <th>地址</th>
+                        <th>郵遞區號</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <!--Table head-->
+
+                <!--Table body-->
+                <tbody>
+                    @for ($i = 0; $i < count($data); $i++)
+                        <tr>
+                           <td>{{$data[$i]->address}}</td>
+                         　<td>{{$data[$i]->zip_code}}</td>
+                         　<td><a href="#delete" style="color:#0275d8;"> 刪除</a></td>
+                        </tr>
+                    @endfor
+                </tbody>
+
+                <!--Table body-->
+            </table>
+     <!--Table-->
+    
     {{ $data->links() }}<br>
-     <button onclick="CreateLocation()">新增地址</button></td>
-
-    <div hidden id="lo">
+     <button onclick="CreateLocation()" type="button" class="btn btn-rounded btn-blue-grey"><i class="fa fa-floppy-o pr-2" aria-hidden="true"></i>新增地址</button>
+    <div id="lo" style="display: none">
         <form action="location" method="post">
-        Address:<input type="text" name="address" required><br>
+        街道名稱及門牌號碼與樓層:<input type="text" name="address" required><br>
             <div id="twzipcode"></div>
             <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
             <input type="submit" value="送出">
@@ -33,7 +45,7 @@
 @section('eofScript')
     <script>
         function CreateLocation() {
-            $("#lo").toggle();
+            document.getElementById('lo').style.display='';
         }
         $( document ).ready(function() {
             $('#twzipcode').twzipcode();

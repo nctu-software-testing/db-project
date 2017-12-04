@@ -2,7 +2,7 @@
     <h5>管理</h5>
     <div class="list-group">
         <a class="list-group-item list-group-item-action"
-           href="{{action('UserController@getUserInfo')}}"
+           href="{{action('AdminController@getUsersManager')}}"
         >管理會員</a>
 
         <a class="list-group-item list-group-item-action"

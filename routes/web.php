@@ -50,6 +50,10 @@ Route::group([
 
     Route::post('/verification', 'VerificationController@postVerification');
     Route::post('/category', 'CategoryController@createCategory');
+
+    //USERMANAGER
+    Route::get('admin/usersmanager', 'AdminController@getUsersManager');
+    Route::post('admin/usersmanager/change-password', 'AdminController@changePassword');
 });
 
 Route::group([
