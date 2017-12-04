@@ -58,7 +58,7 @@
              </table>
          </div>
          <div class = "col-md-7 offset-md-5">
-             <button onclick="CheckOut()" type="button" class="btn blue-gradient btn-block btn-rounded btn-check-out">去買單</button>
+             <a href="{{action('ProductController@getCheckOut')}}" type="button" class="btn blue-gradient btn-block btn-rounded btn-check-out">去買單</a>
          </div>
      </div>
  </div>
@@ -85,7 +85,7 @@
         var ok=confirm("確認將商品移出購物車?");
         if(ok)
         {
-            $.post("removeProductFromShoppingcar",
+            $.post("removeProductFromShoppingcart",
                 {
                     id:id,
                 },
@@ -94,8 +94,6 @@
                 });
         }
     }
-    function CheckOut() {
-        location.href="/any_buy/public/checkout";
-    }
+
     </script>
 @endsection

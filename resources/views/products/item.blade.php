@@ -114,7 +114,7 @@
             location.reload();
         });
 
-        //location.href="{{action('ProductController@getShoppingCar')}}"
+        //location.href="{{action('ProductController@getShoppingCart')}}"
     }
 </script>
 @endsection

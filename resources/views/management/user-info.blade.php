@@ -54,6 +54,16 @@
                                 </a>
                             </span>
                         </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span class="label">地址</span>
+                            <span class="content">{{$locationData->zip_code}} {{$locationData->address}}
+                                <a class="edit-link waves-effect" href="{{action('LocationController@getLocation')}}">
+                                    修改
+                                    <i class="material-icons">keyboard_arrow_right</i>
+                                </a>
+                            </span>
+
+                        </li>
                     </ul>
                 </div>
             </div>

@@ -103,12 +103,20 @@ class ProductController extends BaseController
     {
         //商品資訊
         $type = request("type");
+        $title = request('title');
         $data = Product
             ::join('category', 'on_product.category_id', '=', 'category.id')
             ->select('on_product.id', 'product_name', 'product_information', 'start_date', 'end_date', 'price', 'state', 'product_type', 'user_id');
 
-        $uid = session('user.id');
-        $data->where('user_id', $uid);
+
+        if(session('user.role')==='B') {
+            $uid = session('user.id');
+            $data->where('user_id', $uid);
+        }
+
+        if($title!==''){
+            $data->where('product_name', 'LIKE', '%'.$title.'%');
+        }
 
         if (is_numeric($request->get('category'))) {
             $data->where('on_product.category_id', $request->get('category'));
@@ -118,11 +126,12 @@ class ProductController extends BaseController
         $count = 0;
         //類別資訊
         $category = Category::get();
-        return view('products.manage')->
-        with('category', $category)->
-        with('data', $data)->
-        with('id', $id)->
-        with('type', $type);
+        return view('products.manage')
+            ->with('category', $category)
+            ->with('data', $data)
+            ->with('id', $id)
+            ->with('type', $type)
+            ->with('title', '管理商品');
     }
 
     public function getSell(Request $request, $id)
@@ -259,6 +268,8 @@ class ProductController extends BaseController
         $p = Product::where("id", $id)->first();
         $p->state = Product::STATE_DELETED;
         $p->save();
+
+        return $this->result('ok', true);
     }
 
     public function releaseProduct(Request $request)
@@ -267,6 +278,7 @@ class ProductController extends BaseController
         $p = Product::where("id", $id)->first();
         $p->state = Product::STATE_RELEASE;
         $p->save();
+        return $this->result('ok', true);
     }
 
     //購物車
@@ -281,16 +293,16 @@ class ProductController extends BaseController
             ->where('state', Product::STATE_RELEASE)
             ->first();
         if ($p) {
-            if (($request->session()->has('shoppingcar'))) {
-                $shoppingcar = session()->get('shoppingcar');
+            if (($request->session()->has('shoppingcart'))) {
+                $shoppingcart = session()->get('shoppingcart');
             } else {
-                $shoppingcar = collect();
+                $shoppingcart = collect();
             }
             $flag = false;
-            for ($i = 0; $i < count($shoppingcar); $i++) {
-                if ($shoppingcar[$i]->product->id == $id) {
-                    $shoppingcar[$i]->amount += $amount;
-                    $request->session()->put('shoppingcar', $shoppingcar);
+            for ($i = 0; $i < count($shoppingcart); $i++) {
+                if ($shoppingcart[$i]->product->id == $id) {
+                    $shoppingcart[$i]->amount += $amount;
+                    $request->session()->put('shoppingcart', $shoppingcart);
                     $flag = true;
                 }
             }
@@ -300,29 +312,29 @@ class ProductController extends BaseController
             $op->amount = $amount;
             $product = Product::where("id", $id)->get()->first();
             $op->product = $product;
-            $shoppingcar->push($op);
-            $request->session()->put('shoppingcar', $shoppingcar);
+            $shoppingcart->push($op);
+            $request->session()->put('shoppingcart', $shoppingcart);
         }
     }
 
-    public function getShoppingCar(Request $request)
+    public function getShoppingCart(Request $request)
     {
-        $shoppingcar = session()->get('shoppingcar');
-        $this->renewShoppingcar($request);
+        $shoppingcart = session()->get('shoppingcart');
+        $this->renewShoppingcart($request);
         $final = session()->get('final');
-        return view('shoppingcar', ['data' => $shoppingcar], ['final' => $final]);
+        return view('shoppingcart', ['data' => $shoppingcart], ['final' => $final]);
     }
 
-    public function renewShoppingcar(Request $request)
+    public function renewShoppingcart(Request $request)
     {
-        if (($request->session()->has('shoppingcar'))) {
-            $shoppingcar = session()->get('shoppingcar');
+        if (($request->session()->has('shoppingcart'))) {
+            $shoppingcart = session()->get('shoppingcart');
         } else {
-            $shoppingcar = collect();
+            $shoppingcart = collect();
         }
         $final = 0;
-        for ($i = 0; $i < count($shoppingcar); $i++) {
-            $final += $shoppingcar[$i]->product->price * $shoppingcar[$i]->amount;
+        for ($i = 0; $i < count($shoppingcart); $i++) {
+            $final += $shoppingcart[$i]->product->price * $shoppingcart[$i]->amount;
         }
         $request->session()->put('final', $final);
     }
@@ -331,42 +343,42 @@ class ProductController extends BaseController
     {
         $id = request('id');
         $amount = request('amount');
-        $shoppingcar = session()->get('shoppingcar');
-        for ($i = 0; $i < count($shoppingcar); $i++) {
-            if ($shoppingcar[$i]->product->id == $id) {
-                $shoppingcar[$i]->amount = $amount;
-                $request->session()->put('shoppingcar', $shoppingcar);
+        $shoppingcart = session()->get('shoppingcart');
+        for ($i = 0; $i < count($shoppingcart); $i++) {
+            if ($shoppingcart[$i]->product->id == $id) {
+                $shoppingcart[$i]->amount = $amount;
+                $request->session()->put('shoppingcart', $shoppingcart);
             }
         }
     }
 
-    public function removeProductFromShoppingcar(Request $request)
+    public function removeProductFromShoppingcart(Request $request)
     {
         $id = request('id');
-        $shoppingcar = session()->get('shoppingcar');
+        $shoppingcart = session()->get('shoppingcart');
         $flag = false;
-        for ($i = 0; $i < count($shoppingcar) - 1; $i++) {
-            if ($shoppingcar[$i]->product->id == $id) {
+        for ($i = 0; $i < count($shoppingcart) - 1; $i++) {
+            if ($shoppingcart[$i]->product->id == $id) {
                 $flag = true;
             }
             if ($flag) {
-                $shoppingcar[$i] = $shoppingcar[$i + 1];
+                $shoppingcart[$i] = $shoppingcart[$i + 1];
             }
         }
-        $shoppingcar->pop();
-        $request->session()->put('shoppingcar', $shoppingcar);
+        $shoppingcart->pop();
+        $request->session()->put('shoppingcart', $shoppingcart);
         return;
     }
 
     //結帳頁面
     public function getCheckOut(Request $request)
     {
-        $shoppingcar = session()->get('shoppingcar');
-        $this->renewShoppingcar($request);
+        $shoppingcart = session()->get('shoppingcart');
+        $this->renewShoppingcart($request);
         $final = session()->get('final');
         $uid = $request->session()->get('user')->id;
         $location = Location::where('user_id', $uid)->get();
-        return view('checkout')->with('data', $shoppingcar)->
+        return view('checkout')->with('data', $shoppingcart)->
         with('final', $final)->
         with('location', $location);
     }
@@ -394,15 +406,15 @@ class ProductController extends BaseController
         $order->arrival_time = $date;
         $order->save();
         //裝填貨物
-        $shoppingcar = session()->get('shoppingcar');
-        for ($i = 0; $i < count($shoppingcar); $i++) {
+        $shoppingcart = session()->get('shoppingcart');
+        for ($i = 0; $i < count($shoppingcart); $i++) {
             $op = new OrderProduct();
-            $op->product_id = $shoppingcar[$i]->product->id;
-            $op->amount = $shoppingcar[$i]->amount;
+            $op->product_id = $shoppingcart[$i]->product->id;
+            $op->amount = $shoppingcart[$i]->amount;
             $op->order_id = $order->id;
             $op->save();
         }
-        $request->session()->forget('shoppingcar');
+        $request->session()->forget('shoppingcart');
         $request->session()->flash('log', '成功');
         return redirect()->back();
     }

@@ -2,23 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use App\Location;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
-class UserController extends BaseController
+class AdminController extends BaseController
 {
     public $paginate = 10;
 
     public function __construct()
     {
-        parent::__construct('user');
+        parent::__construct('admin');
     }
 
     public function getReg(Request $request)
     {
         return view('register');
+    }
+
+    public function getUsersManager(Request $request)
+    {
+        $data = User::orderBy('id')->get();
+        return view('management.usersManager', ['data' => $data])
+            ->with('title', '管理會員');
     }
 
     public function postReg(Request $request)
@@ -86,30 +92,21 @@ class UserController extends BaseController
     {
         $id = session('user.id');
         $data = User::find($id);
-        $locationData = Location::
-        where('user_id', '=', $id)->first();
         if(!$data){
             return $this->logout($request);
         }
 
-        return view('management.user-info', ['data' => $data],['locationData'=>$locationData])
+        return view('management.user-info', ['data' => $data])
             ->with('title', '會員資料');
     }
 
     public function changePassword(Request $request)
     {
-        $id = $request->session()->get('user')->id;
-        $oldpassword = request('oldpassword');
+        $id = $request->get('id');
         $check_user = User::where('id', '=', $id)->first();
-        $dbpassword = $check_user->password;
-        if (Hash::check($oldpassword, $dbpassword)) {
-            $check_user->password = bcrypt(request('newpassword'));
-            $check_user->save();
-            $this->logout($request);
-            return $this->result('修改成功，請重新登入。', true);
-        } else {
-            return $this->result('密碼不符合', false);
-        }
+        $check_user->password = bcrypt(request('newpassword'));
+        $check_user->save();
+        return $this->result('修改成功。', true);
     }
 
     public function postChangeAvatar(Request $request){
