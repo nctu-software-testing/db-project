@@ -126,11 +126,12 @@ class ProductController extends BaseController
         $count = 0;
         //類別資訊
         $category = Category::get();
-        return view('products.manage')->
-        with('category', $category)->
-        with('data', $data)->
-        with('id', $id)->
-        with('type', $type);
+        return view('products.manage')
+            ->with('category', $category)
+            ->with('data', $data)
+            ->with('id', $id)
+            ->with('type', $type)
+            ->with('title', '管理商品');
     }
 
     public function getSell(Request $request, $id)

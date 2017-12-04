@@ -3,7 +3,7 @@
     <div class="list-group">
         <a class="list-group-item list-group-item-action"
            href="{{action('ProductController@getSelfProducts')}}"
-        >管理商品@</a>
+        >管理商品</a>
 
         <a class="list-group-item list-group-item-action"
                      href="{{action('OrderController@getOrder')}}"

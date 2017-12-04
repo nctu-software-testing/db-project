@@ -59,7 +59,7 @@ Route::group([
 Route::group([
     'middleware' => ['auth.business']
 ], function () {
-    Route::get('products/item/{id}/manage', 'ProductController@getSell');
+    Route::get('products/item/{id}/edit', 'ProductController@getSell');
     Route::post('products/item/manage', 'ProductController@postSell');
 
     //PRODUCT

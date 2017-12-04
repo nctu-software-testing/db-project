@@ -32,14 +32,18 @@
      <!--Table-->
     
     {{ $data->links() }}<br>
-     <button onclick="CreateLocation()" type="button" class="btn btn-rounded btn-blue-grey"><i class="fa fa-floppy-o pr-2" aria-hidden="true"></i>新增地址</button>
+     <button id="newlocation" onclick="CreateLocation()" type="button" class="btn btn-rounded btn-blue-grey">新增地址</button>
 
     <div id="lo" style="display: none">
         <form action="location" method="post">
         街道名稱及門牌號碼與樓層:<input type="text" name="address" required><br>
+
             <div id="twzipcode"></div>
+
             <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
-            <input type="submit" value="送出">
+            <button type="submit" class="btn btn-rounded btn-blue-grey"><i class="fa fa-floppy-o pr-2" aria-hidden="true"></i>儲存地址</button>
+            <button onclick="CancelLocation()" type="button" class="btn btn-rounded btn-red"><i class="fa fa-rotate-right pr-2" aria-hidden="true"></i>取消</button>
+
         </form>
     </div>
 @endsection
@@ -47,6 +51,11 @@
     <script>
         function CreateLocation() {
             document.getElementById('lo').style.display='';
+            document.getElementById('newlocation').style.display='none';
+        }
+        function CancelLocation() {
+            document.getElementById('lo').style.display='none';
+            document.getElementById('newlocation').style.display='';
         }
         $( document ).ready(function() {
             $('#twzipcode').twzipcode();
