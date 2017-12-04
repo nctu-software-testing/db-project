@@ -2,7 +2,7 @@
 @section('right-nav')
     <div class="flex-center">
         <div class="nav-item" >
-            <a href="{{action('ProductController@getShoppingCar')}}" class="nav-link waves-light">
+            <a href="{{action('ProductController@getShoppingCart')}}" class="nav-link waves-light">
                 <i class="material-icons">shopping_cart</i>
                 <span class="name">購物車</span>
                 <span class="num">87</span>
@@ -34,9 +34,6 @@
                 </h6>
                 <a class="dropdown-item waves-effect waves-light" accesskey="i"
                    href="{{action('AdminController@getUsersManager')}}">(A)會員資料管理</a>
-
-                <a class="dropdown-item waves-effect waves-light" accesskey="d"
-                   href="{{action('LocationController@getLocation')}}">(ABC)地址管理</a>
 
                 <a class="dropdown-item waves-effect waves-light" accesskey="b"
                    href="{{action('VerificationController@getVerification')}}">(ABC)會員驗證</a>

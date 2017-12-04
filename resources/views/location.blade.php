@@ -22,7 +22,7 @@
                         <tr>
                            <td>{{$data[$i]->address}}</td>
                          　<td>{{$data[$i]->zip_code}}</td>
-                         　<td><a href="#delete" style="color:#0275d8;"> 刪除</a></td>
+                         　<td><a href="#cannotdelete" style="color:#0275d8;">不能刪除</a></td>
                         </tr>
                     @endfor
                 </tbody>
@@ -33,8 +33,10 @@
     
     {{ $data->links() }}<br>
      <button id="newlocation" onclick="CreateLocation()" type="button" class="btn btn-rounded btn-blue-grey">新增地址</button>
+     <a href="{{action('UserController@getUserInfo')}}" type="button" class="btn btn-rounded btn-red"><i class="fa fa-rotate-right pr-2" aria-hidden="true"></i>取消</a>
 
-    <div id="lo" style="display: none">
+
+     <div id="lo" style="display: none">
         <form action="location" method="post">
         街道名稱及門牌號碼與樓層:<input type="text" name="address" required><br>
 
@@ -49,6 +51,7 @@
 @endsection
 @section('eofScript')
     <script>
+
         function CreateLocation() {
             document.getElementById('lo').style.display='';
             document.getElementById('newlocation').style.display='none';

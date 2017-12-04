@@ -89,9 +89,9 @@ Route::get('/product-image/{pid}/{id}', 'ProductController@getImage');
 Route::post('/deleteProduct', 'ProductController@delProduct');
 //購物車
 Route::post('/buy', 'ProductController@buyProduct');
-Route::get('/shoppingcar', 'ProductController@getShoppingCar');
+Route::get('/shoppingcart', 'ProductController@getShoppingCart');
 Route::post('/changeAmount', 'ProductController@changeAmount');
-Route::post('/removeProductFromShoppingcar', 'ProductController@removeProductFromShoppingcar');
+Route::post('/removeProductFromShoppingcart', 'ProductController@removeProductFromShoppingcart');
 //DISCOUNT
 Route::get('/discount', 'DiscountController@getDiscount');
 //CHECKOUT

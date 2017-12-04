@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Location;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -85,11 +86,13 @@ class UserController extends BaseController
     {
         $id = session('user.id');
         $data = User::find($id);
+        $locationData = Location::
+        where('user_id', '=', $id)->first();
         if(!$data){
             return $this->logout($request);
         }
 
-        return view('management.user-info', ['data' => $data])
+        return view('management.user-info', ['data' => $data],['locationData'=>$locationData])
             ->with('title', '會員資料');
     }
 
