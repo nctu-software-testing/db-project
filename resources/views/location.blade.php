@@ -33,6 +33,7 @@
     
     {{ $data->links() }}<br>
      <button onclick="CreateLocation()" type="button" class="btn btn-rounded btn-blue-grey"><i class="fa fa-floppy-o pr-2" aria-hidden="true"></i>新增地址</button>
+
     <div id="lo" style="display: none">
         <form action="location" method="post">
         街道名稱及門牌號碼與樓層:<input type="text" name="address" required><br>

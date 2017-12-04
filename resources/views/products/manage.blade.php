@@ -1,4 +1,4 @@
-@extends('base')
+@extends('management.base')
 @section('content')
     <table border="1">
         <tr>
@@ -33,13 +33,10 @@
                 <td>{{$data[$i]->end_date}}</td>
                 <td>{{$data[$i]->GetState()}}</td>
                 <td>
-                    <button onclick="Edit('{{$data[$i]->id}}')">編輯</button>
+                    <a href="{{action('ProductController@getSell', $data[$i]->id)}}" class="btn btn-warning">編輯</a>
                 </td>
                 <td>
                     <button onclick="Release('{{$data[$i]->id}}')">發佈</button>
-                </td>
-                <td>
-                    <a href="{{action('ProductController@getSell', $data[$i]->id)}}">EDIT商品</a>
                 </td>
                 <td>
                     <button onclick="Delete('{{$data[$i]->id}}')">刪除</button>
@@ -47,16 +44,13 @@
             </tr>
         @endfor
     </table>
-    {{ $data->links() }}<br>
+
+    {{ $data->appends(request()->except('page'))->render('pagination::mdb') }}
 
     <a href="{{action('ProductController@getSell', 'add')}}">上架商品</a>
 @endsection
 @section('eofScript')
     <script>
-        function Edit(i) {
-            Sell(i);
-        }
-
         function Delete(id) {
             var ok = confirm("確認刪除?");
             if (ok) {

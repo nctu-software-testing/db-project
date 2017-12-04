@@ -103,12 +103,20 @@ class ProductController extends BaseController
     {
         //商品資訊
         $type = request("type");
+        $title = request('title');
         $data = Product
             ::join('category', 'on_product.category_id', '=', 'category.id')
             ->select('on_product.id', 'product_name', 'product_information', 'start_date', 'end_date', 'price', 'state', 'product_type', 'user_id');
 
-        $uid = session('user.id');
-        $data->where('user_id', $uid);
+
+        if(session('user.role')==='B') {
+            $uid = session('user.id');
+            $data->where('user_id', $uid);
+        }
+
+        if($title!==''){
+            $data->where('product_name', 'LIKE', '%'.$title.'%');
+        }
 
         if (is_numeric($request->get('category'))) {
             $data->where('on_product.category_id', $request->get('category'));
@@ -258,6 +266,8 @@ class ProductController extends BaseController
         $p = Product::where("id", $id)->first();
         $p->state = Product::STATE_DELETED;
         $p->save();
+
+        return $this->result('ok', true);
     }
 
     public function releaseProduct(Request $request)
@@ -266,6 +276,7 @@ class ProductController extends BaseController
         $p = Product::where("id", $id)->first();
         $p->state = Product::STATE_RELEASE;
         $p->save();
+        return $this->result('ok', true);
     }
 
     //購物車

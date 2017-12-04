@@ -27,11 +27,11 @@ Route::group([
 
     //VERIFICATION
     Route::get('/verification', 'VerificationController@getVerification');
-    Route::post('/newverification', 'VerificationController@verification');
+    Route::post('/new-verification', 'VerificationController@verification');
 
     //CHANGE
-    Route::post('/changepassword', 'UserController@changePassword');
-    Route::post('/changeemail', 'UserController@changeEmail');
+    Route::post('/change-password', 'UserController@changePassword');
+    Route::post('/change-email', 'UserController@changeEmail');
 
     //LOCATION
     Route::get('/location', 'LocationController@getLocation');
@@ -51,20 +51,20 @@ Route::group([
     Route::post('/verification', 'VerificationController@postVerification');
     Route::post('/category', 'CategoryController@createCategory');
 
-    //USERMANAGER
-    Route::get('admin/usersmanager', 'AdminController@getUsersManager');
-    Route::post('admin/usersmanager/change-password', 'AdminController@changePassword');
+    //USER MANAGE
+    Route::get('admin/users-manage', 'AdminController@getUsersManager');
+    Route::post('admin/users-manage/change-password', 'AdminController@changePassword');
 });
 
 Route::group([
     'middleware' => ['auth.business']
 ], function () {
-    Route::get('/sell/{id}', 'ProductController@getSell');
-    Route::post('/sell', 'ProductController@postSell');
+    Route::get('products/item/{id}/manage', 'ProductController@getSell');
+    Route::post('products/item/manage', 'ProductController@postSell');
 
     //PRODUCT
-    Route::get('/products/edit', 'ProductController@getSelfProducts');
-    Route::post('/releaseProduct', 'ProductController@releaseProduct');
+    Route::get('products/manage', 'ProductController@getSelfProducts');
+    Route::post('products/manage/release-product', 'ProductController@releaseProduct');
 });
 
 Route::group([
