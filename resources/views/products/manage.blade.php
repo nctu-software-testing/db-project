@@ -1,20 +1,20 @@
 @extends('management.base')
 @section('content')
     <!--Table-->
-    <table class="table">
+    <table class="table" style="word-break: keep-all">
 
         <!--Table head-->
         <thead class="blue-grey lighten-4">
             <tr>
-                <td>編號</td>
-                <td>名稱</td>
-                <td>分類</td>
-                <td>上架者</td>
-                <td>價格</td>
-                <td>上架日期</td>
-                <td>下架日期</td>
-                <td>狀態</td>
-                <td>操作</td>
+                <td valign="center" align="center">編號</td>
+                <td valign="center" align="center">名稱</td>
+                <td valign="center" align="center">分類</td>
+                <td valign="center" align="center">上架者</td>
+                <td valign="center" align="center">價格</td>
+                <td valign="center" align="center">上架日期</td>
+                <td valign="center" align="center">下架日期</td>
+                <td valign="center" align="center">狀態</td>
+                <td valign="center" align="center">操作</td>
             </tr>
         </thead>
         <!--Table head-->
@@ -23,17 +23,17 @@
         <tbody>
             @for ($i = 0; $i < count($data); $i++)
                 <tr>
-                    <td>{{$data[$i]->id}}</td>
-                    <td>
+                    <td align="center">{{$data[$i]->id}}</td>
+                    <td align="center">
                         <a href="{{action('ProductController@getItem', ['id'=>$data[$i]->id])}}"> {{$data[$i]->	product_name}} </a>
                     </td>
-                    <td>{{$data[$i]->product_type}}</td>
-                    <td>{{$data[$i]->getUserName()}}</td>
-                    <td>{{$data[$i]->price}}元</td>
-                    <td>{{$data[$i]->start_date}}</td>
-                    <td>{{$data[$i]->end_date}}</td>
-                    <td>{{$data[$i]->GetState()}}</td>
-                    <td>
+                    <td valign="center" align="center">{{$data[$i]->product_type}}</td>
+                    <td valign="center" align="center">{{$data[$i]->getUserName()}}</td>
+                    <td valign="center" align="center">{{$data[$i]->price}}元</td>
+                    <td valign="center" align="center">{{$data[$i]->start_date}}</td>
+                    <td valign="center" align="center">{{$data[$i]->end_date}}</td>
+                    <td valign="center" align="center">{{$data[$i]->GetState()}}</td>
+                    <td valign="center" nowrap="nowrap" align="center">
                         <a href="{{action('ProductController@getSell', $data[$i]->id)}}" class="btn btn-warning">編輯</a>
                         <button onclick="Release('{{$data[$i]->id}}')" class="btn btn-primary">發佈</button>
                         <button onclick="Delete('{{$data[$i]->id}}')" class="btn btn-danger">刪除</button>
