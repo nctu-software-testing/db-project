@@ -6,8 +6,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark fixed-top scrolling-navbar" id="headNav">
     <div class="container">
         <a class="navbar-brand" href="{{asset('/')}}">
-            <img src="{{asset('images/favicon.png')}}" id="logo-img"/>
-            Any Buy
+            <img src="{{asset('images/logo.svg')}}" onerror="this.src='{{asset('images/logo.png')}}'" id="logo-img"/>
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse"
                 data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
