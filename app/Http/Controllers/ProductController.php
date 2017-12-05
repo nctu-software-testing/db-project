@@ -176,7 +176,7 @@ class ProductController extends BaseController
 
         if (
         !$data
-        ) return abrot(404);
+        ) return abort(404);
 
         if (
             $data->state !== Product::STATE_RELEASE && //沒有發布
