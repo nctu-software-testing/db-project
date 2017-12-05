@@ -13,6 +13,7 @@
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.1",
         "barryvdh/laravel-ide-helper": "^2.4",
+        "doctrine/dbal": "^2.6",
         "filp/whoops": "~2.0",
         "fzaninotto/faker": "~1.4",
         "mockery/mockery": "0.9.*",
@@ -53,7 +54,28 @@
             "Illuminate\\Foundation\\ComposerScripts::postUpdate",
             "php artisan ide-helper:generate",
             "php artisan ide-helper:meta",
+            "php artisan ide-helper:models --nowrite",
             "php artisan optimize"
+        ],
+        "cache-clear": [
+            "php artisan cache:clear",
+            "php artisan config:clear",
+            "php artisan debugbar:clear",
+            "php artisan route:clear",
+            "php artisan view:clear",
+            "composer dump-autoload"
+        ],
+        "do-cache": [
+            "php artisan config:cache",
+            "php artisan route:cache"
+        ],
+        "deploy": [
+            "git pull",
+            "npm install",
+            "composer install",
+            "composer run cache-clear",
+            "npm run prod",
+            "composer dump-autoload"
         ]
     },
     "config": {

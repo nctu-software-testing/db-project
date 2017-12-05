@@ -1,9 +1,46 @@
-
+@charset "UTF-8";
+@import "variable";
 // Fonts
-@import url("https://fonts.googleapis.com/css?family=Raleway:300,400,600");
+@import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600);
+@import url(https://fonts.googleapis.com/earlyaccess/notosanstc.css);
+// Material Design for Bootstrap 4
+@import "../css/ecss.css";
+@import "ajaxAuth";
+@import "form";
+// Common style
+@import "common";
+//Components
+@import "category";
+@import "productItem";
+@import "pagination";
+@import "menu";
 
-// Variables
-@import "variables";
+.page-index {
+  @import "pageIndex";
+}
 
-// Bootstrap
-@import "~bootstrap-sass/assets/stylesheets/bootstrap";
+.page-user {
+  @import "pageUser";
+}
+
+.page-user {
+  @import "pageUser";
+}
+
+.page-verification {
+  @import "pageVerification";
+}
+
+.page-product {
+  @import "pageProduct";
+}
+
+.management {
+  @import "management";
+}
+
+// Img modal style
+@import "img-modal";
+
+//Header Nav Style
+@import "headNav";

@@ -1,5 +1,4 @@
 <?php
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -12,5 +11,99 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    $category = \App\Category::orderBy('id')->get();
+    $hotProducts = \App\Product::getHotProducts();
+    return view('welcome', [
+        'pageName' => 'index',
+        'category' => $category,
+        'products' => $hotProducts
+    ]);
+});
+
+Route::group([
+    'middleware' => ['auth']
+], function () {
+    Route::post('/logout', 'UserController@logout');
+
+    //VERIFICATION
+    Route::get('/verification', 'VerificationController@getVerification');
+    Route::post('/new-verification', 'VerificationController@verification');
+
+    //CHANGE
+    Route::post('/change-password', 'UserController@changePassword');
+    Route::post('/change-email', 'UserController@changeEmail');
+
+    //LOCATION
+    Route::get('/location', 'LocationController@getLocation');
+    Route::post('/location', 'LocationController@createLocation');
+    Route::get('/verify-image/{vid}/{face}', 'VerificationController@getImage');
+
+
+    //USER
+    Route::get('profile', 'UserController@getUserInfo');
+    Route::post('profile/avatar', 'UserController@postChangeAvatar');
+});
+
+Route::group([
+    'middleware' => ['auth.admin']
+], function () {
+
+    Route::post('/verification', 'VerificationController@postVerification');
+    Route::get('/category/manage', 'CategoryController@getManageCategory');
+    Route::post('/category/manage', 'CategoryController@postManageCategory');
+    Route::delete('/category/manage/delete', 'CategoryController@deleteCategory');
+
+    //USER MANAGE
+    Route::get('admin/users-manage', 'AdminController@getUsersManager');
+    Route::post('admin/users-manage/change-password', 'AdminController@changePassword');
+});
+
+Route::group([
+    'middleware' => ['auth.business']
+], function () {
+    Route::get('products/item/{id}/edit', 'ProductController@getSell');
+    Route::post('products/item/manage', 'ProductController@postSell');
+
+    //PRODUCT
+    Route::get('products/manage', 'ProductController@getSelfProducts');
+    Route::post('products/manage/release-product', 'ProductController@releaseProduct');
+    Route::post('/products/deleteProduct', 'ProductController@delProduct');
+});
+
+Route::group([
+    'middleware' => ['auth.non']
+], function () {
+    //REGISTER
+    Route::get('/register', 'UserController@getReg');
+    Route::post('/register', 'UserController@postReg');
+
+    //LOGIN LOGOUT
+    Route::post('/login', 'UserController@postLogin');
+});
+
+
+//CATEGORY
+Route::get('/category', 'CategoryController@getCategory');
+
+//PRODUCT
+Route::get('/products', 'ProductController@getProducts');
+Route::get('/products/item/{id}', 'ProductController@getItem');
+Route::get('/products/item-image/{pid}/{id}', 'ProductController@getImage');
+//購物車
+Route::post('/buy', 'ProductController@buyProduct');
+Route::get('/shoppingcart', 'ProductController@getShoppingCart');
+Route::post('/changeAmount', 'ProductController@changeAmount');
+Route::post('/removeProductFromShoppingcart', 'ProductController@removeProductFromShoppingcart');
+//DISCOUNT
+Route::get('/discount', 'DiscountController@getDiscount');
+//CHECKOUT
+Route::get('/checkout', 'ProductController@getCheckOut');
+Route::post('/checkout', 'ProductController@checkOut');
+//ORDER
+Route::get('/order', 'OrderController@getOrder');
+Route::get('/orderDetail', 'OrderController@getOrderDetail');
+
+
+Route::get('/function', function () {
+    return view('function');
 });

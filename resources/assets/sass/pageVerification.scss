@@ -1,0 +1,86 @@
+#verify_note {
+  background: #EEE;
+  margin-top: -1.5rem;
+  padding-top: 2rem;
+  padding-bottom: .5rem;
+}
+
+#verify_note:before {
+  content: "";
+  clear: both;
+  display: block;
+}
+
+.id-card {
+  & {
+    display: inline-block;
+    margin-left: 1rem;
+    position: relative;
+    overflow: hidden;
+    border-radius: .75rem;
+    cursor: pointer;
+    width: 410px;
+    height: 260px;
+  }
+
+  &:first-child {
+    margin-left: 0;
+  }
+
+  @mixin full {
+    & {
+      display: block;
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      transition: .1s;
+      opacity: 0;
+    }
+  }
+
+  &:before {
+    @include full;
+    background: rgba(0, 0, 0, .6);
+    content: "";
+  }
+
+  &:after {
+    $icon-height: 5rem;
+    @include full;
+    color: #FFF;
+    font-family: "Material Icons";
+    content: "file_upload";
+    left: 50% !important;
+    top: 50% !important;;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    width: $icon-height !important;
+    height: $icon-height !important;
+    font-size: $icon-height;
+    line-height: $icon-height;
+  }
+
+  &:hover {
+    &:before, &:after{
+      opacity: 1;
+    }
+  }
+
+  > input[type='file'] {
+    position: absolute;
+    opacity: 0;
+    left: 0;
+    top: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    z-index: 99999999999;
+  }
+  > img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}

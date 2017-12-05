@@ -2,20 +2,23 @@
 
 namespace App;
 
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable
+use Illuminate\Database\Eloquent\Model;
+
+class User extends Model
 {
-    use Notifiable;
-
+    public const ADMIN_ROLE = 'A';
+    public const BUSINESS_ROLE = 'B';
+    public const CUSTOMER_ROLE = 'C';
+    protected $table = 'user';
+    public $timestamps = false;
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'account', 'sn', 'password', 'role', 'name', 'birthday', 'gender', 'email', 'enable', 'avatar'
     ];
 
     /**
@@ -24,6 +27,29 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
     ];
+
+    public function getAvatarUrl()
+    {
+        if (empty($this->avatar)) {
+            return asset('images/avatar.svg');
+        } else {
+            return 'https://i.imgur.com/' . $this->avatar . 'b.jpg';
+        }
+    }
+
+    public function roleCh()
+    {
+        switch ($this->role) {
+            case self::ADMIN_ROLE:
+                return '管理員';
+            case self::BUSINESS_ROLE:
+                return '商家';
+            case self::CUSTOMER_ROLE:
+                return '顧客';
+            default:
+                return 'Unknown';
+        }
+    }
 }

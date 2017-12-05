@@ -1,0 +1,47 @@
+h2 {
+
+}
+
+.index-section {
+  padding: 2rem 0;
+}
+
+#features {
+  & {
+    margin: 1rem 0;
+    background: #FFF;
+  }
+
+  .feature {
+    & {
+      padding: 1rem 2rem;
+      display: flex;
+      border-left: #ddd 1px solid;
+      &:first-child {
+        border-left: none;
+      }
+    }
+    & > .icon-container {
+      width: 3rem;
+      margin-right: 1rem;
+    }
+    & img {
+      width: 100%;
+      height: auto;
+    }
+
+    & > .text-container {
+      & {
+        flex-direction: column;
+        flex: 1;
+        display: flex;
+        justify-content: center;
+      }
+    }
+  }
+}
+
+#hotProducts {
+  @extend .index-section;
+  background: #FEFEFE;
+}

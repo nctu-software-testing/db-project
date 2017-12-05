@@ -1,0 +1,82 @@
+form.ajax-auth {
+    display: none;
+    z-index: 999;
+    position: fixed;
+    top: 30px;
+    left: 50%;
+    transform:translateX(-50%);
+    width: 450px;
+    padding: 20px 25px 15px 25px;
+    background-color: #FFFFFF;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
+}
+
+.login_overlay {
+    height: 100%;
+    width: 100%;
+    background-color: #F6F6F6;
+    opacity: 0.9;
+    position: fixed;
+    z-index: 94;
+}
+
+.login-font-small, .wp-social-login-connect-with {
+    font-size:0.8rem;
+}
+
+.wp-social-login-connect-with {
+    color:#4f4f4f !important;
+}
+
+@media (max-height: 700px) {
+    form.ajax-auth input {
+        height: 50%;
+        margin-bottom: 10px;
+    }
+    form.ajax-auth {
+        font-size: 1rem;
+    }
+}
+
+@media only screen and (max-width: 1100px) {
+    form.ajax-auth {
+        top: 90px;
+        width: 350px;
+    }
+}
+
+@media only screen and (max-width: 800px) {
+    form.ajax-auth {
+        top: 90px;
+    }
+}
+
+.ajax-auth .wp-social-login-provider {
+    font: normal normal normal 1rem/1 FontAwesome;
+    color: #2196F3 !important;
+    max-width: 70px;
+    border-radius:10em;
+    box-shadow: 0 2px 5px 0 rgba(55, 161, 255, 0.26), 0 4px 12px 0 rgba(121, 155, 254, 0.25);
+    background:none;
+    padding: 0.85rem 2.13rem;
+    overflow:hidden;
+    text-indent: -9999px;
+    display:inline-block;
+}
+
+.ajax-auth .wp-social-login-provider:before {
+    float: left;
+    text-indent: 0;
+}
+
+.ajax-auth .wp-social-login-provider-facebook:before {
+    content: "\f09a";
+}
+.ajax-auth .wp-social-login-provider-twitter:before {
+    content: "\f099";
+    margin-left: -5px;
+}
+.ajax-auth .wp-social-login-provider-google:before {
+    content: "\f0d5";
+    margin-left:-3px;
+}
