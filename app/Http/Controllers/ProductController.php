@@ -45,7 +45,8 @@ class ProductController extends BaseController
 
         //公開瀏覽
         $now = new DateTime();
-        $data = Product::getOnProductsBuilder($data);
+        $data = Product::getOnProductsBuilder($data)
+            ->where('state', Product::STATE_RELEASE);
         $data = $this->applySearchCond($data, $search);
 
         $data = $data->paginate($this->paginate);
@@ -71,16 +72,16 @@ class ProductController extends BaseController
             $builder->where('on_product.category_id', $data['category']);
 
         if ($data['name'] != null)
-            $builder->where('on_product.product_name', 'LIKE', '%'.$data['name'].'%');
+            $builder->where('on_product.product_name', 'LIKE', '%' . $data['name'] . '%');
 
-        if(is_numeric($data['minPrice']))
+        if (is_numeric($data['minPrice']))
             $builder->where('on_product.price', '>=', $data['minPrice']);
 
-        if(is_numeric($data['maxPrice']))
+        if (is_numeric($data['maxPrice']))
             $builder->where('on_product.price', '<=', $data['maxPrice']);
 
         //Apply Sort
-        switch(intval($data['sort'])){
+        switch (intval($data['sort'])) {
             case 2:
                 $builder->orderBy('on_product.price', 'ASC');
                 break;
@@ -109,13 +110,13 @@ class ProductController extends BaseController
             ->select('on_product.id', 'product_name', 'product_information', 'start_date', 'end_date', 'price', 'state', 'product_type', 'user_id');
 
 
-        if(session('user.role')==='B') {
+        if (session('user.role') === 'B') {
             $uid = session('user.id');
             $data->where('user_id', $uid);
         }
 
-        if($title!==''){
-            $data->where('product_name', 'LIKE', '%'.$title.'%');
+        if ($title !== '') {
+            $data->where('product_name', 'LIKE', '%' . $title . '%');
         }
 
         if (is_numeric($request->get('category'))) {
@@ -172,9 +173,21 @@ class ProductController extends BaseController
             ->select('on_product.id', 'product_name', 'product_information', 'start_date', 'end_date', 'price', 'state', 'product_type', 'user_id', 'category_id', 'amount')
             ->selectRaw('GetSellCount(on_product.id) as sell')
             ->where('on_product.id', '=', $id)->first();
-        if (!$data) {
-            return abort(404);
+
+        if (
+        !$data
+        ) return abrot(404);
+
+        if (
+            $data->state !== Product::STATE_RELEASE && //沒有發布
+            !(
+                session('user.id') === $data->user_id ||
+                session('user.role') === 'A'
+            )
+        ) {
+            return abort(403, 'You Can\'t See Me');
         }
+
         //圖片數量
         $count = ProductPicture::
         where('product_id', '=', $id)

@@ -26,7 +26,12 @@ $(function () {
         e.preventDefault();
     });
 
-    $('select').each(function () {
+    let selectDefault = '.phpdebugbar-datasets-switcher';
+    let allSelect =$('select');
+
+    allSelect
+        .filter(`:not(${selectDefault})`)
+        .each(function () {
         const WAIT = 250;
         let s = $(this);
         let timer = null;
@@ -51,4 +56,6 @@ $(function () {
         s.material_select();
         observer.observe(this, config);
     });
+
+    allSelect.filter(selectDefault).addClass('browser-default');
 });
