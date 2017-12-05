@@ -464,7 +464,7 @@ INSERT INTO `verification` VALUES (6, 15, 'images/WYfNpmn1K5rU3Rqobdk0i7t2SrUqJ0
 -- ----------------------------
 DROP FUNCTION IF EXISTS `GetDiffUserBuyProduct`;
 delimiter ;;
-CREATE DEFINER=`root`@`localhost` FUNCTION `GetDiffUserBuyProduct`(`pid` int) RETURNS int(11)
+CREATE FUNCTION `GetDiffUserBuyProduct`(`pid` int) RETURNS int(11)
 BEGIN
 	DECLARE c INT DEFAULT 0;
 	SELECT Count(*) INTO c From order_product as od INNER JOIN `Order` as o ON o.id = od.order_id
@@ -479,7 +479,7 @@ delimiter ;
 -- ----------------------------
 DROP FUNCTION IF EXISTS `GetSellCount`;
 delimiter ;;
-CREATE DEFINER=`root`@`%` FUNCTION `GetSellCount`(`pid` int) RETURNS int(11)
+CREATE FUNCTION `GetSellCount`(`pid` int) RETURNS int(11)
 BEGIN
 		DECLARE c INT DEFAULT 0;
 		SELECT Count(*) INTO c From order_product as od Where od.product_id = pid;
