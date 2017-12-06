@@ -42,6 +42,15 @@ Route::group([
     //USER
     Route::get('profile', 'UserController@getUserInfo');
     Route::post('profile/avatar', 'UserController@postChangeAvatar');
+
+
+//購物車
+    Route::post('/buy', 'ProductController@buyProduct');
+    Route::get('/shopping-cart', 'ProductController@getShoppingCart');
+    Route::post('/shopping-cart', 'ProductController@postShoppingCart');
+    Route::post('/checkout', 'ProductController@checkOut');
+    Route::post('/changeAmount', 'ProductController@changeAmount');
+    Route::post('/removeProductFromShoppingcart', 'ProductController@removeProductFromShoppingcart');
 });
 
 Route::group([
@@ -89,16 +98,9 @@ Route::get('/category', 'CategoryController@getCategory');
 Route::get('/products', 'ProductController@getProducts');
 Route::get('/products/item/{id}', 'ProductController@getItem');
 Route::get('/products/item-image/{pid}/{id}', 'ProductController@getImage');
-//購物車
-Route::post('/buy', 'ProductController@buyProduct');
-Route::get('/shoppingcart', 'ProductController@getShoppingCart');
-Route::post('/changeAmount', 'ProductController@changeAmount');
-Route::post('/removeProductFromShoppingcart', 'ProductController@removeProductFromShoppingcart');
+
 //DISCOUNT
 Route::get('/discount', 'DiscountController@getDiscount');
-//CHECKOUT
-Route::get('/checkout', 'ProductController@getCheckOut');
-Route::post('/checkout', 'ProductController@checkOut');
 //ORDER
 Route::get('/order', 'OrderController@getOrder');
 Route::get('/orderDetail', 'OrderController@getOrderDetail');
