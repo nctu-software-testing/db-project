@@ -1,2 +1,15 @@
 User-agent: *
-Disallow:
+Disallow: /Admin/
+Disallow: /login
+Disallow: /logout
+Disallow: /add-to-shopping-car/
+Disallow: /handle-transaction
+Disallow: /undo-buy/
+Disallow: /
+Disallow: /analysis-report/
+Disallow: /key-generator/
+Disallow: /bill/
+Disallow: /abandon/
+Disallow: /reset-data
+
+Allow: /WW91IENhbid0IFNlZSBNZQ==

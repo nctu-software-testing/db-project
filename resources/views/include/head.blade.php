@@ -1,6 +1,6 @@
 <meta name="csrf-token" content="{{ csrf_token() }}" />
 <meta name="public-path" content="{{ asset('/') }}" />
-<link rel="shortcut icon" href="{{asset('images/favicon.ico')}}" />
+<link rel="shortcut icon" href="{{asset('favicon.ico')}}" />
 <link rel="stylesheet" type="text/css" href="{{asset('css/all.css')}}">
 
 <!-- Include Script -->
