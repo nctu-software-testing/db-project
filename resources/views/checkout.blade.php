@@ -63,11 +63,11 @@
                     </tr>
                     <tr>
                         <td><h5>運費</h5></td>
-                        <td><h5>$60</h5></td>
+                        <td><h5>{{$shippingment}}</h5></td>
                     </tr>
                     <tr>
                         <td><h5>訂單金額：</h5></td>
-                        <td><h5 class="price-amount"> ${{$final + 60}}</h5></td>
+                        <td><h5 class="price-amount"> ${{$final+$shippingment}}</h5></td>
                     </tr>
                     </tbody>
                 </table>

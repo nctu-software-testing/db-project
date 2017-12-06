@@ -38,7 +38,7 @@
              </table>
          </div>
      </div>
-     <div class = "row">
+     <div class = "row" id = "checkout_info">
          <div class="col-md-7 offset-md-5 buy-info">
              <table class="table">
                  <tbody>
@@ -65,21 +65,25 @@
 @endsection
 @section('eofScript')
     <script>
+        var productCount = {{count($data)}};
+        if (productCount == 0)
+            $('#checkout_info').hide();
+
     function ChangeAmount(id,a) {
 
-    var amount=prompt("請輸入修改後數量!", a);
-    if (isNaN(amount)||amount<0||!amount) {
-    alert("請輸入正確數字");
-    return;
-    }
-    $.post("changeAmount",
-    {
-    id:id,
-    amount:amount,
-    },
-    function(data){
-    location.reload();
-    });
+        var amount=prompt("請輸入修改後數量!", a);
+        if (isNaN(amount)||amount<0||!amount) {
+            alert("請輸入正確數字");
+            return;
+        }
+        $.post("changeAmount",
+        {
+        id:id,
+        amount:amount,
+        },
+        function(data){
+        location.reload();
+        });
     }
     function Remove(id) {
         var ok=confirm("確認將商品移出購物車?");

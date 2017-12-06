@@ -53,15 +53,15 @@
                 <div class = "product-information">
                     <div class="info-header">
                         <h1>{{$p->product_name}}</h1>
-                        <h6 class = "suggest">建議售價 NT$ <del>{{$p->price*1.2}} .00</del> </h6>
-                        <h2 class = "product-price">NT$ {{$p->price}} .00</h2>
+                        <h6 class = "suggest">建議售價 NT$ <del>{{$p->price*1.2}}</del> </h6>
+                        <h2 class = "product-price">NT$ {{$p->price}}</h2>
                     </div>
                     <div class = "info-about">
                         <div class = "chip">
                             <a href="{{action('ProductController@getProducts')}}?search[category]={{$p->category_id}}">{{$p->product_type}}</a>
                         </div>
                         <h6>販售截止日 {{$p->end_date}}</h6>
-                        <h6>運費 NT$ 60 .00</h6>
+                        <h6>運費 NT$ 60</h6>
                     </div>
                     <div class = "info-price">
                         <h6>數量&nbsp;&nbsp;&nbsp;
@@ -83,6 +83,14 @@
 @endsection
 @section('eofScript')
 <script>
+    $('#amount').change(function() {
+        var amount =  $('#amount').val();
+        if (isNaN(amount) || amount <= 0  || amount =="" ) {
+            $('#amount').val("1");
+            alert("請輸入正確數字");
+        }
+    });
+
     function getBBCodeFromHtml(code){
         let fragment = CKEDITOR.htmlParser.fragment.fromBBCode( code ),
             writer = new CKEDITOR.htmlParser.basicWriter();

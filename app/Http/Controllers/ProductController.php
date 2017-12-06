@@ -345,6 +345,8 @@ class ProductController extends BaseController
         } else {
             $shoppingcart = collect();
         }
+        //初始運費
+
         $final = 0;
         for ($i = 0; $i < count($shoppingcart); $i++) {
             $final += $shoppingcart[$i]->product->price * $shoppingcart[$i]->amount;
@@ -383,15 +385,21 @@ class ProductController extends BaseController
         return;
     }
 
+    public function getShippingment()
+    {
+        return 60;
+    }
     //結帳頁面
     public function getCheckOut(Request $request)
     {
         $shoppingcart = session()->get('shoppingcart');
         $this->renewShoppingcart($request);
         $final = session()->get('final');
+        $shippingment = $this->getShippingment();
         $uid = $request->session()->get('user')->id;
         $location = Location::where('user_id', $uid)->get();
         return view('checkout')->with('data', $shoppingcart)->
+            with('shippingment',$shippingment)->
         with('final', $final)->
         with('location', $location);
     }
