@@ -3,9 +3,9 @@
     <script type="text/javascript" src="{{asset('js/ckeditor/ckeditor.js')}}"></script>
 @endsection
 @section('content')
-    <div class = "container product-header">
-        <div class = "row">
-            <div class = "col-6">
+    <div class="container product-header">
+        <div class="row">
+            <div class="col-6">
                 <!--Carousel Wrapper-->
                 <div id="carousel-example-1z" class="carousel slide carousel-fade" data-ride="carousel">
                     <!--Indicators-->
@@ -49,21 +49,21 @@
                 </div>
                 <!--/.Carousel Wrapper-->
             </div>
-            <div class = "col-6">
-                <div class = "product-information">
+            <div class="col-6">
+                <div class="product-information">
                     <div class="info-header">
                         <h1>{{$p->product_name}}</h1>
-                        <h6 class = "suggest">建議售價 NT$ <del>{{$p->price*1.2}}</del> </h6>
-                        <h2 class = "product-price">NT$ {{$p->price}}</h2>
+                        <h6 class="suggest">建議售價 NT$ <del>{{$p->price*1.2}}</del> </h6>
+                        <h2 class="product-price">NT$ {{$p->price}}</h2>
                     </div>
-                    <div class = "info-about">
-                        <div class = "chip">
+                    <div class="info-about">
+                        <div class="chip">
                             <a href="{{action('ProductController@getProducts')}}?search[category]={{$p->category_id}}">{{$p->product_type}}</a>
                         </div>
                         <h6>販售截止日 {{$p->end_date}}</h6>
                         <h6>運費 NT$ 60</h6>
                     </div>
-                    <div class = "info-price">
+                    <div class="info-price">
                         <h6>數量&nbsp;&nbsp;&nbsp;
                             <input id = "amount" type= "number" class="input-alternate" min="0" max="10" value="1">
                             &nbsp;&nbsp;
@@ -73,8 +73,8 @@
                 </div>
             </div>
         </div>
-        <div class = "row introduce">
-            <h2 class = "col-12 introduce-title">商品詳情</h2>
+        <div class="row introduce">
+            <h2 class="col-12 introduce-title">商品詳情</h2>
 
             <div id="description" hidden>{{$p->product_information}}</div>
         </div>

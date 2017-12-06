@@ -26,7 +26,7 @@
                             </td>
                             <td>{{$data[$i]->product->price}}</td>
                             　<td>{{$data[$i]->amount}}</td>
-                            <td class = "price-amount">$ {{$data[$i]->product->price * $data[$i]->amount}}</td>
+                            <td class="price-amount">$ {{$data[$i]->product->price * $data[$i]->amount}}</td>
                         </tr>
                     @endfor
                     <tr>
