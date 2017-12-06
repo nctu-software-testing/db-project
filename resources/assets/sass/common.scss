@@ -89,3 +89,10 @@ main {
 .list-group-item.justify-content-between.align-items-center>.label{
   font-weight: 500;
 }
+
+.table-middle.table{
+  td, th{
+    vertical-align: middle;
+    text-align:center;
+  }
+}

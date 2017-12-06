@@ -2,7 +2,7 @@
 @section('content')
 <form action="sell" method="post" enctype="multipart/form-data" id="Form">
     <input type="hidden" name="Edit_id" id="Edit_id" value={{$id}}>
-    商品名稱:<input type="text" name="title" value="{{$editdata->product_name}}" required><br>
+    商品名稱:<input type="text" name="title" value="{{$editdata->product_name}}" required><br><br>
     商品類別:<select name="category"required>
         @for ($i = 0; $i < count($category); $i++)
             　<option value={{$category[$i]->id}}
@@ -49,8 +49,8 @@
     @if(!request('id'))
         <input type="submit" value="上架">
     @else
-        <input type="submit" value="編輯">
-        <button type="button" onclick="Cancel('{{$data->currentPage()}}')">取消編輯</button></td>
+        <button type="submit"  class="btn btn-primary">編輯</button>
+        <button type="button" onclick="Cancel('{{$data->currentPage()}}')" class="btn btn-warning">取消編輯</button></td>
     @endif
 </form>
 
