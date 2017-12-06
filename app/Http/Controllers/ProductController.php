@@ -306,13 +306,10 @@ class ProductController extends BaseController
             ->where('state', Product::STATE_RELEASE)
             ->first();
         if ($p) {
-            if (($request->session()->has('shoppingcart'))) {
-                $shoppingcart = session()->get('shoppingcart');
-            } else {
-                $shoppingcart = collect();
-            }
+            $shoppingcart = session('shoppingcart', collect());
+
             $flag = false;
-            for ($i = 0; $i < count($shoppingcart); $i++) {
+            for ($i = 0; $i < $shoppingcart->count(); $i++) {
                 if ($shoppingcart[$i]->product->id == $id) {
                     $shoppingcart[$i]->amount += $amount;
                     $request->session()->put('shoppingcart', $shoppingcart);
@@ -323,7 +320,7 @@ class ProductController extends BaseController
             $op = new OrderProduct();
             $op->product_id = $id;
             $op->amount = $amount;
-            $product = Product::where("id", $id)->get()->first();
+            $product = Product::where("id", $id)->first();
             $op->product = $product;
             $shoppingcart->push($op);
             $request->session()->put('shoppingcart', $shoppingcart);
@@ -332,24 +329,23 @@ class ProductController extends BaseController
 
     public function getShoppingCart(Request $request)
     {
-        $shoppingcart = session()->get('shoppingcart');
-        $this->renewShoppingcart($request);
+        $this->renewShoppingCart();
+        $shoppingcart = session('shoppingcart');
         $final = session()->get('final');
-        return view('shoppingcart', ['data' => $shoppingcart], ['final' => $final]);
+        return view('shopping-cart')
+            ->with('data', $shoppingcart)
+            ->with('final', $final);
     }
 
-    public function renewShoppingcart(Request $request)
+    private function renewShoppingCart()
     {
-        if (($request->session()->has('shoppingcart'))) {
-            $shoppingcart = session()->get('shoppingcart');
-        } else {
-            $shoppingcart = collect();
-        }
+        $shoppingcart = session('shoppingcart', collect());
         $final = 0;
         for ($i = 0; $i < count($shoppingcart); $i++) {
             $final += $shoppingcart[$i]->product->price * $shoppingcart[$i]->amount;
         }
-        $request->session()->put('final', $final);
+        session()->put('shoppingcart', $shoppingcart);
+        session()->put('final', $final);
     }
 
     public function changeAmount(Request $request)
@@ -384,10 +380,10 @@ class ProductController extends BaseController
     }
 
     //結帳頁面
-    public function getCheckOut(Request $request)
+    public function postShoppingCart(Request $request)
     {
+        $this->renewShoppingCart();
         $shoppingcart = session()->get('shoppingcart');
-        $this->renewShoppingcart($request);
         $final = session()->get('final');
         $uid = $request->session()->get('user')->id;
         $location = Location::where('user_id', $uid)->get();
@@ -429,7 +425,7 @@ class ProductController extends BaseController
         }
         $request->session()->forget('shoppingcart');
         $request->session()->flash('log', '成功');
-        return redirect()->back();
+        return redirect('/');
     }
 }
 
