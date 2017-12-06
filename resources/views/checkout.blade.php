@@ -65,7 +65,6 @@
                             <td>
                                 <select class="mdb-select" name="location" required id="location">
                                     @for ($i = 0; $i < count($location); $i++)
-                                        　
                                         <option value={{$location[$i]->id}}>{{$location[$i]->address}}
                                         </option>
                                     @endfor
@@ -74,11 +73,11 @@
                         </tr>
                         <tr>
                             <td><label for="shipping">運費</label></td>
-                            <td><h5 id="shipping">$60</h5></td>
+                            <td><h5 id="shipping">${{$shippingment}}</h5></td>             
                         </tr>
                         <tr>
                             <td><label for="price">訂單金額：</label></td>
-                            <td><h5 class="price-amount" id="price"> ${{$final + 60}}</h5></td>
+                            <td><h5 class="price-amount" id="price"> ${{$final+$shippingment}}</h5></td>
                         </tr>
                         </tbody>
                     </table>
@@ -86,7 +85,7 @@
                             name="_token"
                             value="{{csrf_token()}}"
                             type="submit" class="btn blue-gradient btn-block btn-rounded btn-check-out"
-                    >下訂單
+                      >下訂單
                     </button>
                 </div>
             </div>

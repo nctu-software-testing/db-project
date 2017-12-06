@@ -47,7 +47,7 @@
                     </table>
                 </div>
             </div>
-            <div class="row">
+            <div class="row" id="checkout_info">
                 <div class="col-md-7 offset-md-5 buy-info">
                     <table class="table">
                         <tbody>
@@ -89,36 +89,38 @@
     </div>
 @endsection
 @section('eofScript')
-    <script>
-        function ChangeAmount(id, a) {
+@if(count($data)==0)
+<style>#checkout_info{display: none}</style>
+@endif
+<script>
+    function ChangeAmount(id,a) {
 
-            var amount = prompt("請輸入修改後數量!", a);
-            if (isNaN(amount) || amount < 0 || !amount) {
-                alert("請輸入正確數字");
-                return;
-            }
-            $.post("changeAmount",
+        var amount=prompt("請輸入修改後數量!", a);
+        if (isNaN(amount)||amount<0||!amount) {
+            alert("請輸入正確數字");
+            return;
+        }
+        $.post("changeAmount",
+        {
+        id:id,
+        amount:amount,
+        },
+        function(data){
+        location.reload();
+        });
+    }
+    function Remove(id) {
+        var ok=confirm("確認將商品移出購物車?");
+        if(ok)
+        {
+            $.post("removeProductFromShoppingcart",
                 {
-                    id: id,
-                    amount: amount,
+                    id:id,
                 },
-                function (data) {
+                function(data){
                     location.reload();
                 });
         }
-
-        function Remove(id) {
-            var ok = confirm("確認將商品移出購物車?");
-            if (ok) {
-                $.post("removeProductFromShoppingcart",
-                    {
-                        id: id,
-                    },
-                    function (data) {
-                        location.reload();
-                    });
-            }
-        }
-
-    </script>
+    }
+</script>
 @endsection
