@@ -10,15 +10,7 @@
 |
 */
 
-Route::get('/', function () {
-    $category = \App\Category::orderBy('id')->get();
-    $hotProducts = \App\Product::getHotProducts();
-    return view('welcome', [
-        'pageName' => 'index',
-        'category' => $category,
-        'products' => $hotProducts
-    ]);
-});
+Route::get('/', 'HomeController@getIndex');
 
 Route::group([
     'middleware' => ['auth']
@@ -44,13 +36,15 @@ Route::group([
     Route::post('profile/avatar', 'UserController@postChangeAvatar');
 
 
-//購物車
+    //購物車
     Route::post('/buy', 'ProductController@buyProduct');
     Route::get('/shopping-cart', 'ProductController@getShoppingCart');
     Route::post('/shopping-cart', 'ProductController@postShoppingCart');
     Route::post('/checkout', 'ProductController@checkOut');
     Route::post('/changeAmount', 'ProductController@changeAmount');
     Route::post('/removeProductFromShoppingcart', 'ProductController@removeProductFromShoppingcart');
+
+    Route::post('shopping-cart/discount', 'DiscountController@postSetDiscount');
 });
 
 Route::group([
@@ -65,6 +59,9 @@ Route::group([
     //USER MANAGE
     Route::get('admin/users-manage', 'AdminController@getUsersManager');
     Route::post('admin/users-manage/change-password', 'AdminController@changePassword');
+
+    //DISCOUNT
+    Route::get('/discount/manage', 'DiscountController@getManageDiscount');
 });
 
 Route::group([
@@ -99,8 +96,6 @@ Route::get('/products', 'ProductController@getProducts');
 Route::get('/products/item/{id}', 'ProductController@getItem');
 Route::get('/products/item-image/{pid}/{id}', 'ProductController@getImage');
 
-//DISCOUNT
-Route::get('/discount', 'DiscountController@getDiscount');
 //ORDER
 Route::get('/order', 'OrderController@getOrder');
 Route::get('/orderDetail', 'OrderController@getOrderDetail');

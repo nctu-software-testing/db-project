@@ -65,14 +65,14 @@
                                        name="discount"
                                         type="text" class="input-alternate discount-code">&nbsp;&nbsp;&nbsp;
                                 <button
-                                        type="button" class="btn htn-sm btn-rounded btn-amber">完成
+                                        type="button" class="btn htn-sm btn-rounded btn-amber" id="discountBtn">完成
                                 </button>
                             </td>
-                            <td><h5>-$0</h5></td>
+                            <td><h5 id="discountValue">-$0</h5></td>
                         </tr>
                         <tr>
                             <td><h5>訂單金額：</h5></td>
-                            <td><h5 class="price-amount"> ${{$final}}</h5></td>
+                            <td><h5 class="price-amount" id="finalCost"> ${{$final}}</h5></td>
                         </tr>
                         </tbody>
                     </table>
@@ -93,6 +93,23 @@
 <style>#checkout_info{display: none}</style>
 @endif
 <script>
+    $('#discountBtn').on('click', function(){
+        let discountCode = $("#discount").val();
+        ajax('POST', '{{action('DiscountController@postSetDiscount')}}', {
+            code: discountCode
+        })
+            .then(d=>{
+                if(d.success){
+                    let preFix = d.result.type==='$'?'$':'';
+                    let postFix = d.result.type==='%'?'%':'';
+                    toastr.success(d.result.message);
+                    $("#finalCost").text(`$${d.result.final_cost}`);
+                    $("#discountValue").text(`${preFix}-${d.result.value}${postFix}`);
+                }else{
+                    toastr.error(d.result.message);
+                }
+            })
+    });
     function ChangeAmount(id,a) {
 
         var amount=prompt("請輸入修改後數量!", a);
