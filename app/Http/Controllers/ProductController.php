@@ -387,9 +387,11 @@ class ProductController extends BaseController
         $final = session()->get('final');
         $uid = $request->session()->get('user')->id;
         $location = Location::where('user_id', $uid)->get();
-        return view('checkout')->with('data', $shoppingcart)->
-        with('final', $final)->
-        with('location', $location);
+        return view('checkout')
+            ->with('data', $shoppingcart)
+            ->with('final', $final)
+            ->with('location', $location)
+            ->with('shippingment', $this->getShippingCost($request));
     }
 
     public function checkOut(Request $request)
@@ -426,6 +428,11 @@ class ProductController extends BaseController
         $request->session()->forget('shoppingcart');
         $request->session()->flash('log', '成功');
         return redirect('/');
+    }
+
+    private function getShippingCost(Request $request) : int
+    {
+        return 60;
     }
 }
 

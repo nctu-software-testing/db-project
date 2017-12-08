@@ -45,7 +45,7 @@
                    href="{{action('ProductController@getSelfProducts')}}">(AB)商品管理</a>
 
                 <a class="dropdown-item waves-effect waves-light" accesskey="g"
-                   href="{{action('DiscountController@getDiscount')}}">(A)折價管理</a>
+                   href="{{action('DiscountController@getManageDiscount')}}">(A)折價管理</a>
 
                 <a class="dropdown-item waves-effect waves-light" accesskey="h"
                    href="{{action('OrderController@getOrder')}}">(BC)訂單管理</a>
