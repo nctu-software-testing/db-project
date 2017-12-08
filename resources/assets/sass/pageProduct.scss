@@ -7,19 +7,19 @@
   .product-wrap {
     margin-right: 1rem;
 
-    p{
+    p {
       margin-bottom: 0;
     }
   }
 }
 
-#searchList{
-  .row.section{
+#searchList {
+  .row.section {
     margin-bottom: 1rem;
     padding-bottom: 1rem;
     border-bottom: 1px solid #DDD;
 
-    &:last-of-type{
+    &:last-of-type {
       border-bottom: 0;
     }
   }
@@ -29,11 +29,12 @@
 .product-header {
   padding-top: 50px;
 }
-.product-information, .introduce, .checkout-info{
+
+.product-information, .introduce, .checkout-info {
   background-color: white;
   padding: 32px;
   border-radius: 2px;
-  box-shadow: 0 1px 1px 0 rgba(0,0,0,.05);
+  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .05);
 }
 
 .product-price, .price-amount {
@@ -44,7 +45,7 @@
 .info-header, .info-about {
   padding-bottom: 10px;
   margin-bottom: 10px;
-  border-bottom: 1px solid rgba(0,0,0,.09);
+  border-bottom: 1px solid rgba(0, 0, 0, .09);
 }
 
 .info-about {
@@ -61,16 +62,15 @@
 }
 
 .suggest {
-  color: rgba(0,0,0,.54);
+  color: rgba(0, 0, 0, .54);
 }
 
 #amount {
   width: 250px;
 }
 
-.remaining
-{
-  color: rgba(0,0,0,.54);
+.remaining {
+  color: rgba(0, 0, 0, .54);
   font-size: 0.58em;
 }
 
@@ -79,7 +79,7 @@
 }
 
 .introduce-title {
-  border-bottom: 1px solid rgba(0,0,0,.09);
+  border-bottom: 1px solid rgba(0, 0, 0, .09);
   padding-left: 0px;
   padding-top: 10px;
   padding-bottom: 20px;
@@ -99,14 +99,14 @@
   overflow: hidden;
 }
 
-.shopping-table td, .shopping-table th{
-  vertical-align:middle;
+.shopping-table td, .shopping-table th {
+  vertical-align: middle;
 }
 
 .shopping-table {
   padding-bottom: 20px;
   margin-bottom: 50px;
-  border-bottom: 3px solid rgba(0,0,0,.09);
+  border-bottom: 3px solid rgba(0, 0, 0, .09);
 }
 
 .discount-code {
@@ -118,7 +118,7 @@
   font-size: 35px;
   padding-bottom: 20px;
   margin-bottom: 20px;
-  border-bottom: 1px solid rgba(0,0,0,.09);
+  border-bottom: 1px solid rgba(0, 0, 0, .09);
 }
 
 .btn-check-out {
@@ -135,6 +135,101 @@
   padding: 32px;
 }
 
-.payment-method td{
+.payment-method td {
   border-top: none;
+}
+
+#imagesContainer {
+  display: flex;
+  flex-wrap: wrap;
+  .upload-container {
+    $border-color: #dddfe2;
+    $border-darker-color: #ccc;
+
+    position: relative;
+    margin-right: .5rem;
+    margin-bottom: .5rem;
+    width: 7rem;
+    height: 7rem;
+    border: 2px dashed $border-color;
+    border-radius: 2px;
+    overflow: hidden;
+
+    &:last-of-type {
+      margin-right: 0;
+    }
+    &:hover, &:hover .addImageBtn {
+      color: $border-darker-color !important;
+      border-color: $border-darker-color !important;
+    }
+    .close-btn {
+      position: absolute;
+      right: .5rem;
+      top: 0;
+      font-size: 1.25rem;
+      color: #FFF;
+      font-weight: bold;
+      z-index: 100;
+      cursor: pointer;
+    }
+    input {
+      display: none;
+      position: absolute;
+      left: -200px;
+      top: -200px;
+      width: 400px;
+      height: 400px;
+      z-index: 99;
+      opacity: 0;
+
+      cursor: pointer;
+    }
+
+    .img {
+      &:not([src=""]){
+        ~.addImageBtn{
+          text-indent: -999px;
+          position:absolute;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          display: block;
+          background: rgba(0, 0, 0, .3);
+          z-index: 99;
+        }
+      }
+      &[src="" ] {
+        display: none;
+        + input {
+          display: block;
+        }
+        ~ .addImageBtn {
+          $size: 3rem;
+          font-size: $size;
+          width: $size;
+          height: $size;
+          display: inline-block;
+          text-align: center;
+          border-radius: $size;
+          border: 2px solid $border-color;
+          color: $border-color;
+          line-height: $size - .25rem;
+          position: absolute;
+          z-index: 97;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+        }
+      }
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  #uploaderBase .close-btn{
+    display: none;
+  }
+
 }

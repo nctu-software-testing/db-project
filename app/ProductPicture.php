@@ -14,6 +14,6 @@ class ProductPicture extends Model
      * @var array
      */
     protected $fillable = [
-        'path','product_id',
+        'path','product_id', 'sort'
     ];
 }

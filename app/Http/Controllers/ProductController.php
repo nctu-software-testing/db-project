@@ -20,6 +20,7 @@ class ProductController extends BaseController
 {
     public $paginate = 12;
     private const SEARCH_KEY = ['name', 'category', 'minPrice', 'maxPrice', 'sort'];
+    private const IMAGE_LIMIT = 5;
 
     public function __construct()
     {
@@ -162,7 +163,8 @@ class ProductController extends BaseController
             ->with('id', $id)
             ->with('category', $category)
             ->with('editdata', $editdata)
-            ->with('count', $count);
+            ->with('count', $count)
+            ->with('imgLimit', self::IMAGE_LIMIT);
     }
 
     public function getItem(Request $request, $id)
@@ -228,22 +230,37 @@ class ProductController extends BaseController
         $product->user_id = $id;
         $product->state = Product::STATE_DRAFT;
         $product->save();
+
         //移除圖片
-        $image = ProductPicture::where('product_id', $edit_id)->get();
-        for ($i = 0; $i < 5; $i++) {
-            $del = request('delImage' . $i);
-            if ($del == 1)
+        $image = ProductPicture::where('product_id', $edit_id)
+            ->orderBy('sort')
+            ->orderBy('id')
+            ->get();
+        $imgCount = 0;
+
+        $delArray = request('delImage', []);
+        if (!is_array($delArray)) $delArray = [];
+        for ($i = 0, $j = count($delArray); $i < $j; $i++) {
+            if (($delArray[$i] ?? null) === '1' && !is_null($image[$i] ?? null)) {
                 $image[$i]->delete();
+                $imgCount--;
+            }else{
+                $image[$i]->sort = ++$imgCount;
+                $image[$i]->save();
+            }
         }
+
         //圖片
-        for ($i = 0; $i < 5; $i++) {
-            if ($request->hasFile('file' . $i)) {
-                $file = $request->file('file' . $i);
+        for ($i = 0; $i < self::IMAGE_LIMIT; $i++) {
+            $key = 'productImage.' . $i;
+            if ($request->hasFile($key)) {
+                $file = $request->file($key);
                 if ($file->isValid()) {
-                    $path[$i] = $file->store('images');
+                    $path = $file->store('images');
                     $pp = new ProductPicture();
                     $pp->product_id = $product->id;
-                    $pp->path = $path[$i];
+                    $pp->path = $path;
+                    $pp->sort = ++$imgCount;
                     $pp->save();
                 }
             }
@@ -257,8 +274,11 @@ class ProductController extends BaseController
 
     public function getImage($pid, $id)
     {
-        $image = ProductPicture::where('product_id', $pid)->get();
-        $image = $image[$id] ?? null;
+        $image = ProductPicture
+            ::where('product_id', $pid)
+            ->where('sort', $id)
+            ->first();
+
         if ($image) {
             $imagePath = $image->path;
         }
@@ -272,7 +292,7 @@ class ProductController extends BaseController
             $response->header("Content-Type", $type);
             $response->header("Cache-Control", 'public, max-age=3600');
             return $response;
-        }catch (FileNotFoundException $e) {
+        } catch (FileNotFoundException $e) {
             debugbar()->error($e);
         }
         return abort(404);
@@ -433,7 +453,7 @@ class ProductController extends BaseController
         return redirect('/');
     }
 
-    private function getShippingCost(Request $request) : int
+    private function getShippingCost(Request $request): int
     {
         return 60;
     }
