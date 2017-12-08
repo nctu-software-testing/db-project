@@ -100,9 +100,11 @@
         })
             .then(d=>{
                 if(d.success){
+                    let preFix = d.result.type==='$'?'$':'';
+                    let postFix = d.result.type==='%'?'%':'';
                     toastr.success(d.result.message);
-                    $("#finalCost").text(`\$${d.result.final_cost}`);
-                    $("#discountValue").text(`\$${d.result.value}`);
+                    $("#finalCost").text(`$${d.result.final_cost}`);
+                    $("#discountValue").text(`${preFix}-${d.result.value}${postFix}`);
                 }else{
                     toastr.error(d.result.message);
                 }

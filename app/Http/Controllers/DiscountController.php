@@ -41,19 +41,23 @@ class DiscountController extends BaseController
             } else if ($d->type === 'C') {
                 $type = self::TYPE_AMOUNT;
             }
-            $value = -.95;
+            $value = .1;
             if ($type === self::TYPE_AMOUNT) {
                 $finalCost -= $value;
             } else if ($type === self::TYPE_PERCENTAGE) {
-                $finalCost -= $finalCost *= $value;
+                $finalCost -= $finalCost * $value;
             }
 
             if ($finalCost < 0) $finalCost = 0;
 
-            session()->put('discount_cost', $finalCost);
+            session()->put('discount', [
+                'final_price' => $finalCost,
+                'code' => $code
+            ]);
+
             return $this->result([
                 'message' => "套用優惠成功",
-                'type' => self::TYPE_PERCENTAGE,
+                'type' => $type,
                 'value' => $value,
                 'final_cost' => $finalCost,
             ], true);
