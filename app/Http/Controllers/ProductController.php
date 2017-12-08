@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
+use League\Flysystem\FileNotFoundException;
 
 
 class ProductController extends BaseController
@@ -261,16 +262,18 @@ class ProductController extends BaseController
         if ($image) {
             $imagePath = $image->path;
         }
-        if (is_null($image) || !Storage::exists($imagePath)) {
+        if (is_null($image)) {
             $imagePath = 'public/product-no-image.png';
         }
-        if (Storage::exists($imagePath)) {
+        try {
             $type = Storage::mimeType($imagePath);
             $content = (Storage::get($imagePath));
             $response = Response::make($content, 200);
             $response->header("Content-Type", $type);
             $response->header("Cache-Control", 'public, max-age=3600');
             return $response;
+        }catch (FileNotFoundException $e) {
+            debugbar()->error($e);
         }
         return abort(404);
     }
