@@ -18,7 +18,7 @@
          >管理商品</a>
 
         <a class="list-group-item list-group-item-action"
-           href="{{action('DiscountController@getDiscount')}}"
+           href="{{action('DiscountController@getManageDiscount')}}"
         >管理折扣</a>
     </div>
 </section>
