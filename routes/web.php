@@ -94,7 +94,6 @@ Route::get('/category', 'CategoryController@getCategory');
 //PRODUCT
 Route::get('/products', 'ProductController@getProducts');
 Route::get('/products/item/{id}', 'ProductController@getItem');
-Route::get('/products/item-image/{pid}/{id}', 'ProductController@getImage');
 
 //ORDER
 Route::get('/order', 'OrderController@getOrder');

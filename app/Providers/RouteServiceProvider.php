@@ -35,6 +35,8 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function map()
     {
+        $this->mapAnyRoutes();
+
         $this->mapApiRoutes();
 
         $this->mapWebRoutes();
@@ -54,6 +56,17 @@ class RouteServiceProvider extends ServiceProvider
         Route::middleware('web')
              ->namespace($this->namespace)
              ->group(base_path('routes/web.php'));
+    }
+
+    /**
+     * Define the "any" routes for the application.
+     *
+     * @return void
+     */
+    protected function mapAnyRoutes()
+    {
+        Route::namespace($this->namespace)
+             ->group(base_path('routes/any.php'));
     }
 
     /**
