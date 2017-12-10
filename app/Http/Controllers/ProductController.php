@@ -8,6 +8,7 @@ use App\Order;
 use App\OrderProduct;
 use App\Product;
 use App\ProductPicture;
+use App\Shipping;
 use DateTime;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -455,7 +456,15 @@ class ProductController extends BaseController
 
     private function getShippingCost(Request $request): int
     {
-        return 60;
+        $price = $this->getCurrentPrice();
+        return Shipping::getShippingPrice($price);
+    }
+
+    private function getCurrentPrice() : int
+    {
+        $this->renewShoppingCart();
+
+        return session('final', 0);
     }
 }
 
