@@ -14,7 +14,7 @@ class Shipping extends Model
      * @var array
      */
     protected $fillable = [
-        'lower_bound', 'upper_bound'
+        'lower_bound', 'upper_bound', 'price'
     ];
 
     public static function getShippingPrice($curPrice): int
