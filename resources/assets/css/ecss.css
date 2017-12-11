@@ -15,7 +15,7 @@
     right: 0;
     bottom: 0;
     left: 0;
-    z-index: 999999999999999999999;
+    z-index: 2147483647;
     display: none;
     font-size: 16px;
 }
@@ -99,7 +99,7 @@
 }
 
 .e-text1:before {
-    content: "\6c5d\ff0c\606d\559c\4f60\767c\73fe\524d\5f80\65b0\4e16\754c\7684\5927\9580";
+    content: "\6c5d\ff0c\606d\559c\767c\73fe\524d\5f80\65b0\4e16\754c\7684\5927\9580";
 }
 
 .e-text2:before {
