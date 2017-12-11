@@ -1,3 +1,4 @@
+const KeyDetector = require('./KeyDetector');
 window.StartE = function () {
     const eDiv = $("#ediv"), eContainer = eDiv.find(".e-container"), eBg = eContainer.find(".ebg", eContainer);
     eDiv.addClass('start');
@@ -17,27 +18,15 @@ window.StartK = function () {
 
 const _key = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65];
 const _keyShow = _key.slice(0, _key.length - 2);
-let keyCounter = 0, keyShowCounter = 0;
+let eggDetector = new KeyDetector(_key);
+eggDetector.setOnSeqDetected(()=>window.StartE());
+
+let eggHintDetector = new KeyDetector(_keyShow);
+eggHintDetector.setOnSeqDetected(()=>window.StartK());
+
 const checkEgg = (keyCode) => {
-    if (keyCode === _key[keyCounter]) {
-        keyCounter++;
-    } else {
-        keyCounter = 0;
-    }
-    if (keyCode === _keyShow[keyShowCounter]) {
-        keyShowCounter++;
-    } else {
-        keyShowCounter = 0;
-    }
-    
-    if (keyCounter === _key.length) {
-        keyCounter = 0;
-        window.StartE();
-    }
-    if (keyShowCounter === _keyShow.length) {
-        keyShowCounter = 0;
-        window.StartK();
-    }
+    eggDetector.onKeyPress(keyCode);
+    eggHintDetector.onKeyPress(keyCode);
 };
 
 window.addEventListener('keydown', function (e) {
