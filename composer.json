@@ -72,11 +72,8 @@
         ],
         "deploy": [
             "git pull",
-            "npm install",
-            "composer install",
             "composer run cache-clear",
-            "npm run prod",
-            "composer dump-autoload"
+            "npm run prod"
         ]
     },
     "config": {
