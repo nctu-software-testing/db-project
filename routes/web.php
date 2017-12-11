@@ -100,6 +100,4 @@ Route::get('/order', 'OrderController@getOrder');
 Route::get('/orderDetail', 'OrderController@getOrderDetail');
 
 
-Route::get('/function', function () {
-    return view('function');
-});
+Route::get('/function', 'HomeController@getFunction');

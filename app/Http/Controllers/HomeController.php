@@ -14,7 +14,8 @@ class HomeController extends BaseController
         parent::__construct('index');
     }
 
-    public function getIndex(Request $request){
+    public function getIndex(Request $request)
+    {
 
         $category = Category::orderBy('id')->get();
         $hotProducts = Product::getHotProducts();
@@ -22,6 +23,11 @@ class HomeController extends BaseController
             'category' => $category,
             'products' => $hotProducts
         ]);
+    }
+
+    public function getFunction()
+    {
+        return view('function');
     }
 
 }
