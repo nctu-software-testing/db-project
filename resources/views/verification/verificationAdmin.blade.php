@@ -8,9 +8,8 @@
         <tr>
             <th>姓名</th>
             <th>身分</th>
-            <th>身分證正面</th>
-            <th>身分證背面</th>
-            <th>verify_result</th>
+            <th>身分證正反面</th>
+            <th>驗證結果</th>
             <th>註冊時間</th>
             <th>驗證</th>
         </tr>
@@ -24,10 +23,8 @@
                 <td>{{$data[$i]->name}}</td>
                 <td>{{$data[$i]->role}}</td>
                 <td>
-                    <a href="{{action('VerificationController@getImage', ['vid'=>$data[$i]->id, 't'=>'front'])}}" class="btn btn-primary btn-sm verify-image">圖片</a>
-                </td>
-                <td>
-                    <a href="{{action('VerificationController@getImage', ['vid'=>$data[$i]->id, 't'=>'back'])}}" class="btn btn-primary btn-sm verify-image">圖片</a>
+                    <a href="{{action('VerificationController@getImage', ['vid'=>$data[$i]->id, 't'=>'front'])}}" class="btn btn-primary btn-sm verify-image">正面</a>
+                    <a href="{{action('VerificationController@getImage', ['vid'=>$data[$i]->id, 't'=>'back'])}}" class="btn btn-primary btn-sm verify-image">反面</a>
                 </td>
                 <td>{{$data[$i]->verify_result}}</td>
                 <td>{{$data[$i]->sign_up_datetime}}</td>
