@@ -12,15 +12,17 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Fetch API" level="application" />
     <orderEntry type="module-library">
-      <library name="PHARS">
+      <library name="PHP" type="php">
         <CLASSES>
-          <root url="phar://$MODULE_DIR$/vendor/phar-io/manifest/tests/_fixture/test.phar/" />
-          <root url="phar://$MODULE_DIR$/vendor/phpunit/phpunit/tests/_files/phpunit-example-extension/tools/phpunit.d/phpunit-example-extension-1.0.1.phar/" />
+          <root url="file://$MODULE_DIR$/vendor/symfony/polyfill-php70" />
+          <root url="file://$MODULE_DIR$/vendor/xethron/laravel-4-generators" />
+          <root url="file://$MODULE_DIR$/vendor/xethron/migrations-generator" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
-          <root url="phar://$MODULE_DIR$/vendor/phar-io/manifest/tests/_fixture/test.phar/" />
-          <root url="phar://$MODULE_DIR$/vendor/phpunit/phpunit/tests/_files/phpunit-example-extension/tools/phpunit.d/phpunit-example-extension-1.0.1.phar/" />
+          <root url="file://$MODULE_DIR$/vendor/symfony/polyfill-php70" />
+          <root url="file://$MODULE_DIR$/vendor/xethron/laravel-4-generators" />
+          <root url="file://$MODULE_DIR$/vendor/xethron/migrations-generator" />
         </SOURCES>
       </library>
     </orderEntry>
