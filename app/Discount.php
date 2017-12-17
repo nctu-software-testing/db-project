@@ -18,6 +18,7 @@ class Discount extends Model
     protected $fillable = [
         'name','start_discount_time','end_discount_time','type','discount_percent',
     ];
+
     public function GetType()
     {
         if($this->type=="A")return "免運費";

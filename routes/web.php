@@ -97,7 +97,7 @@ Route::get('/products/item/{id}', 'ProductController@getItem');
 
 //ORDER
 Route::get('/order', 'OrderController@getOrder');
-Route::get('/orderDetail', 'OrderController@getOrderDetail');
+Route::get('/orderDetail/{id}', 'OrderController@getOrderDetail');
 
 
 Route::get('/function', 'HomeController@getFunction');

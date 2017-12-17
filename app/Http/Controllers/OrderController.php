@@ -26,34 +26,29 @@ class OrderController extends BaseController
         $data = Order::
         where('customer_id', '=', $id)
             ->paginate($this->paginate);
-        return view('order', ['data' => $data]);
+        return view('order', ['data' => $data])
+            ->with('title', '我的訂單');
     }
 
-    public function getOrderDetail(Request $request)
+    public function getOrderDetail(Request $request, $id)
     {
         if (!($request->session()->has('user')))
             return redirect()->back();
         $uid = $request->session()->get('user')->id;
-        $orderid = request('id');
         $order = Order::
         where('customer_id', $uid)
-            ->where('id', $orderid)
+            ->where('id', $id)
             ->first();
         if (!$order)
             return abort(404);
-        $data = OrderProduct::
-        where('order_id', $orderid)
-            ->paginate($this->paginate);
-        $location = Location::
-        where('id', $order->location_id)
-            ->first();
-        for ($i = 0; $i < count($data); $i++) {
-            $product = Product::where('id', $data[$i]->product_id)->first();
-            $data[$i]->product = $product;
-        }
+        $data = OrderProduct::where('order_id', $id)->get();
+        $location = Location::find($order->location_id);
         return view('orderDetail')
             ->with('data', $data)
             ->with('location', $location)
-            ->with('order', $order);
+            ->with('order', $order)
+            ->with('discountAmount', $order->discountAmount())
+            ->with('title', '我的訂單');
     }
+
 }
