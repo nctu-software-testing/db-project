@@ -45,13 +45,19 @@ class Order extends Model
 
     }
 
-    public function GetId()
+    public function getShippingCost(): int
     {
-        return $this->id;
+        return Shipping::getShippingPrice($this->final_cost);
     }
 
-    public function GetLink()
+    public function discount()
     {
-        return "orderDetail?id=" . $this->id;
+        return $this->belongsTo('App\Discount');
+    }
+
+    public function discountAmount():?int
+    {
+        //return null;
+        return 10;
     }
 }

@@ -23,7 +23,8 @@ class LocationController extends BaseController
         $data = Location::
         where('user_id', '=', $id)
             ->paginate(self::PAGINATE);
-        return view('location', ['data' => $data]);
+        return view('location', ['data' => $data])
+            ->with('title', '會員資料');
     }
 
     public function createLocation(Request $request)
