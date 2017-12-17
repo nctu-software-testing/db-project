@@ -10,7 +10,7 @@
         >我的訂單</a>
 
         <a class="list-group-item list-group-item-action"
-           href="#"
+           href="{{action('StatController@getCustomStat')}}"
         >統計資料</a>
     </div>
 </section>
