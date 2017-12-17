@@ -77,6 +77,13 @@ Route::group([
 });
 
 Route::group([
+    'middleware' => ['auth.customer']
+], function () {
+    Route::get('stat/customer', 'StatController@getCustomStat');
+    Route::post('stat/customer', 'StatController@postCustomStat');
+});
+
+Route::group([
     'middleware' => ['auth.non']
 ], function () {
     //REGISTER
