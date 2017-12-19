@@ -42,7 +42,10 @@ class Order extends Model
         if ($now > $at)
             $this->state = 2;
         $this->save();
+    }
 
+    public function location(){
+        return $this->belongsTo('App\Location');
     }
 
     public function getShippingCost(): int
@@ -57,7 +60,7 @@ class Order extends Model
 
     public function discountAmount():?int
     {
-        //return null;
-        return 10;
+        return null;
+        //return 10;
     }
 }

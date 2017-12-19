@@ -1,12 +1,17 @@
 <form action="{{action('UserController@logout')}}" method="POST" class="form-inline" id="logoutForm" hidden></form>
 @section('right-nav')
     <div class="flex-center">
-        <div class="nav-item" >
+        <div class="nav-item">
             <a href="{{action('ProductController@getShoppingCart')}}" class="nav-link waves-light">
                 <i class="material-icons">shopping_cart</i>
                 <span class="name">購物車</span>
-                <span class="num">87</span>
+                <span class="num" id="cartNum"></span>
             </a>
+            <script>
+                ajax('GET', '{{action('ProductController@getShoppingCart')}}', {type: 'query'})
+                    .then(d => $("#cartNum").text(d.result ? d.result : ''));
+            </script>
+
         </div>
         &emsp;
         <div class="nav-item dropdown">

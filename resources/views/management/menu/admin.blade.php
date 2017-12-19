@@ -20,5 +20,9 @@
         <a class="list-group-item list-group-item-action"
            href="{{action('DiscountController@getManageDiscount')}}"
         >管理折扣</a>
+
+        <a class="list-group-item list-group-item-action"
+           href="{{action('OrderController@getShippingStatus')}}"
+        >出貨狀態</a>
     </div>
 </section>

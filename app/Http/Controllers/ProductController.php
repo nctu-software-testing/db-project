@@ -245,7 +245,7 @@ class ProductController extends BaseController
             if (($delArray[$i] ?? null) === '1' && !is_null($image[$i] ?? null)) {
                 $image[$i]->delete();
                 $imgCount--;
-            }else{
+            } else {
                 $image[$i]->sort = ++$imgCount;
                 $image[$i]->save();
             }
@@ -355,6 +355,9 @@ class ProductController extends BaseController
     {
         $this->renewShoppingCart();
         $shoppingcart = session('shoppingcart');
+        if ($request->get('type') === 'query') {
+            return $this->result(count($shoppingcart), true);
+        }
         $final = session()->get('final');
         return view('shopping-cart')
             ->with('data', $shoppingcart)
@@ -460,7 +463,7 @@ class ProductController extends BaseController
         return Shipping::getShippingPrice($price);
     }
 
-    private function getCurrentPrice() : int
+    private function getCurrentPrice(): int
     {
         $this->renewShoppingCart();
 

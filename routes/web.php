@@ -73,7 +73,13 @@ Route::group([
     //PRODUCT
     Route::get('products/manage', 'ProductController@getSelfProducts');
     Route::post('products/manage/release-product', 'ProductController@releaseProduct');
-    Route::post('/products/deleteProduct', 'ProductController@delProduct');
+    Route::post('products/deleteProduct', 'ProductController@delProduct');
+
+    Route::get('order/shipping-status', 'OrderController@getShippingStatus');
+
+
+    Route::get('stat/business', 'StatController@getBusinessStat');
+    Route::post('stat/business', 'StatController@postBusinessStat');
 });
 
 Route::group([
@@ -81,6 +87,10 @@ Route::group([
 ], function () {
     Route::get('stat/customer', 'StatController@getCustomStat');
     Route::post('stat/customer', 'StatController@postCustomStat');
+
+    //ORDER
+    Route::get('/order', 'OrderController@getOrder');
+    Route::get('/orderDetail/{id}', 'OrderController@getOrderDetail');
 });
 
 Route::group([
@@ -102,9 +112,6 @@ Route::get('/category', 'CategoryController@getCategory');
 Route::get('/products', 'ProductController@getProducts');
 Route::get('/products/item/{id}', 'ProductController@getItem');
 
-//ORDER
-Route::get('/order', 'OrderController@getOrder');
-Route::get('/orderDetail/{id}', 'OrderController@getOrderDetail');
 
 
 Route::get('/function', 'HomeController@getFunction');
