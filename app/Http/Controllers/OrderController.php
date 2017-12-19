@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Location;
 use App\Order;
 use App\OrderProduct;
-use App\Product;
 use Illuminate\Http\Request;
 
 class OrderController extends BaseController
@@ -49,6 +48,22 @@ class OrderController extends BaseController
             ->with('order', $order)
             ->with('discountAmount', $order->discountAmount())
             ->with('title', '我的訂單');
+    }
+
+    public function getShippingStatus()
+    {
+        $uid = session('user.id');
+        $dataQuery = OrderProduct::join('on_product', 'product_id', 'on_product.id')
+            ->select('order_product.*');
+        if (session('user.role') !== 'A') {
+            $dataQuery->where('on_product.user_id', $uid);
+        }
+
+        $data = $dataQuery->paginate($this->paginate);
+
+        return view('shipping-status')
+            ->with('data', $data)
+            ->with('title', '出貨狀態');
     }
 
 }

@@ -6,7 +6,11 @@
         >管理商品</a>
 
         <a class="list-group-item list-group-item-action"
-                     href="{{action('OrderController@getOrder')}}"
-        >訂單查詢</a>
+           href="{{action('StatController@getBusinessStat')}}"
+        >統計資料</a>
+
+        <a class="list-group-item list-group-item-action"
+                     href="{{action('OrderController@getShippingStatus')}}"
+        >出貨狀態</a>
     </div>
 </section>
