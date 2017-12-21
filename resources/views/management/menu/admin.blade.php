@@ -10,7 +10,7 @@
         >驗證會員</a>
 
         <a class="list-group-item list-group-item-action"
-           href="{{action('CategoryController@getCategory')}}"
+           href="{{action('CategoryController@getManageCategory')}}"
         >管理分類</a>
 
         <a class="list-group-item list-group-item-action"
