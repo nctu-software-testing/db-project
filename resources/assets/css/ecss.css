@@ -147,7 +147,7 @@
     display: flex !important;
     transform: translateY(150%);
     transition: .5s;
-    z-index: 99999999999999999999999999;
+    z-index: 2147483646;
 }
 #touch-keyboard.show{
     transform: translateY(0);
