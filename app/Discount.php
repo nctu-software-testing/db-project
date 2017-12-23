@@ -29,11 +29,6 @@ class Discount extends Model
         return static::encrypt($this->id);
     }
 
-    private static function crc32(string $str)
-    {
-        return strtoupper(hash("crc32b", $str));
-    }
-
     private static function sha256(string $str)
     {
         return strtoupper(hash("sha256", $str));
