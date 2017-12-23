@@ -56,6 +56,9 @@ Route::group([
     Route::post('/category/manage', 'CategoryController@postManageCategory');
     Route::delete('/category/manage/delete', 'CategoryController@deleteCategory');
 
+    //SHIPPING MANGE
+    Route::get('shipping/manage','DiscountController@getShipping');
+
     //USER MANAGE
     Route::get('admin/users-manage', 'AdminController@getUsersManager');
     Route::post('admin/users-manage/change-password', 'AdminController@changePassword');

@@ -1,4 +1,4 @@
-@extends('base')
+@extends('management.base')
 @section('content')
     <table border="1">
         <tr>

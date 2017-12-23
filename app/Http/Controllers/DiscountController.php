@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Discount;
+use App\Shipping;
 use Illuminate\Http\Request;
 
 class DiscountController extends BaseController
@@ -24,7 +25,13 @@ class DiscountController extends BaseController
         $id = $request->session()->get('user')->id;
         $data = Discount::
         paginate($this->paginate);
-        return view('discount', ['data' => $data]);
+        return view('discount', ['data' => $data])->with('title', '管理折扣');
+    }
+
+    public function getShipping()
+    {
+        $data=Shipping::orderBy('id')->get();
+        return view('management.shipping',['data'=>$data])->with('title', '管理運費');
     }
 
     public function postSetDiscount(Request $request)
