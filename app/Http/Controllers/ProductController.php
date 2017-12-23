@@ -386,6 +386,7 @@ class ProductController extends BaseController
                 $request->session()->put('shoppingcart', $shoppingcart);
             }
         }
+        session()->remove('discount');
     }
 
     public function removeProductFromShoppingcart(Request $request)
@@ -403,6 +404,7 @@ class ProductController extends BaseController
         }
         $shoppingcart->pop();
         $request->session()->put('shoppingcart', $shoppingcart);
+        session()->remove('discount');
         return;
     }
 
@@ -411,20 +413,41 @@ class ProductController extends BaseController
     {
         $this->renewShoppingCart();
         $shoppingcart = session()->get('shoppingcart');
-        $final = session()->get('final');
         $uid = $request->session()->get('user')->id;
         $location = Location::where('user_id', $uid)->get();
+        $discount = $request->session()->get('discount');
+        $final = session()->get('final');
+        $discountAmount = 0;
+        if($discount)
+        {
+            $final = $discount['final_price'];
+            $discountAmount = $discount['discountAmount'];
+        }
+        $shippingCost=$this->getShippingCost($request);
         return view('checkout')
             ->with('data', $shoppingcart)
             ->with('final', $final)
+            ->with('AftershippingCostfinal', $final+$shippingCost)
+            ->with('discountAmount', $discountAmount)
             ->with('location', $location)
-            ->with('shippingment', $this->getShippingCost($request));
+            ->with('shippingment', $shippingCost);
     }
-
+    public  function getAfterDiscountFinal(Request $request)
+    {
+        $discount = $request->session()->get('discount');
+        $final = session()->get('final');
+        if($discount)
+        {
+            $final = $discount['final_price'];
+            $discountAmount = $discount['discountAmount'];
+        }
+        return $final;
+    }
     public function checkOut(Request $request)
     {
         $uid = $request->session()->get('user')->id;
         $locationid = request('location');
+        $discountcode = session()->get('discount')['code'];
         $final = session()->get('final');
         $location = Location::where('id', $locationid)->where('user_id', $uid)
             ->first();
@@ -433,10 +456,14 @@ class ProductController extends BaseController
             return redirect()->back();
         }
         $order = new Order();
+        $shippingCost=$this->getShippingCost($request);
+        $order->shipping_cost = $shippingCost;
         $order->location_id = $locationid;
         $order->customer_id = $uid;
         $order->state = Product::STATE_DRAFT;
-        $order->final_cost = $final;
+        $order->original_cost=$final;
+        $order->discount_id=$discountcode;
+        $order->final_cost = $this->getAfterDiscountFinal($request)+$this->getShippingCost($request);
         $order->save();
         $date = date('Y-m-d H:i:s', strtotime('+1hour'));
         $order->sent_time = $date;
@@ -454,12 +481,13 @@ class ProductController extends BaseController
         }
         $request->session()->forget('shoppingcart');
         $request->session()->flash('log', '成功');
+        session()->remove('discount');
         return redirect('/');
     }
 
     private function getShippingCost(Request $request): int
     {
-        $price = $this->getCurrentPrice();
+        $price = $this->getAfterDiscountFinal($request);
         return Shipping::getShippingPrice($price);
     }
 

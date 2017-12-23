@@ -18,7 +18,7 @@ class Order extends Model
      * @var array
      */
     protected $fillable = [
-        'location_id', 'customer_id', 'state', 'order_time', 'sent_time', 'arrival_time', 'final_cost', 'discount_id',
+        'location_id', 'customer_id', 'state', 'order_time', 'sent_time', 'arrival_time', 'final_cost', 'discount_id' , 'original_cost','shipping_cost',
     ];
 
     public function GetState()
@@ -60,7 +60,7 @@ class Order extends Model
 
     public function discountAmount():?int
     {
-        return null;
-        //return 10;
+        return $this->original_cost-$this->final_cost;
+
     }
 }

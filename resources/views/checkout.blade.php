@@ -29,6 +29,13 @@
                             </tr>
                         @endfor
                         <tr>
+                            <th>折扣</th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="product-price">-$ {{$discountAmount}}</td>
+                        </tr>
+                        <tr>
                             <th>Total</th>
                             <td></td>
                             <td></td>
@@ -74,7 +81,7 @@
                         </tr>
                         <tr>
                             <td><label for="price">訂單金額：</label></td>
-                            <td><h5 class="price-amount" id="price"> ${{$final+$shippingment}}</h5></td>
+                            <td><h5 class="price-amount" id="price"> ${{$AftershippingCostfinal}}</h5></td>
                         </tr>
                         </tbody>
                     </table>

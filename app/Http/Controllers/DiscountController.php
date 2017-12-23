@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Catlog;
 use App\Discount;
 use Illuminate\Http\Request;
+use DateTime;
 
 class DiscountController extends BaseController
 {
@@ -29,29 +31,53 @@ class DiscountController extends BaseController
 
     public function postSetDiscount(Request $request)
     {
+        $now = new DateTime();
         $code = $request->get('code');
-        $d = Discount::find($code);
+        $code = Discount::decrypt($code) ?? -1;
+        $d = Discount::where("id", $code)
+            ->where('start_discount_time', '<=', $now)
+            ->where('end_discount_time', '>=', $now)->first();
+
         $finalCost = session('final', 0);
 
 
         if ($d) {
-            $type = '';
-            if ($d->type === 'A' || $d->type === 'B') {
-                $type = self::TYPE_PERCENTAGE;
-            } else if ($d->type === 'C') {
-                $type = self::TYPE_AMOUNT;
+            $type = $d->type;
+            $value = $d->value;
+            $discountAmount = 0;
+            //A 總價打折
+            if ($type === 'A') {
+                $discountAmount = $finalCost * $value;
             }
-            $value = .1;
-            if ($type === self::TYPE_AMOUNT) {
-                $finalCost -= $value;
-            } else if ($type === self::TYPE_PERCENTAGE) {
-                $finalCost -= $finalCost * $value;
+            //B 總價折扣XX元
+            if ($type === 'B') {
+                $discountAmount = $value;
+            }
+            //C 分類折扣
+            if ($type === 'C') {
+                $shoppingcart = session()->get('shoppingcart');
+                for ($i = 0; $i < count($shoppingcart); $i++)
+                {
+                    $category = $shoppingcart[$i]->product->category_id;
+                    $result = Catlog:: where('discount_id', $code)
+                        ->where('category_id', $category)
+                        ->first();
+                    if($result)
+                    {
+                        $price = $shoppingcart[$i]->product->price;
+                        $amount= $shoppingcart[$i]->amount;
+                        $discountAmount += $price * $amount * $value;
+                    }
+                }
             }
 
+            $discountAmount = round($discountAmount);
+            $finalCost -= $discountAmount;
             if ($finalCost < 0) $finalCost = 0;
 
             session()->put('discount', [
                 'final_price' => $finalCost,
+                'discountAmount' => $discountAmount,
                 'code' => $code
             ]);
 
@@ -59,10 +85,13 @@ class DiscountController extends BaseController
                 'message' => "套用優惠成功",
                 'type' => $type,
                 'value' => $value,
+                'discountAmount' => $discountAmount,
                 'final_cost' => $finalCost,
             ], true);
         } else {
+            session()->remove('discount');
             return $this->result([
+                'final_cost' => $finalCost,
                 'message' => "找不到符合條件的優惠"
             ], false);
         }

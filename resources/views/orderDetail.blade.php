@@ -38,22 +38,29 @@
                 <tr>
                     <td colspan="5" style="padding: 0;line-height: 0;border-top-width: 5px"></td>
                 </tr>
+                @if($discountAmount)
+                <tr>
+                    <th>原價</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="text-right">{{$originalcost}}</td>
+                </tr>
+                <tr>
+                    <th>折扣</th>
+                    <td>{{$order->discount->name}}</td>
+                    <td></td>
+                    <td></td>
+                    <td class="text-right">-{{$discountAmount+$order->shipping_cost}}</td>
+                </tr>
+                @endif
                 <tr>
                     <th>運費</th>
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td class="text-right">{{$order->getShippingCost()}}</td>
+                    <td class="text-right">{{$order->shipping_cost}}</td>
                 </tr>
-                @if($discountAmount)
-                <tr>
-                    <th>優惠</th>
-                    <td>{{$order->discount->name}}</td>
-                    <td></td>
-                    <td></td>
-                    <td class="text-right">-{{$order->getShippingCost()}}</td>
-                </tr>
-                @endif
                 <tr>
                     <th>總計</th>
                     <td></td>
