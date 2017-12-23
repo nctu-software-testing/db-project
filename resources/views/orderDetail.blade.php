@@ -43,7 +43,7 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td class="text-right">{{$order->getShippingCost()}}</td>
+                    <td class="text-right">{{$order->shipping_cost}}</td>
                 </tr>
                 @if($discountAmount)
                 <tr>
@@ -58,7 +58,7 @@
                     <td>優惠名稱:{{$order->discount->name}}</td>
                     <td></td>
                     <td></td>
-                    <td class="text-right">-{{$discountAmount}}</td>
+                    <td class="text-right">-{{$discountAmount+$order->shipping_cost}}</td>
                 </tr>
                 @endif
                 <tr>

@@ -456,6 +456,8 @@ class ProductController extends BaseController
             return redirect()->back();
         }
         $order = new Order();
+        $shippingCost=$this->getShippingCost($request);
+        $order->shipping_cost = $shippingCost;
         $order->location_id = $locationid;
         $order->customer_id = $uid;
         $order->state = Product::STATE_DRAFT;

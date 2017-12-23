@@ -1,0 +1,1 @@
+﻿ALTER TABLE order ADD shipping_cost INT(11) NOT NULL AFTER original_cost;
