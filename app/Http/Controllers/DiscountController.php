@@ -33,7 +33,7 @@ class DiscountController extends BaseController
     {
         $now = new DateTime();
         $code = $request->get('code');
-        //$code = Discount::decrypt($code) ?? -1;
+        $code = Discount::decrypt($code) ?? -1;
         $d = Discount::where("id", $code)
             ->where('start_discount_time', '<=', $now)
             ->where('end_discount_time', '>=', $now)->first();
@@ -48,7 +48,6 @@ class DiscountController extends BaseController
             //A 總價打折
             if ($type === 'A') {
                 $discountAmount = $finalCost * $value;
-                $discountAmount = number_format($discountAmount,1);
             }
             //B 總價折扣XX元
             if ($type === 'B') {
@@ -71,6 +70,8 @@ class DiscountController extends BaseController
                     }
                 }
             }
+
+            $discountAmount = round($discountAmount);
             $finalCost -= $discountAmount;
             if ($finalCost < 0) $finalCost = 0;
 
