@@ -25,4 +25,32 @@ class Discount extends Model
         if($this->type=="B")return "總價折扣XX元";
         if($this->type=="C")return "特定分類打折";
     }
+    
+    public function getEncodedCode()
+    {
+        return static::encrypt($this->id);
+    }
+    
+    public static function encrypt(int $id) : string
+    {
+        $id = strval($id);
+        $crc32 = strtoupper(str_pad(dechex(crc32($id)), 8, '0', STR_PAD_LEFT));
+        $dataBase64 = base64_encode($id);
+        
+        return $crc32.$dataBase64;
+    }
+
+    public static function decrypt(string $str) : ?int
+    {
+        $crc32Hex = substr($str, 0, 8);
+        $data = substr($str, 8);
+        $b64DecodedData = base64_decode($data);
+        $crc32 = hexdec($crc32Hex);
+        if(crc32($b64DecodedData)===$crc32)
+        {
+            return intval($b64DecodedData);
+        }
+        
+        return null;
+    }
 }

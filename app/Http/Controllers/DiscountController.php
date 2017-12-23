@@ -33,7 +33,7 @@ class DiscountController extends BaseController
     {
         $now = new DateTime();
         $code = $request->get('code');
-        //$d = Discount::find($code);
+        $code = Discount::decrypt($code) ?? -1;
         $d = Discount::where("id", $code)
             ->where('start_discount_time', '<=', $now)
             ->where('end_discount_time', '>=', $now)->first();
