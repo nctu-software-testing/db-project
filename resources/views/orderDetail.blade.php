@@ -47,11 +47,18 @@
                 </tr>
                 @if($discountAmount)
                 <tr>
+                    <th>原價</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="text-right">{{$originalcost}}</td>
+                </tr>
+                <tr>
                     <th>優惠</th>
-                    <td>{{$order->discount->name}}</td>
+                    <td>優惠名稱:{{$order->discount->name}}</td>
                     <td></td>
                     <td></td>
-                    <td class="text-right">-{{$order->getShippingCost()}}</td>
+                    <td class="text-right">-{{$discountAmount}}</td>
                 </tr>
                 @endif
                 <tr>

@@ -101,8 +101,11 @@
                     let postFix = d.result.type==='%'?'%':'';
                     toastr.success(d.result.message);
                     $("#finalCost").text(`$${d.result.final_cost}`);
-                    $("#discountValue").text(`${preFix}-${d.result.value}${postFix}`);
+                    $("")
+                    $("#discountValue").text(`${preFix}-${d.result.discountAmount}${postFix}`);
                 }else{
+                    $("#finalCost").text(`$${d.result.final_cost}`);
+                    $("#discountValue").text(0);
                     toastr.error(d.result.message);
                 }
             })

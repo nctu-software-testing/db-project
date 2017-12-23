@@ -41,11 +41,13 @@ class OrderController extends BaseController
         if (!$order)
             return abort(404);
         $data = OrderProduct::where('order_id', $id)->get();
+        $original_cost=$order->original_cost;
         $location = Location::find($order->location_id);
         return view('orderDetail')
             ->with('data', $data)
             ->with('location', $location)
             ->with('order', $order)
+            ->with('originalcost', $original_cost)
             ->with('discountAmount', $order->discountAmount())
             ->with('title', '我的訂單');
     }
