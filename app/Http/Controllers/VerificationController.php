@@ -26,7 +26,8 @@ class VerificationController extends BaseController
             $data = User::
             join('verification', 'user.id', '=', 'verification.user_id')
                 ->paginate($this->paginate);
-            return view('verification.verificationAdmin', ['data' => $data]);
+            return view('verification.verificationAdmin', ['data' => $data])
+                ->with('title', '驗證會員');
         } else {
             $id = $request->session()->get('user')->id;
             $data = User::
