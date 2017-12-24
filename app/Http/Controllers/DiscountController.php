@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Catlog;
 use App\Discount;
+use App\Shipping;
 use Illuminate\Http\Request;
 use DateTime;
 
@@ -26,7 +27,13 @@ class DiscountController extends BaseController
         $id = $request->session()->get('user')->id;
         $data = Discount::
         paginate($this->paginate);
-        return view('discount', ['data' => $data]);
+        return view('discount', ['data' => $data])->with('title', '管理折扣');
+    }
+
+    public function getShipping()
+    {
+        $data=Shipping::orderBy('lower_bound')->get();
+        return view('management.shipping',['data'=>$data])->with('title', '管理運費');
     }
 
     public function postSetDiscount(Request $request)
@@ -98,4 +105,23 @@ class DiscountController extends BaseController
 
     }
 
+    public function createShipping(Request $request)
+    {
+        $lower_bound = request('lower_bound');
+        $upper_bound = request('upper_bound');
+        $price = request('price');
+        $shipping = new Shipping();
+        $shipping->lower_bound = $lower_bound;
+        $shipping->upper_bound = $upper_bound;
+        $shipping->price = $price;
+        $shipping->save();
+        $request->session()->flash('log', '建立成功');
+        return redirect()->back();
+    }
+    public  function deleteShipping(Request $request)
+    {
+        $id=request('id');
+        Shipping::find($id)->forceDelete();
+        return $this->result('OK', true);
+    }
 }
