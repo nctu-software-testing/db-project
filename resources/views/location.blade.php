@@ -1,7 +1,7 @@
 @extends('management.base')
 @section('content')
     <div class="card card-body">
-        <h4 class="card-title">管理地址</h4>
+        <h4 class="card-title">地址管理</h4>
         <div class="card-text">
             <!--Table-->
             <table class="table table-bordered">
