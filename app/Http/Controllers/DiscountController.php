@@ -30,7 +30,7 @@ class DiscountController extends BaseController
 
     public function getShipping()
     {
-        $data=Shipping::orderBy('id')->get();
+        $data=Shipping::orderBy('lower_bound')->get();
         return view('management.shipping',['data'=>$data])->with('title', '管理運費');
     }
 
@@ -76,4 +76,23 @@ class DiscountController extends BaseController
 
     }
 
+    public function createShipping(Request $request)
+    {
+        $lower_bound = request('lower_bound');
+        $upper_bound = request('upper_bound');
+        $price = request('price');
+        $shipping = new Shipping();
+        $shipping->lower_bound = $lower_bound;
+        $shipping->upper_bound = $upper_bound;
+        $shipping->price = $price;
+        $shipping->save();
+        $request->session()->flash('log', '建立成功');
+        return redirect()->back();
+    }
+    public  function deleteShipping(Request $request)
+    {
+        $id=request('id');
+        Shipping::find($id)->forceDelete();
+        return $this->result('OK', true);
+    }
 }

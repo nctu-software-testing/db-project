@@ -39,13 +39,12 @@
 
             <div id="lo" style="display: none">
                 <form action="{{action('LocationController@createLocation')}}" method="post">
-                    街道名稱及門牌號碼與樓層:<input type="text" name="address" required><br>
 
                     <div id="twzipcode"></div>
-
+                    街道名稱及門牌號碼與樓層:<input type="text" name="address" required><br>
                     <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
-                    <button type="submit" class="btn btn-rounded btn-blue-grey"><i class="fa fa-floppy-o pr-2"
-                                                                                   aria-hidden="true"></i>儲存地址
+                    <button type="submit" class="btn btn-rounded btn-blue-grey"><i class="fa fa-floppy-o pr-2" aria-hidden="true"></i>
+                        儲存地址
                     </button>
                     <button onclick="CancelLocation()" type="button" class="btn btn-rounded btn-red"><i
                                 class="fa fa-rotate-right pr-2" aria-hidden="true"></i>取消
