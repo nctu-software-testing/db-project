@@ -146,4 +146,5 @@ module.exports = {
         Index: require('./pages/index'),
     },
     palette: require('./palette'),
+    Captcha: require('./Captcha'),
 };
