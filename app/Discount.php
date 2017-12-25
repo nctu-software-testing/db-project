@@ -19,8 +19,8 @@ class Discount extends Model
 
     public function GetType()
     {
-        if ($this->type == "A") return "總價打折";
-        if ($this->type == "B") return "總價折扣XX元";
+        if ($this->type == "A") return "不限品項打折";
+        if ($this->type == "B") return "優惠折扣";
         if ($this->type == "C") return "特定分類打折";
     }
 

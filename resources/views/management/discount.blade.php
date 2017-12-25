@@ -9,14 +9,13 @@
                 <tr>
                     　
                     <th>id</th>
-                    <th>name</th>
-                    <th>type</th>
-                    <th>Delete</th>
-                    <th>Start_time</th>
-                    <th>End_time</th>
-                    <th>value</th>
-                    <th>Discount Code</th>
-                    <th>Action</th>
+                    <th>活動名稱</th>
+                    <th>折扣類型</th>
+                    <th>動作</th>
+                    <th>開始日期</th>
+                    <th>結束日期</th>
+                    <th>折扣數值</th>
+                    <th>優惠代碼</th>
                 </tr>
                 </thead>
 
@@ -25,16 +24,29 @@
                         <td>
                             {{$d->id}}
                         </td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td>
+                            {{$d->name}}
+                        </td>
+                        <td>
+                            {{$d->type}}
+                        </td>
+                        <td>
+                            <button onclick="DisableDiscount({{$d->id}})" type="button"  class="btn btn-red btn-sm">
+                                停用
+                            </button>
+                        </td>
+                        <td>
+                            {{$d->start_discount_time}}
+                        </td>
+                        <td>
+                            {{$d->end_discount_time}}
+                        </td>
+                        <td>
+                            {{$d->value}}
+                        </td>
                         <td>
                             {{$d->getEncodedCode()}}
                         </td>
-                        <td></td>
                     </tr>
                 @endforeach
             </table>
@@ -43,35 +55,35 @@
             <button onclick="CreateDiscount()" class="btn btn-amber">新增折扣</button></td>
 
             <div id="lo" style="display:none">
-                <form action="{{action('DiscountController@createShipping')}}" method="post">
+                <form action="{{action('DiscountController@createDiscount')}}" method="post">
 
                     折扣類型:
-                    <div class="form-group ">
-                        <label for="dis_A">
-                            總價打折
-                        </label>
-                        <input id="dis_A" type="radio" name="type" value="A"/>
+                    <select name="type" id="type">
+                        <option value="A">A 不限品項打折</option>
+                        <option value="B">B 優惠折扣</option>
+                        <option value="C">C 特定分類打折</option>
+                    </select>
+                    折扣名稱: <input id="name" type="text" name="name" required><br>
+                    <div class="discountExplain">
+                        不限品項打折 ex: 0.2 表示不限品項 20% off
                     </div>
-                    <div class="form-group ">
-                        <label for="dis_B">
-                            總價折扣XX元
-                        </label>
-                        <input id="dis_B" type="radio" name="type" value="B"/>
+                    <input id="value" type="text" name="value" required><br>
+                    <div class="discount_category" style="display: none">
+                        折扣分類: <select class="mdb-select" name="category" required id="category_id"  name="category_id"></select>
                     </div>
-                    <div class="form-group ">
-                        <label for="dis_C">
-                            特定分類打折
-                        </label>
-                        <input id="dis_C" type="radio" name="type" value="C"/>
+                    <div>
+                        折扣開始:
+                        <input type="datetime-local" name="start_date" id="d1" required>
+                    </div>
+                    <div>
+                        折扣結束:
+                        <input type="datetime-local" name="end_date" id="d2" required>
                     </div>
 
-                    折扣名稱: <input type="text" name="name" required><br>
-
-                    折扣數值: <input type="text" name="value" required><br>
-
-                    折扣的分類: <select id="category_id" name="category_id"></select>
-
-                    不知道怎弄
+                    <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
+                    <button type="submit" class="btn btn-rounded btn-blue-grey"><i class="fa fa-floppy-o pr-2" aria-hidden="true"></i>
+                        確認新增
+                    </button>
                 </form>
 
             </div>
@@ -97,9 +109,38 @@
                     });
                 });
         });
-
+        function DisableDiscount(id) {
+            if (confirm('確定停用該折扣嗎?')) {
+                ajax('POST', '{{action('DiscountController@disableDiscount')}}', {id: id})
+            .then(d => {
+                    if (d.success) {
+                        toastr.success(d.result);
+                        location.reload();
+                    } else {
+                        toastr.error(d.result);
+                    }
+                });
+            }
+        }
+        $( "#type" ).change(function() {
+            $(".discount_category").hide();
+            if ($("#type").val() == 'A')
+            {
+                $(".discountExplain").text("不限品項打折 ex: 0.2 表示不限品項 20% off");
+            }
+            else if ($("#type").val() == 'B')
+            {
+                $(".discountExplain").text("優惠折扣 ex: 100 表示該訂單總金額 -100 元");
+            }
+            else if ($("#type").val() == 'C')
+            {
+                $(".discountExplain").text("特定分類打折 ex: 0.2 表示該分類的品項20% off");
+                $(".discount_category").show();
+            }
+        });
         function CreateDiscount() {
             $("#lo").toggle();
         }
+
     </script>
 @endsection

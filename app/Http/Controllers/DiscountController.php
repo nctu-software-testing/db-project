@@ -124,4 +124,43 @@ class DiscountController extends BaseController
         Shipping::find($id)->forceDelete();
         return $this->result('OK', true);
     }
+
+    public  function createDiscount(Request $request)
+    {
+        $type =  $request->input('type');
+        $name = request('name');
+        $value = request('value');
+        $selectCategory = request('category');
+        $start_discount_time = $request->input('start_date');
+        $end_discount_time = $request->input('end_date');
+        $discount = new Discount();
+        $discount->type = $type;
+        $discount->name = $name;
+        $discount->value = $value;
+        $discount->start_discount_time = $start_discount_time;
+        $discount->end_discount_time = $end_discount_time;
+        $discount->save();
+        if ($type == 'C')
+        {
+            $catlog = new Catlog();
+            $catlog->discount_id = $discount->id;
+            $catlog->category_id = $selectCategory->id;
+            $catlog->save();
+        }
+        $request->session()->flash('log', '建立成功');
+        return redirect()->back();
+    }
+
+    public  function disableDiscount(Request $request)
+    {
+        $date = date('Y-m-d H:i:s');
+        $id = request('id');
+        $discount = session()->get('discount');
+        for ($i = 0; $i < count($discount); $i++) {
+            if ($discount[$i]->id == $id) {
+                $discount[$i]->end_discount_time = $date;
+                $request->session()->put('discount', $discount);
+            }
+        }
+    }
 }
