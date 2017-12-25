@@ -36,12 +36,15 @@ class Captcha {
         this._inputContainer.appendChild(this._input);
         this._ele.appendChild(this._imageContainer);
         this._ele.appendChild(this._inputContainer);
-        this._fetchImage();
+        let p = this._fetchImage();
 
         this._initialized = true;
+
+        return p;
     }
 
     Reset() {
+        this._ele.classList.remove('success');
         this._imageContainer.innerHTML = '';
         this._input.value = 0;
         this._input.disabled = false;
@@ -123,13 +126,14 @@ class Captcha {
             .then((d) => {
                 if (d.success) {
                     toastr.success(d.result, '', {
-                        positionClass: 'toast-center',
+                        positionClass: 'toast-top-center',
                         timeOut: 3e3,
                     });
+                    this._ele.classList.add('success');
 
                 } else {
                     toastr.error(d.result, '', {
-                        positionClass: 'toast-center',
+                        positionClass: 'toast-top-center',
                         timeOut: 3e3,
                     });
                     this.Reset();

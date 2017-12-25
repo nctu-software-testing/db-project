@@ -12,9 +12,10 @@ class CaptchaController extends BaseController
     private const PATH = 'captcha';
     private const ROW_COUNT = 9;
     private const COL_COUNT = 16;
-    private const GRID_SIZE = 40;
+    private const GRID_SIZE = 30;
     private const CONTENT_TYPE = 'image/png';
-    private const ALLOW_ERROR_OF_GRID = 3;
+    private const ALLOW_ERROR_OF_GRID = self::GRID_SIZE / 4;
+    public const TIMEOUT = 3 * 60;
 
     public function __construct()
     {
@@ -23,16 +24,16 @@ class CaptchaController extends BaseController
 
     private static function getImageList()
     {
-        if (static::$imageList != null) return;
-        $imgList = Storage::files(static::PATH);
-        static::$imageList = $imgList;
+        if (self::$imageList != null) return;
+        $imgList = Storage::files(self::PATH);
+        self::$imageList = $imgList;
     }
 
     public function getList()
     {
-        static::getImageList();
+        self::getImageList();
 
-        return $this->result(static::$imageList, true);
+        return $this->result(self::$imageList, true);
     }
 
 
@@ -55,9 +56,9 @@ class CaptchaController extends BaseController
 
         $paddingDataArray = $imageArray;
         $paddingDataArray[] = count($imageArray);
-        $paddingDataArray[] = static::GRID_SIZE;
-        $paddingDataArray[] = static::ROW_COUNT;
-        $paddingDataArray[] = static::COL_COUNT;
+        $paddingDataArray[] = self::GRID_SIZE;
+        $paddingDataArray[] = self::ROW_COUNT;
+        $paddingDataArray[] = self::COL_COUNT;
         $postfix = '';
         foreach ($paddingDataArray as $p) {
             $upper = ($p >> 8);
@@ -70,7 +71,7 @@ class CaptchaController extends BaseController
             ->with('postfix', $postfix);
 
         $response = Response::make($view, 200)
-            ->header("Content-Type", static::CONTENT_TYPE)
+            ->header("Content-Type", self::CONTENT_TYPE)
             ->header("Cache-Control", 'no-cache');
 
         return $response;
@@ -92,7 +93,7 @@ class CaptchaController extends BaseController
             ->with('image', $maskedImage);
 
         $response = Response::make($view, 200)
-            ->header("Content-Type", static::CONTENT_TYPE)
+            ->header("Content-Type", self::CONTENT_TYPE)
             ->header("Cache-Control", 'no-cache');
 
         return $response;
@@ -108,7 +109,7 @@ class CaptchaController extends BaseController
         $data = $this->processSliceImage($captcha);
         $view = view('captcha.image', ['image' => $data]);
         $response = Response::make($view, 200)
-            ->header("Content-Type", static::CONTENT_TYPE)
+            ->header("Content-Type", self::CONTENT_TYPE)
             ->header("Cache-Control", 'no-cache');
 
         return $response;
@@ -122,7 +123,7 @@ class CaptchaController extends BaseController
 
         $resizedImage = $this->prepareImageSource($imgRealPath);
 
-        $output = imagecreatetruecolor(static::GRID_SIZE, static::GRID_SIZE * static::ROW_COUNT);
+        $output = imagecreatetruecolor(self::GRID_SIZE, self::GRID_SIZE * self::ROW_COUNT);
         $black = imagecolorallocate($output, 0, 0, 0);
         $t = imagecolortransparent($output, $black);
         imagefill($output, 0, 0, $t);
@@ -130,7 +131,7 @@ class CaptchaController extends BaseController
             $output, $resizedImage,
             0, $selected['y'],
             $selected['x'], $selected['y'],
-            static::GRID_SIZE, static::GRID_SIZE,
+            self::GRID_SIZE, self::GRID_SIZE,
             100
         );
         imagedestroy($resizedImage);
@@ -143,7 +144,14 @@ class CaptchaController extends BaseController
         if ($captcha) {
             // session()->forget('captcha');
             $value = floatval(request('value', -999));
-            if (abs($captcha['selected']['x'] - $value) < static::ALLOW_ERROR_OF_GRID) {
+            if (abs($captcha['selected']['x'] - $value) < self::ALLOW_ERROR_OF_GRID) {
+                $now = time();
+                if ($now - $captcha['created_at'] > self::TIMEOUT) {
+                    return $this->result('驗證碼逾時', false);
+                }
+                $captcha['passed'] = true;
+                $captcha['passed_at'] = $now;
+                session()->put('captcha', $captcha);
                 return $this->result('驗證成功', true);
             } else {
                 session()->forget('captcha');
@@ -154,50 +162,51 @@ class CaptchaController extends BaseController
 
     protected function prepareImageConfig()
     {
-        static::getImageList();
-        $index = array_rand(static::$imageList);
-        $path = static::$imageList[$index];
+        self::getImageList();
+        $index = array_rand(self::$imageList);
+        $path = self::$imageList[$index];
 
-        $imageArray = range(0, static::COL_COUNT * static::ROW_COUNT - 1);
+        $imageArray = range(0, self::COL_COUNT * self::ROW_COUNT - 1);
         shuffle($imageArray);
 
-        $half = static::GRID_SIZE >> 1;
+        $half = self::GRID_SIZE >> 1;
         $selected = [
-            'x' => rand($half, static::COL_COUNT * static::GRID_SIZE - $half * 3),
-            'y' => rand($half, static::ROW_COUNT * static::GRID_SIZE - $half * 3),
+            'x' => rand($half * 4, self::COL_COUNT * self::GRID_SIZE - $half * 4),
+            'y' => rand($half * 4, self::ROW_COUNT * self::GRID_SIZE - $half * 4),
         ];
 
         return [
             'imageArray' => $imageArray,
             'selected' => $selected,
             'path' => $path,
-            'passed' => false
+            'passed' => false,
+            'created_at' => time(),
         ];
     }
 
     protected function shuffleImage($resizedImage, $imageArray)
     {
-        $nWidth = static::GRID_SIZE * static::COL_COUNT;
-        $nHeight = static::GRID_SIZE * static::ROW_COUNT;
+        $nWidth = self::GRID_SIZE * self::COL_COUNT;
+        $nHeight = self::GRID_SIZE * self::ROW_COUNT;
         $output = imagecreatetruecolor($nWidth, $nHeight);
         imagecolorallocate($output, 0, 0, 0);
 
         $i = 0;
         foreach ($imageArray as $idx) {
-            $rcInfo = static::getRowAndCol($idx);
+            $rcInfo = self::getRowAndCol($idx);
             $r = $rcInfo['r'];
             $c = $rcInfo['c'];
 
             $gridImage = [
-                'x' => $c * static::GRID_SIZE,
-                'y' => $r * static::GRID_SIZE,
-                'width' => static::GRID_SIZE,
-                'height' => static::GRID_SIZE,
+                'x' => $c * self::GRID_SIZE,
+                'y' => $r * self::GRID_SIZE,
+                'width' => self::GRID_SIZE,
+                'height' => self::GRID_SIZE,
             ];
-            $dstRcInfo = static::getRowAndCol($i);
+            $dstRcInfo = self::getRowAndCol($i);
             imagecopymerge(
                 $output, $resizedImage,
-                $dstRcInfo['c'] * static::GRID_SIZE, $dstRcInfo['r'] * static::GRID_SIZE,
+                $dstRcInfo['c'] * self::GRID_SIZE, $dstRcInfo['r'] * self::GRID_SIZE,
                 $gridImage['x'], $gridImage['y'],
                 $gridImage['width'], $gridImage['height'],
                 100
@@ -211,15 +220,14 @@ class CaptchaController extends BaseController
 
     protected function getMaskedImage($resizedImage, $imageArray, $selected)
     {
-
-        $black = imagecolorallocatealpha($resizedImage, 0x33, 0x33, 0x33, 50);
+        $black = imagecolorallocatealpha($resizedImage, 0x33, 0x33, 0x33, 32);
 
         $x1 = $selected['x'];
         $y1 = $selected['y'];
         imagefilledrectangle(
             $resizedImage,
             $x1, $y1,
-            $x1 + static::GRID_SIZE - 1, $y1 + static::GRID_SIZE - 1,
+            $x1 + self::GRID_SIZE - 1, $y1 + self::GRID_SIZE - 1,
             $black
         );
         $output = $this->shuffleImage($resizedImage, $imageArray);
@@ -230,8 +238,8 @@ class CaptchaController extends BaseController
 
     protected static function getRowAndCol($idx)
     {
-        $r = floor($idx / static::COL_COUNT);
-        $c = $idx % static::COL_COUNT;
+        $r = floor($idx / self::COL_COUNT);
+        $c = $idx % self::COL_COUNT;
 
         return ['r' => $r, 'c' => $c];
     }
@@ -241,8 +249,8 @@ class CaptchaController extends BaseController
         $originalImage = $this->createImageFromFile($realPath);
         $width = imagesx($originalImage);
         $height = imagesy($originalImage);
-        $nWidth = static::GRID_SIZE * static::COL_COUNT;
-        $nHeight = static::GRID_SIZE * static::ROW_COUNT;
+        $nWidth = self::GRID_SIZE * self::COL_COUNT;
+        $nHeight = self::GRID_SIZE * self::ROW_COUNT;
         $resizedImage = imagecreatetruecolor($nWidth, $nHeight);
         imagecopyresampled($resizedImage, $originalImage, 0, 0, 0, 0, $nWidth, $nHeight, $width, $height);
         imagedestroy($originalImage);

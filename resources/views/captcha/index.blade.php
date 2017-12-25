@@ -16,18 +16,33 @@
 
 </head>
 <body>
-
 <div id="captcha"
      data-base="{{action('CaptchaController@getFullImage')}}"
      data-mask="{{action('CaptchaController@getMaskImage')}}"
      data-slice="{{action('CaptchaController@getSliceImage')}}"
      data-verify="{{action('CaptchaController@postVerify')}}"
 ></div>
+<p class="text-center" style="margin-top: -1rem">
+    請按住拖動完成上方拼圖
+</p>
 <script type="text/javascript">
-    //(function () {
+    (function () {
         let c = new Captcha('#captcha');
-         c.Initialize();
-    //})();
+        c.Initialize()
+            .then(function () {
+                if (self !== top && window.frameElement) {
+                    let callback = () => {
+                        console.log(document.body.scrollWidth, document.documentElement.offsetHeight);
+                        window.frameElement.style.width = '480px';
+                        window.frameElement.style.height = '360px';
+                    };
+                    callback();
+                    window.addEventListener('load', callback);
+                }
+            });
+
+        window.CReset = () => c.Reset();
+    })();
 </script>
 </body>
 </html>
