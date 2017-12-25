@@ -12,7 +12,7 @@ class CaptchaController extends BaseController
     private const PATH = 'captcha';
     private const ROW_COUNT = 9;
     private const COL_COUNT = 16;
-    private const GRID_SIZE = 30;
+    private const GRID_SIZE = 32;
     private const CONTENT_TYPE = 'image/png';
     private const ALLOW_ERROR_OF_GRID = self::GRID_SIZE / 4;
     public const TIMEOUT = 3 * 60;
