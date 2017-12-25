@@ -22,7 +22,7 @@
      data-slice="{{action('CaptchaController@getSliceImage')}}"
      data-verify="{{action('CaptchaController@postVerify')}}"
 ></div>
-<p class="text-center" style="margin-top: -1rem">
+<p class="text-center" style="margin-top: -1.5rem">
     請按住拖動完成上方拼圖
 </p>
 <script type="text/javascript">
@@ -32,8 +32,8 @@
             .then(function () {
                 if (self !== top && window.frameElement) {
                     let callback = () => {
-                        window.frameElement.style.width = '480px';
-                        window.frameElement.style.height = '360px';
+                        window.frameElement.style.width = '512px';
+                        window.frameElement.style.height = '370px';
                     };
                     callback();
                     window.addEventListener('load', callback);
