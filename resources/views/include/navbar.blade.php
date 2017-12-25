@@ -1,7 +1,7 @@
 @if(!session('user'))
-    @include('include.navbar-non-login')
+    @include('include.navbar.non-login')
 @else
-    @include('include.navbar-login')
+    @include('include.navbar.login')
 @endif
 <nav class="navbar navbar-expand-lg navbar-dark fixed-top scrolling-navbar" id="headNav">
     <div class="container">

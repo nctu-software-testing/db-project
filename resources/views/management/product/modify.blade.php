@@ -91,7 +91,7 @@
                 </tbody>
             </table>
             @if($id==='add')
-                <input type="submit" value="上架">
+                <input type="submit" value="上架" class="btn btn-primary">
             @else
                 <button type="submit" class="btn btn-primary">編輯</button>
                 <button type="button" onclick="Cancel()" class="btn btn-warning">取消編輯</button>

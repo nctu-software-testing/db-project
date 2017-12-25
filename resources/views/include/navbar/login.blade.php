@@ -1,4 +1,17 @@
-<form action="{{action('UserController@logout')}}" method="POST" class="form-inline" id="logoutForm" hidden></form>
+<?php
+$path = '';
+switch (session('user.role')) {
+    case 'A':
+        $path = 'admin';
+        break;
+    case 'B':
+        $path = 'business';
+        break;
+    case 'C':
+        $path = 'customer';
+        break;
+}
+?><form action="{{action('UserController@logout')}}" method="POST" class="form-inline" id="logoutForm" hidden></form>
 @section('right-nav')
     <div class="flex-center">
         <div class="nav-item">
@@ -28,33 +41,14 @@
                 </span>
                 </h6>
 
-                <a class="dropdown-item waves-effect waves-light" accesskey="c"
-                   href="{{action('UserController@getUserInfo')}}">(ABC)會員資料</a>
+                <a class="dropdown-item waves-effect waves-light"
+                   href="{{action('UserController@getUserInfo')}}">會員資料</a>
 
                 <div class="divider"></div>
 
-
-                <h6 class="dropdown-header">
-                    管理
-                </h6>
-                <a class="dropdown-item waves-effect waves-light" accesskey="i"
-                   href="{{action('AdminController@getUsersManager')}}">(A)會員資料管理</a>
-
-                <a class="dropdown-item waves-effect waves-light" accesskey="b"
-                   href="{{action('VerificationController@getVerification')}}">(ABC)會員驗證</a>
-
-                <a class="dropdown-item waves-effect waves-light" accesskey="e"
-                   href="{{action('CategoryController@getManageCategory')}}">(A)管理分類</a>
-
-                <a class="dropdown-item waves-effect waves-light" accesskey="f"
-                   href="{{action('ProductController@getSelfProducts')}}">(AB)商品管理</a>
-
-                <a class="dropdown-item waves-effect waves-light" accesskey="g"
-                   href="{{action('DiscountController@getManageDiscount')}}">(A)折價管理</a>
-
-                <a class="dropdown-item waves-effect waves-light" accesskey="h"
-                   href="{{action('OrderController@getOrder')}}">(BC)訂單管理</a>
-
+                @if(!empty($path))
+                    @include('include.navbar.items.'.$path)
+                @endif
 
                 <div class="divider"></div>
                 <button class="dropdown-item  waves-effect" type="submit" value="{{csrf_token()}}" name="_token"
