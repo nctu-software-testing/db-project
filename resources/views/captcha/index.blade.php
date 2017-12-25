@@ -32,7 +32,6 @@
             .then(function () {
                 if (self !== top && window.frameElement) {
                     let callback = () => {
-                        console.log(document.body.scrollWidth, document.documentElement.offsetHeight);
                         window.frameElement.style.width = '480px';
                         window.frameElement.style.height = '360px';
                     };
