@@ -167,6 +167,18 @@
                                 </div>
                                 <!--/.Forth row-->
 
+                                <!--Fifth row-->
+                                <div class="row">
+
+                                    <div class="col">
+
+                                        <div class="md-form  form-group">
+                                            <iframe src="{{action('CaptchaController@getIndex')}}" frameborder="0" name="captcha" class="captcha"></iframe>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--/.Fifth row-->
+
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="text-center mb-3">
@@ -226,7 +238,9 @@
                         setTimeout(() => location.replace('{{asset('')}}'), 2000);
                     } else {
                         regBtn.disabled = false;
-                        toastr.error(d.result);
+                        toastr.error(d.result, '', {
+                            positionClass: 'toast-top-center',
+                        });
                     }
                 }).catch(() => regBtn.disabled = false);
 

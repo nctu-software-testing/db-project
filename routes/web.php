@@ -57,7 +57,7 @@ Route::group([
     Route::delete('category/manage/delete', 'CategoryController@deleteCategory');
 
     //SHIPPING MANGE
-    Route::get('shipping/manage','DiscountController@getShipping');
+    Route::get('shipping/manage', 'DiscountController@getShipping');
     Route::post('shipping/manage', 'DiscountController@createShipping');
     Route::delete('shipping/manage/delete', 'DiscountController@deleteShipping');
 
@@ -110,6 +110,17 @@ Route::group([
     Route::post('login', 'UserController@postLogin');
 });
 
+Route::group([
+    'prefix' => 'captcha',
+], function () {
+    Route::get('list', 'CaptchaController@getList');
+    Route::get('full-image', 'CaptchaController@getFullImage');
+    Route::get('masked-image', 'CaptchaController@getMaskImage');
+    Route::get('slice', 'CaptchaController@getSliceImage');
+    Route::post('verify', 'CaptchaController@postVerify');
+    Route::get('/', 'CaptchaController@getIndex');
+});
+
 
 //CATEGORY
 Route::get('category', 'CategoryController@getCategory');
@@ -117,7 +128,6 @@ Route::get('category', 'CategoryController@getCategory');
 //PRODUCT
 Route::get('products', 'ProductController@getProducts');
 Route::get('products/item/{id}', 'ProductController@getItem');
-
 
 
 Route::get('function', 'HomeController@getFunction');
