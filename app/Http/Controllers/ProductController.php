@@ -238,7 +238,7 @@ class ProductController extends BaseController
             ->orderBy('id')
             ->get();
         $imgCount = 0;
-
+        // sort從0開始
         $delArray = request('delImage', []);
         if (!is_array($delArray)) $delArray = [];
         for ($i = 0, $j = count($delArray); $i < $j; $i++) {
@@ -246,7 +246,7 @@ class ProductController extends BaseController
                 $image[$i]->delete();
                 $imgCount--;
             } else {
-                $image[$i]->sort = ++$imgCount;
+                $image[$i]->sort = $imgCount++; //從0開始
                 $image[$i]->save();
             }
         }
@@ -261,7 +261,7 @@ class ProductController extends BaseController
                     $pp = new ProductPicture();
                     $pp->product_id = $product->id;
                     $pp->path = $path;
-                    $pp->sort = ++$imgCount;
+                    $pp->sort = $imgCount++;
                     $pp->save();
                 }
             }
