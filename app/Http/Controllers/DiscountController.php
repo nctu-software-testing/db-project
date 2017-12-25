@@ -27,7 +27,7 @@ class DiscountController extends BaseController
         $id = $request->session()->get('user')->id;
         $data = Discount::
         paginate($this->paginate);
-        return view('discount', ['data' => $data])->with('title', '管理折扣');
+        return view('management.discount', ['data' => $data])->with('title', '管理折扣');
     }
 
     public function getShipping()

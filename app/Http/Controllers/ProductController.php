@@ -49,7 +49,7 @@ class ProductController extends BaseController
         //公開瀏覽
         $now = new DateTime();
         $data = Product::getOnProductsBuilder($data)
-            ->where('state', Product::STATE_RELEASE);
+            ->where('on_product.state', Product::STATE_RELEASE);
         $data = $this->applySearchCond($data, $search);
 
         $data = $data->paginate($this->paginate);
@@ -110,7 +110,8 @@ class ProductController extends BaseController
         $title = request('title');
         $data = Product
             ::join('category', 'on_product.category_id', '=', 'category.id')
-            ->select('on_product.id', 'product_name', 'product_information', 'start_date', 'end_date', 'price', 'state', 'product_type', 'user_id');
+            ->select('on_product.id', 'product_name', 'product_information', 'start_date', 'end_date', 'price', 'state', 'product_type', 'user_id')
+            ->where('on_product.state', '!=', Product::STATE_DELETED);
 
 
         if (session('user.role') === 'B') {
@@ -125,12 +126,14 @@ class ProductController extends BaseController
         if (is_numeric($request->get('category'))) {
             $data->where('on_product.category_id', $request->get('category'));
         }
+        $data->orderBy('id', 'DESC');
+
         $data = $data->paginate($this->paginate);
         $id = request("id", 0);
         $count = 0;
         //類別資訊
         $category = Category::get();
-        return view('products.manage')
+        return view('management.product.manage')
             ->with('category', $category)
             ->with('data', $data)
             ->with('id', $id)
@@ -150,7 +153,7 @@ class ProductController extends BaseController
             join('category', 'on_product.category_id', '=', 'category.id')
                 ->where('on_product.id', $id)
                 ->get()->first();
-            if (is_null($editdata)) {
+            if (is_null($editdata) || !$editdata->isAllowChange()) {
                 return abort(404);
             }
             $count = ProductPicture::
@@ -160,7 +163,7 @@ class ProductController extends BaseController
 
         $category = Category::all();
 
-        return view('products.modify')
+        return view('management.product.modify')
             ->with('id', $id)
             ->with('category', $category)
             ->with('editdata', $editdata)
@@ -218,10 +221,20 @@ class ProductController extends BaseController
             $request->session()->flash('log', '參數錯誤');
             return redirect()->back();
         }
+        $product = null;
         if ($edit_id == 0)
             $product = new Product();
-        else
-            $product = Product::Where('id', $edit_id)->first();
+        else {
+            $product = Product::where('id', $edit_id);
+            if (session('user.role') !== 'A') {
+                $product->where('user_id', $id);
+            }
+
+            $product = $product->first();
+            if (!$product || !$product->isAllowChange()) {
+                return abort(404);
+            }
+        }
         $product->product_name = $title;
         $product->product_information = $info;
         $product->start_date = $dt1;
@@ -238,7 +251,7 @@ class ProductController extends BaseController
             ->orderBy('id')
             ->get();
         $imgCount = 0;
-
+        // sort從0開始
         $delArray = request('delImage', []);
         if (!is_array($delArray)) $delArray = [];
         for ($i = 0, $j = count($delArray); $i < $j; $i++) {
@@ -246,7 +259,7 @@ class ProductController extends BaseController
                 $image[$i]->delete();
                 $imgCount--;
             } else {
-                $image[$i]->sort = ++$imgCount;
+                $image[$i]->sort = $imgCount++; //從0開始
                 $image[$i]->save();
             }
         }
@@ -261,7 +274,7 @@ class ProductController extends BaseController
                     $pp = new ProductPicture();
                     $pp->product_id = $product->id;
                     $pp->path = $path;
-                    $pp->sort = ++$imgCount;
+                    $pp->sort = $imgCount++;
                     $pp->save();
                 }
             }
@@ -270,7 +283,7 @@ class ProductController extends BaseController
             $request->session()->flash('log', '建立成功');
         else
             $request->session()->flash('log', '修改成功');
-        return redirect()->action('ProductController@getProducts');
+        return redirect()->action('ProductController@getSelfProducts');
     }
 
     public function getImage($pid, $id)
@@ -418,31 +431,31 @@ class ProductController extends BaseController
         $discount = $request->session()->get('discount');
         $final = session()->get('final');
         $discountAmount = 0;
-        if($discount)
-        {
+        if ($discount) {
             $final = $discount['final_price'];
             $discountAmount = $discount['discountAmount'];
         }
-        $shippingCost=$this->getShippingCost($request);
+        $shippingCost = $this->getShippingCost($request);
         return view('checkout')
             ->with('data', $shoppingcart)
             ->with('final', $final)
-            ->with('AftershippingCostfinal', $final+$shippingCost)
+            ->with('AftershippingCostfinal', $final + $shippingCost)
             ->with('discountAmount', $discountAmount)
             ->with('location', $location)
             ->with('shippingment', $shippingCost);
     }
-    public  function getAfterDiscountFinal(Request $request)
+
+    public function getAfterDiscountFinal(Request $request)
     {
         $discount = $request->session()->get('discount');
         $final = session()->get('final');
-        if($discount)
-        {
+        if ($discount) {
             $final = $discount['final_price'];
             $discountAmount = $discount['discountAmount'];
         }
         return $final;
     }
+
     public function checkOut(Request $request)
     {
         $uid = $request->session()->get('user')->id;
@@ -456,14 +469,14 @@ class ProductController extends BaseController
             return redirect()->back();
         }
         $order = new Order();
-        $shippingCost=$this->getShippingCost($request);
+        $shippingCost = $this->getShippingCost($request);
         $order->shipping_cost = $shippingCost;
         $order->location_id = $locationid;
         $order->customer_id = $uid;
         $order->state = Product::STATE_DRAFT;
-        $order->original_cost=$final;
-        $order->discount_id=$discountcode;
-        $order->final_cost = $this->getAfterDiscountFinal($request)+$this->getShippingCost($request);
+        $order->original_cost = $final;
+        $order->discount_id = $discountcode;
+        $order->final_cost = $this->getAfterDiscountFinal($request) + $this->getShippingCost($request);
         $order->save();
         $date = date('Y-m-d H:i:s', strtotime('+1hour'));
         $order->sent_time = $date;

@@ -61,7 +61,6 @@
                             <a href="{{action('ProductController@getProducts')}}?search[category]={{$p->category_id}}">{{$p->product_type}}</a>
                         </div>
                         <h6>販售截止日 {{$p->end_date}}</h6>
-                        <h6>運費 NT$ 60</h6>
                     </div>
                     <div class="info-price">
                         <h6>數量&nbsp;&nbsp;&nbsp;

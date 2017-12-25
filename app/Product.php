@@ -34,6 +34,13 @@ class Product extends Model
         return "";
     }
 
+    public function isAllowChange()
+    {
+        if ($this->state === self::STATE_DRAFT) return true;
+
+        return false;
+    }
+
     public function GetLink()
     {
         return "item?id=" . $this->id;
@@ -58,7 +65,8 @@ class Product extends Model
         return User::Where('id', $this->user_id)->first()->name;
     }
 
-    public function provider(){
+    public function provider()
+    {
         return $this->belongsTo('App\User', 'user_id', 'id');
     }
 
@@ -67,19 +75,21 @@ class Product extends Model
         return $this->hasMany('\App\ProductPicture');
     }
 
-    public function getSell() : int
+    public function getSell(): int
     {
-        if(isset($this->sell)){
+        if (isset($this->sell)) {
             return $this->sell;
-        }else{
-            $res = DB::select('SELECT GetSellCount(:pid) as c', ['pid'=>$this->id])[0];
+        } else {
+            $res = DB::select('SELECT GetSellCount(:pid) as c', ['pid' => $this->id])[0];
             return $res->c;
         }
     }
 
-    public function getRemaining() : int
+    public function getRemaining(): int
     {
-        return $this->amount - $this->getSell();
+        $amount = $this->amount - $this->getSell();
+        if ($amount < 0) $amount = 0;
+        return $amount;
     }
 
     public static function getOnProductsBuilder(Builder $builder = null): Builder

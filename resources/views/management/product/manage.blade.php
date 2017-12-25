@@ -34,16 +34,24 @@
                         @for ($i = 0; $i < count($data); $i++)
                             <tr>
                                 <td>{{$data[$i]->id}}</td>
-                                <td>
+                                <td class="text-left">
                                     <a href="{{action('ProductController@getItem', ['id'=>$data[$i]->id])}}"> {{$data[$i]->	product_name}} </a>
                                 </td>
                                 <td>{{$data[$i]->start_date}}</td>
                                 <td>{{$data[$i]->end_date}}</td>
                                 <td>{{$data[$i]->GetState()}}</td>
                                 <td nowrap="nowrap">
+                                    @if($data[$i]->isAllowChange())
                                     <a href="{{action('ProductController@getSell', $data[$i]->id)}}" class="btn btn-warning btn-md">編輯</a>
                                     <button onclick="Release('{{$data[$i]->id}}')" class="btn btn-primary btn-md">發佈</button>
-                                    <button onclick="Delete('{{$data[$i]->id}}')" class="btn btn-danger btn-md">刪除</button>
+                                    @endif
+                                    <button onclick="Delete('{{$data[$i]->id}}')" class="btn btn-danger btn-md">
+                                        @if($data[$i]->isAllowChange())
+                                            刪除
+                                        @else
+                                            下架商品
+                                        @endif
+                                    </button>
                                 </td>
                             </tr>
                         @endfor
@@ -62,7 +70,7 @@
 @section('eofScript')
     <script>
         function Delete(id) {
-            var ok = confirm("確認刪除?");
+            var ok = confirm("確認?");
             if (ok) {
                 ajax('POST', '{{action('ProductController@delProduct')}}', {id: id})
                     .then(() => location.reload());
