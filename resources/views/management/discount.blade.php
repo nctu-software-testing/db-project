@@ -31,9 +31,17 @@
                             {{$d->type}}
                         </td>
                         <td>
-                                <button id="stop" onclick="DisableDiscount({{$d->id}})" type="button"  class="btn btn-red btn-sm">
-                                    停用
+                            @if(strtotime($d->end_discount_time) < strtotime(date('Y-m-d H:i:s')))
+                                <button id="stop" onclick="DisableDiscount({{$d->id}})" type="button"  class="btn btn-success btn-sm" disabled>
+                                    已停用
                                 </button>
+                            @else
+                            <button id="stop" onclick="DisableDiscount({{$d->id}})" type="button"  class="btn btn-red btn-sm">
+                                停用
+                            </button>
+
+                            @endif
+
                         </td>
                         <td>
                             {{$d->start_discount_time}}

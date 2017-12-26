@@ -144,7 +144,7 @@ class DiscountController extends BaseController
         {
             $catlog = new Catlog();
             $catlog->discount_id = $discount->id;
-            $catlog->category_id = $selectCategory->id;
+            $catlog->category_id = $selectCategory;
             $catlog->save();
         }
         $request->session()->flash('log', '建立成功');
