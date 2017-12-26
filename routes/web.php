@@ -68,6 +68,9 @@ Route::group([
 
     //DISCOUNT
     Route::get('discount/manage', 'DiscountController@getManageDiscount');
+    Route::post('discount/manage', 'DiscountController@postSetDiscount');
+    Route::post('discount/manage/create', 'DiscountController@createDiscount');
+    Route::post('discount/manage/disable', 'DiscountController@disableDiscount');
 });
 
 Route::group([
