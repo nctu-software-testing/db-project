@@ -68,12 +68,24 @@
         ],
         "do-cache": [
             "php artisan config:cache",
-            "php artisan route:cache"
+            "@php artisan route:cache"
         ],
         "deploy": [
-            "git pull",
             "composer run cache-clear",
             "npm run prod"
+        ],
+        "deploy-dev": [
+            "git pull",
+            "composer run deploy"
+        ],
+        "deploy-prod": [
+            "composer run deploy",
+            "composer run do-cache"
+        ],
+        "deploy-test": [
+            "git pull",
+            "composer run deploy",
+            "composer run do-cache"
         ]
     },
     "config": {
