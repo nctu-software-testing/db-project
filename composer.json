@@ -81,6 +81,11 @@
         "deploy-prod": [
             "composer run deploy",
             "composer run do-cache"
+        ],
+        "deploy-test": [
+            "git pull",
+            "composer run deploy",
+            "composer run do-cache"
         ]
     },
     "config": {
