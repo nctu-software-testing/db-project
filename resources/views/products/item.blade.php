@@ -52,14 +52,15 @@
             <div class="col-6">
                 <div class="product-information">
                     <div class="info-header">
+                        <p class="text-right">供應商：{{$p->provider->name}}</p>
                         <h1>{{$p->product_name}}</h1>
                         <h6 class="suggest">建議售價 NT$ <del>{{$p->price*1.2}}</del> </h6>
                         <h2 class="product-price">NT$ {{$p->price}}</h2>
                     </div>
                     <div class="info-about">
-                        <div class="chip">
-                            <a href="{{action('ProductController@getProducts')}}?search[category]={{$p->category_id}}">{{$p->product_type}}</a>
-                        </div>
+                        <a class="chip" href="{{action('ProductController@getProducts')}}?search[category]={{$p->category_id}}">
+                            {{$p->product_type}}
+                        </a>
                         <h6>販售截止日 {{$p->end_date}}</h6>
                     </div>
                     <div class="info-price">
