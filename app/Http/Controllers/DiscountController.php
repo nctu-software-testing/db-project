@@ -155,12 +155,9 @@ class DiscountController extends BaseController
     {
         $date = date('Y-m-d H:i:s');
         $id = request('id');
-        $discount = session()->get('discount');
-        for ($i = 0; $i < count($discount); $i++) {
-            if ($discount[$i]->id == $id) {
-                $discount[$i]->end_discount_time = $date;
-                $request->session()->put('discount', $discount);
-            }
-        }
+        $discount = Discount::find($id);
+        $discount->end_discount_time = $date;
+        $discount->save();
+        return $this->result('OK', true);
     }
 }

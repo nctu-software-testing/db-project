@@ -31,9 +31,9 @@
                             {{$d->type}}
                         </td>
                         <td>
-                            <button onclick="DisableDiscount({{$d->id}})" type="button"  class="btn btn-red btn-sm">
-                                停用
-                            </button>
+                                <button id="stop" onclick="DisableDiscount({{$d->id}})" type="button"  class="btn btn-red btn-sm">
+                                    停用
+                                </button>
                         </td>
                         <td>
                             {{$d->start_discount_time}}
@@ -64,10 +64,10 @@
                         <option value="C">C 特定分類打折</option>
                     </select>
                     折扣名稱: <input id="name" type="text" name="name" required><br>
-                    <div class="discountExplain">
+                   折扣數值: <div class="discountExplain">
                         不限品項打折 ex: 0.2 表示不限品項 20% off
                     </div>
-                    <input id="value" type="text" name="value" required><br>
+                    <input id="value" type="number" name="value" step="0.1" required><br>
                     <div class="discount_category" style="display: none">
                         折扣分類: <select class="mdb-select" name="category" required id="category_id"  name="category_id"></select>
                     </div>
@@ -111,8 +111,8 @@
         });
         function DisableDiscount(id) {
             if (confirm('確定停用該折扣嗎?')) {
-                ajax('POST', '{{action('DiscountController@disableDiscount')}}', {id: id})
-            .then(d => {
+                var promise = ajax('POST', '{{action('DiscountController@disableDiscount')}}', {id: id});
+                promise.then(d => {
                     if (d.success) {
                         toastr.success(d.result);
                         location.reload();
@@ -138,6 +138,26 @@
                 $(".discount_category").show();
             }
         });
+
+        $("#value").change(function(){
+            if ($("#type").val() == 'A' || $("#type").val() == 'C')
+            {
+                if ($("#value").val() >= 1 || $("#value").val() < 0)
+                {
+                    $("#value").val(null);
+                    alert("折扣數值應小於1，且大於0");
+                }
+            }
+            else if ($("#type").val() == 'B')
+            {
+                if ($("#value").val() < 0)
+                {
+                    $("#value").val(null);
+                    alert("折扣數值應大於0");
+                }
+            }
+        });
+
         function CreateDiscount() {
             $("#lo").toggle();
         }
