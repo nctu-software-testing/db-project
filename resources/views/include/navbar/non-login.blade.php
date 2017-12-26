@@ -23,7 +23,7 @@
             </div>
         </div>
 
-        @if($captcha)
+        @if(config('app.captcha'))
         <div class="md-form">
             <iframe src="{{action('CaptchaController@getIndex')}}" frameborder="0" name="captcha" class="captcha"></iframe>
         </div>
@@ -52,7 +52,7 @@
                     if (result.success) {
                         location.reload(!0);
                     } else {
-                        @if($captcha)
+                        @if(config('app.captcha'))
                         let c = this.querySelector('.captcha');
                         if(c && c.contentWindow && c.contentWindow.CReset) c.contentWindow.CReset();
                         @endif
