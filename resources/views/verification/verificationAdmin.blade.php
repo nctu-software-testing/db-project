@@ -57,9 +57,10 @@
             var reason = "";
             var ok = confirm("驗證通過?");
             if (ok) {
-                result = "驗證成功";
+                result = 1;
             }
             else {
+                result = 0;
                 reason = prompt("理由?");
             }
             $.post("verification",
