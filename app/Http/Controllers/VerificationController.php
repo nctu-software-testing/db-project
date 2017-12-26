@@ -42,8 +42,12 @@ class VerificationController extends BaseController
     public function postVerification(Request $request)
     {
         $id = request('id');
-        $result = request('result');
+        $resultId = request('result');
+        $result = '未驗證';
         $reason = request('reason');
+        if($resultId === '1') $result = '驗證成功';
+        else if($resultId === '0') $result = '驗證失敗';
+        
         $verification = Verification::where('id', '=', $id)->first();
         $verification->verify_result = $result;
         $verification->description = $reason;
