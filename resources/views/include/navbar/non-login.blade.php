@@ -23,9 +23,11 @@
             </div>
         </div>
 
+        @if($captcha)
         <div class="md-form">
             <iframe src="{{action('CaptchaController@getIndex')}}" frameborder="0" name="captcha" class="captcha"></iframe>
         </div>
+        @endif
 
         <div class="text-center mt-3 mb-3">
             <button class="submit_button btn blue-gradient btn-block btn-rounded"
@@ -49,8 +51,11 @@
                     statusBar.textContent = result.result;
                     if (result.success) {
                         location.reload(!0);
-                    }else{
-                        this.querySelector('.captcha').contentWindow.CReset();
+                    } else {
+                        @if($captcha)
+                        let c = this.querySelector('.captcha');
+                        if(c && c.contentWindow && c.contentWindow.CReset) c.contentWindow.CReset();
+                        @endif
                     }
                 });
             e.preventDefault();

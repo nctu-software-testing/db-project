@@ -167,6 +167,7 @@
                                 </div>
                                 <!--/.Forth row-->
 
+                                @if($captcha)
                                 <!--Fifth row-->
                                 <div class="row">
 
@@ -178,6 +179,7 @@
                                     </div>
                                 </div>
                                 <!--/.Fifth row-->
+                                @endif
 
                                 <div class="row">
                                     <div class="col-12">
@@ -241,6 +243,11 @@
                         toastr.error(d.result, '', {
                             positionClass: 'toast-top-center',
                         });
+
+                        @if($captcha)
+                        let c = this.querySelector('.captcha');
+                        if(c && c.contentWindow && c.contentWindow.CReset) c.contentWindow.CReset();
+                        @endif
                     }
                 }).catch(() => regBtn.disabled = false);
 

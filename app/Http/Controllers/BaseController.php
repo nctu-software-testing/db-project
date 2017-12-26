@@ -5,11 +5,15 @@ namespace App\Http\Controllers;
 class BaseController extends \Illuminate\Routing\Controller
 {
     protected $controllerName = 'base';
+    protected $captcha = false;
 
     protected function __construct($name = 'base')
     {
+        $this->captcha = env('APP_CAPTCHA', false);
         $this->controllerName = $name;
         $this->setShareVariables('pageName', $name);
+        $this->setShareVariables('captcha', $this->captcha);
+
     }
 
     protected function setShareVariables($key, $val)
@@ -36,6 +40,9 @@ class BaseController extends \Illuminate\Routing\Controller
 
     protected function checkCaptcha(): array
     {
+        if (env('APP_CAPTCHA', false) === false) {
+            return ['success' => true, 'message' => ''];
+        }
         $captcha = session('captcha');
 
         if (!$captcha || $captcha['passed'] !== true) {
