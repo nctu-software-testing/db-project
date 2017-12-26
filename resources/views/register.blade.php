@@ -167,7 +167,7 @@
                                 </div>
                                 <!--/.Forth row-->
 
-                                @if($captcha)
+                                @if(config('app.captcha'))
                                 <!--Fifth row-->
                                 <div class="row">
 
@@ -244,7 +244,7 @@
                             positionClass: 'toast-top-center',
                         });
 
-                        @if($captcha)
+                        @if(config('app.captcha'))
                         let c = this.querySelector('.captcha');
                         if(c && c.contentWindow && c.contentWindow.CReset) c.contentWindow.CReset();
                         @endif
