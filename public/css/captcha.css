@@ -16,6 +16,7 @@ body {
 
 .captcha .image-container {
     position: relative;
+    overflow: hidden;
 }
 
 .captcha .grid {
