@@ -36,7 +36,7 @@ class BaseController extends \Illuminate\Routing\Controller
 
     protected function checkCaptcha(): array
     {
-        if (env('APP_CAPTCHA', false) === false) {
+        if (config('app.captcha') === false) {
             return ['success' => true, 'message' => ''];
         }
         $captcha = session('captcha');
