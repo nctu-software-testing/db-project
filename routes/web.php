@@ -37,14 +37,15 @@ Route::group([
 
 
     //購物車
-    Route::post('buy', 'ProductController@buyProduct');
-    Route::get('shopping-cart', 'ProductController@getShoppingCart');
-    Route::post('shopping-cart', 'ProductController@postShoppingCart');
-    Route::post('checkout', 'ProductController@checkOut');
-    Route::post('changeAmount', 'ProductController@changeAmount');
-    Route::post('removeProductFromShoppingcart', 'ProductController@removeProductFromShoppingcart');
+    Route::post('buy', 'ShoppingCartController@buyProduct');
+    Route::get('shopping-cart', 'ShoppingCartController@getShoppingCart');
+    Route::post('shopping-cart', 'ShoppingCartController@postShoppingCart');
+    Route::delete('shopping-cart', 'ShoppingCartController@deleteShoppingCart');
+    Route::post('checkout', 'ShoppingCartController@checkOut');
+    Route::post('changeAmount', 'ShoppingCartController@changeAmount');
+    Route::post('removeProductFromShoppingcart', 'ShoppingCartController@removeProductFromShoppingcart');
 
-    Route::post('shopping-cart/discount', 'DiscountController@postSetDiscount');
+    Route::post('shopping-cart/discount', 'ShoppingCartController@postSetDiscount');
 });
 
 Route::group([

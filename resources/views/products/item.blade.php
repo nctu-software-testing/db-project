@@ -52,14 +52,15 @@
             <div class="col-6">
                 <div class="product-information">
                     <div class="info-header">
+                        <p class="text-right">供應商：{{$p->provider->name}}</p>
                         <h1>{{$p->product_name}}</h1>
                         <h6 class="suggest">建議售價 NT$ <del>{{$p->price*1.2}}</del> </h6>
                         <h2 class="product-price">NT$ {{$p->price}}</h2>
                     </div>
                     <div class="info-about">
-                        <div class="chip">
-                            <a href="{{action('ProductController@getProducts')}}?search[category]={{$p->category_id}}">{{$p->product_type}}</a>
-                        </div>
+                        <a class="chip" href="{{action('ProductController@getProducts')}}?search[category]={{$p->category_id}}">
+                            {{$p->product_type}}
+                        </a>
                         <h6>販售截止日 {{$p->end_date}}</h6>
                     </div>
                     <div class="info-price">
@@ -67,7 +68,7 @@
                             <input id = "amount" type= "number" class="input-alternate" min="0" max="10" value="1">
                             &nbsp;&nbsp;
                             <span class="remaining"> 還剩 {{$p->getRemaining()}} 件</span></h6>
-                        <button type="button" class=" buy-btn btn btn-default" onclick="Buy('{{$p->id}}')">購買</button>
+                        <button type="button" class=" buy-btn btn btn-default" onclick="Buy('{{$p->id}}')">加入購物車</button>
                     </div>
                 </div>
             </div>
@@ -113,15 +114,17 @@
         var number_element = document.getElementById('amount');
         var number = number_element.value;
         toastr.success('已加入購物車');
-        ajax("POST", "{{action('ProductController@buyProduct')}}",
+        ajax("POST", "{{action('ShoppingCartController@buyProduct')}}",
             {
                 id: id,
                 amount: number,
             }).then(function (data) {
-            location.reload();
+            if(!data.success){
+                toastr.error(data.result);
+            }else{
+                if(window.updateShoppingCartCount) updateShoppingCartCount();
+            }
         });
-
-        //location.href="{{action('ProductController@getShoppingCart')}}"
     }
 </script>
 @endsection
