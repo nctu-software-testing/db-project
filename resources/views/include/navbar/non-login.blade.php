@@ -1,4 +1,5 @@
 <!-- Navbar -->
+@if(!($hide_login??false))
 <form id="login" class="ajax-auth card p-0" action="{{action('UserController@postLogin')}}" method="POST">
     <div class="card-body mx-4">
         <div class="text-center">
@@ -6,15 +7,27 @@
         </div>
 
         <p class="status"></p>
-        <div class="md-form">
-            <input type="text" id="nav_account" class="form-control" name="account">
-            <label for="nav_account">帳號</label>
+
+        <div class="row">
+            <div class="col">
+                <div class="md-form">
+                    <input type="text" id="nav_account" class="form-control" name="account">
+                    <label for="nav_account">帳號</label>
+                </div>
+            </div>
+            <div class="col">
+                <div class="md-form mb-1">
+                    <input type="password" id="nav_password" class="form-control" name="password">
+                    <label for="nav_password">密碼</label>
+                </div>
+            </div>
         </div>
 
-        <div class="md-form mb-1">
-            <input type="password" id="nav_password" class="form-control" name="password">
-            <label for="nav_password">密碼</label>
+        @if(config('app.captcha'))
+        <div class="md-form">
+            <iframe src="{{action('CaptchaController@getIndex')}}" frameborder="0" name="captcha" class="captcha"></iframe>
         </div>
+        @endif
 
         <div class="text-center mt-3 mb-3">
             <button class="submit_button btn blue-gradient btn-block btn-rounded"
@@ -28,7 +41,6 @@
         </div>
     </div>
 </form>
-
 <script>
     $(function () {
         $("#login").submit(function (e) {
@@ -39,13 +51,20 @@
                     statusBar.textContent = result.result;
                     if (result.success) {
                         location.reload(!0);
+                    } else {
+                        @if(config('app.captcha'))
+                        let c = this.querySelector('.captcha');
+                        if(c && c.contentWindow && c.contentWindow.CReset) c.contentWindow.CReset();
+                        @endif
                     }
                 });
             e.preventDefault();
         });
     });
 </script>
-
+@else
+<style>#navbar-static-login{display:none}</style>
+@endif
 @section('right-nav')
     <li class="nav-item">
         <a id="navbar-static-login" class="nav-link waves-effect waves-light" data-form="#login">

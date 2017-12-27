@@ -26,7 +26,8 @@ class VerificationController extends BaseController
             $data = User::
             join('verification', 'user.id', '=', 'verification.user_id')
                 ->paginate($this->paginate);
-            return view('verification.verificationAdmin', ['data' => $data]);
+            return view('verification.verificationAdmin', ['data' => $data])
+                ->with('title', '驗證會員');
         } else {
             $id = $request->session()->get('user')->id;
             $data = User::
@@ -41,8 +42,12 @@ class VerificationController extends BaseController
     public function postVerification(Request $request)
     {
         $id = request('id');
-        $result = request('result');
+        $resultId = request('result');
+        $result = '未驗證';
         $reason = request('reason');
+        if($resultId === '1') $result = '驗證成功';
+        else if($resultId === '0') $result = '驗證失敗';
+        
         $verification = Verification::where('id', '=', $id)->first();
         $verification->verify_result = $result;
         $verification->description = $reason;

@@ -10,7 +10,7 @@
         >驗證會員</a>
 
         <a class="list-group-item list-group-item-action"
-           href="{{action('CategoryController@getCategory')}}"
+           href="{{action('CategoryController@getManageCategory')}}"
         >管理分類</a>
 
         <a class="list-group-item list-group-item-action"
@@ -18,7 +18,14 @@
          >管理商品</a>
 
         <a class="list-group-item list-group-item-action"
-           href="{{action('DiscountController@getDiscount')}}"
+           href="{{action('DiscountController@getManageDiscount')}}"
         >管理折扣</a>
+
+        <a class="list-group-item list-group-item-action"
+           href="{{action('OrderController@getShippingStatus')}}"
+        >出貨狀態</a>
+        <a class="list-group-item list-group-item-action"
+           href="{{action('DiscountController@getShipping')}}"
+        >管理運費</a>
     </div>
 </section>

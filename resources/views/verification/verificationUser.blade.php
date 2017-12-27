@@ -1,5 +1,5 @@
-@extends('verification.verification')
-@section('verify')
+@extends('base')
+@section('content')
     <div class="row" id="verify_note">
         <div class="col-12">
             <h2 class="page-title">會員驗證</h2>

@@ -1,0 +1,1 @@
+﻿ALTER TABLE `discount` CHANGE `discount_percent` `value` FLOAT(11,2) NOT NULL;

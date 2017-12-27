@@ -18,7 +18,7 @@ class Order extends Model
      * @var array
      */
     protected $fillable = [
-        'location_id', 'customer_id', 'state', 'order_time', 'sent_time', 'arrival_time', 'final_cost', 'discount_id',
+        'location_id', 'customer_id', 'state', 'order_time', 'sent_time', 'arrival_time', 'final_cost', 'discount_id' , 'original_cost','shipping_cost',
     ];
 
     public function GetState()
@@ -42,16 +42,25 @@ class Order extends Model
         if ($now > $at)
             $this->state = 2;
         $this->save();
-
     }
 
-    public function GetId()
-    {
-        return $this->id;
+    public function location(){
+        return $this->belongsTo('App\Location');
     }
 
-    public function GetLink()
+    public function getShippingCost(): int
     {
-        return "orderDetail?id=" . $this->id;
+        return Shipping::getShippingPrice($this->final_cost);
+    }
+
+    public function discount()
+    {
+        return $this->belongsTo('App\Discount');
+    }
+
+    public function discountAmount():?int
+    {
+        return $this->original_cost-$this->final_cost;
+
     }
 }

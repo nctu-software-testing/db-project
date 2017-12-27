@@ -1,0 +1,77 @@
+html{
+    background: transparent;
+    overflow: hidden;
+}
+body {
+    background: transparent;
+}
+
+.captcha {
+    display: block;
+    position: relative;
+    line-height: 0;
+    box-sizing: content-box;
+    padding: 0 0 1.5rem 0;
+}
+
+.captcha .image-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.captcha .grid {
+    position: absolute;
+    z-index: 1;
+    background: no-repeat;
+    transition: .25s;
+}
+
+.captcha .grid.mask {
+    opacity: 0;
+}
+
+.captcha img.slice {
+    position: absolute;
+    z-index: 3;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    transition: opacity .25s;
+}
+
+.captcha:hover .grid.mask, .captcha:hover img.slice {
+    opacity: 1;
+}
+
+/*
+input[type=range] {
+    -webkit-appearance: none;
+    width: 100%;
+    border-radius: 8px;
+    height: 7px;
+    border: 1px solid #bdc3c7;
+    background-color: #fff;
+    outline: none;
+}
+
+input[type='range']::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    background-color: #ecf0f1;
+    border: 1px solid #bdc3c7;
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+*/
+.captcha .input-container {
+    margin-top: 1rem;
+}
+
+.captcha .input-container input[type=range] + .thumb {
+    display: none;
+}
+
+.captcha.success .mask, .captcha.success .slice {
+    display: none;
+}

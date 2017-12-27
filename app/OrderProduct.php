@@ -2,8 +2,6 @@
 
 namespace App;
 
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 
 class OrderProduct extends Model
@@ -16,7 +14,14 @@ class OrderProduct extends Model
      * @var array
      */
     protected $fillable = [
-       'order_id','product_id','amount',
+        'order_id', 'product_id', 'amount',
     ];
 
+    public function product(){
+        return $this->belongsTo('App\Product');
+    }
+
+    public function order(){
+        return $this->belongsTo('App\Order');
+    }
 }

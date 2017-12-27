@@ -10,52 +10,67 @@
 |
 */
 
-Route::get('/', function () {
-    $category = \App\Category::orderBy('id')->get();
-    $hotProducts = \App\Product::getHotProducts();
-    return view('welcome', [
-        'pageName' => 'index',
-        'category' => $category,
-        'products' => $hotProducts
-    ]);
-});
+Route::get('/', 'HomeController@getIndex');
 
 Route::group([
     'middleware' => ['auth']
 ], function () {
-    Route::post('/logout', 'UserController@logout');
+    Route::post('logout', 'UserController@logout');
 
     //VERIFICATION
-    Route::get('/verification', 'VerificationController@getVerification');
-    Route::post('/new-verification', 'VerificationController@verification');
+    Route::get('verification', 'VerificationController@getVerification');
+    Route::post('new-verification', 'VerificationController@verification');
 
     //CHANGE
-    Route::post('/change-password', 'UserController@changePassword');
-    Route::post('/change-email', 'UserController@changeEmail');
+    Route::post('change-password', 'UserController@changePassword');
+    Route::post('change-email', 'UserController@changeEmail');
 
     //LOCATION
-    Route::get('/location', 'LocationController@getLocation');
-    Route::post('/location', 'LocationController@createLocation');
-    Route::get('/verify-image/{vid}/{face}', 'VerificationController@getImage');
+    Route::get('location', 'LocationController@getLocation');
+    Route::post('location', 'LocationController@createLocation');
+    Route::get('verify-image/{vid}/{face}', 'VerificationController@getImage');
 
 
     //USER
     Route::get('profile', 'UserController@getUserInfo');
     Route::post('profile/avatar', 'UserController@postChangeAvatar');
+
+
+    //購物車
+    Route::post('buy', 'ShoppingCartController@buyProduct');
+    Route::get('shopping-cart', 'ShoppingCartController@getShoppingCart');
+    Route::post('shopping-cart', 'ShoppingCartController@postShoppingCart');
+    Route::delete('shopping-cart', 'ShoppingCartController@deleteShoppingCart');
+    Route::post('checkout', 'ShoppingCartController@checkOut');
+    Route::post('changeAmount', 'ShoppingCartController@changeAmount');
+    Route::post('removeProductFromShoppingcart', 'ShoppingCartController@removeProductFromShoppingcart');
+
+    Route::post('shopping-cart/discount', 'ShoppingCartController@postSetDiscount');
 });
 
 Route::group([
     'middleware' => ['auth.admin']
 ], function () {
 
-    Route::post('/verification', 'VerificationController@postVerification');
-    Route::get('/category/manage', 'CategoryController@getManageCategory');
-    Route::post('/category/manage', 'CategoryController@postManageCategory');
-    Route::delete('/category/manage/delete', 'CategoryController@deleteCategory');
+    Route::post('verification', 'VerificationController@postVerification');
+    Route::get('category/manage', 'CategoryController@getManageCategory');
+    Route::post('category/manage', 'CategoryController@postManageCategory');
+    Route::delete('category/manage/delete', 'CategoryController@deleteCategory');
+
+    //SHIPPING MANGE
+    Route::get('shipping/manage', 'DiscountController@getShipping');
+    Route::post('shipping/manage', 'DiscountController@createShipping');
+    Route::delete('shipping/manage/delete', 'DiscountController@deleteShipping');
+
 
     //USER MANAGE
     Route::get('admin/users-manage', 'AdminController@getUsersManager');
     Route::post('admin/users-manage/change-password', 'AdminController@changePassword');
+
+    //DISCOUNT
+    Route::get('discount/manage', 'DiscountController@getManageDiscount');
+    Route::post('discount/manage/create', 'DiscountController@createDiscount');
+    Route::post('discount/manage/disable', 'DiscountController@disableDiscount');
 });
 
 Route::group([
@@ -67,43 +82,55 @@ Route::group([
     //PRODUCT
     Route::get('products/manage', 'ProductController@getSelfProducts');
     Route::post('products/manage/release-product', 'ProductController@releaseProduct');
-    Route::post('/products/deleteProduct', 'ProductController@delProduct');
+    Route::post('products/deleteProduct', 'ProductController@delProduct');
+
+    Route::get('order/shipping-status', 'OrderController@getShippingStatus');
+
+
+    Route::get('stat/business', 'StatController@getBusinessStat');
+    Route::post('stat/business', 'StatController@postBusinessStat');
+});
+
+Route::group([
+    'middleware' => ['auth.customer']
+], function () {
+    Route::get('stat/customer', 'StatController@getCustomStat');
+    Route::post('stat/customer', 'StatController@postCustomStat');
+
+    //ORDER
+    Route::get('order', 'OrderController@getOrder');
+    Route::get('orderDetail/{id}', 'OrderController@getOrderDetail');
 });
 
 Route::group([
     'middleware' => ['auth.non']
 ], function () {
     //REGISTER
-    Route::get('/register', 'UserController@getReg');
-    Route::post('/register', 'UserController@postReg');
+    Route::get('register', 'UserController@getReg');
+    Route::post('register', 'UserController@postReg');
 
     //LOGIN LOGOUT
-    Route::post('/login', 'UserController@postLogin');
+    Route::post('login', 'UserController@postLogin');
+});
+
+Route::group([
+    'prefix' => 'captcha',
+], function () {
+    Route::get('list', 'CaptchaController@getList');
+    Route::get('full-image', 'CaptchaController@getFullImage');
+    Route::get('masked-image', 'CaptchaController@getMaskImage');
+    Route::get('slice', 'CaptchaController@getSliceImage');
+    Route::post('verify', 'CaptchaController@postVerify');
+    Route::get('/', 'CaptchaController@getIndex');
 });
 
 
 //CATEGORY
-Route::get('/category', 'CategoryController@getCategory');
+Route::get('category', 'CategoryController@getCategory');
 
 //PRODUCT
-Route::get('/products', 'ProductController@getProducts');
-Route::get('/products/item/{id}', 'ProductController@getItem');
-Route::get('/products/item-image/{pid}/{id}', 'ProductController@getImage');
-//購物車
-Route::post('/buy', 'ProductController@buyProduct');
-Route::get('/shoppingcart', 'ProductController@getShoppingCart');
-Route::post('/changeAmount', 'ProductController@changeAmount');
-Route::post('/removeProductFromShoppingcart', 'ProductController@removeProductFromShoppingcart');
-//DISCOUNT
-Route::get('/discount', 'DiscountController@getDiscount');
-//CHECKOUT
-Route::get('/checkout', 'ProductController@getCheckOut');
-Route::post('/checkout', 'ProductController@checkOut');
-//ORDER
-Route::get('/order', 'OrderController@getOrder');
-Route::get('/orderDetail', 'OrderController@getOrderDetail');
+Route::get('products', 'ProductController@getProducts');
+Route::get('products/item/{id}', 'ProductController@getItem');
 
 
-Route::get('/function', function () {
-    return view('function');
-});
+Route::get('function', 'HomeController@getFunction');

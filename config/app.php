@@ -125,6 +125,8 @@ return [
 
     'log_level' => env('APP_LOG_LEVEL', 'debug'),
 
+    'captcha' => env('APP_CAPTCHA', false),
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers

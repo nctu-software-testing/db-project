@@ -18,6 +18,10 @@ class CategoryController extends BaseController
     public function getCategory(Request $request)
     {
         $data = Category::orderBy('id')->get();
+        if (request('type') === 'json') {
+            return $this->result($data, true);
+        }
+
         return view('category', ['category' => $data]);
     }
 
@@ -46,13 +50,14 @@ class CategoryController extends BaseController
         return $this->result('Ok', true);
     }
 
-    public function deleteCategory(Request $request){
+    public function deleteCategory(Request $request)
+    {
         $id = request('id');
-        if(Product::where('category_id', $id)->count()>0){
+        if (Product::where('category_id', $id)->count() > 0) {
             return $this->result('不可以刪除有任何商品的分類', false);
-        }else{
-           Category::find($id)->forceDelete();
-           return $this->result('OK', true);
+        } else {
+            Category::find($id)->forceDelete();
+            return $this->result('OK', true);
         }
     }
 }

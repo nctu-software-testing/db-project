@@ -7,7 +7,10 @@
 
         <a class="list-group-item list-group-item-action"
            href="{{action('OrderController@getOrder')}}"
-        >訂單查詢</a>
+        >我的訂單</a>
 
+        <a class="list-group-item list-group-item-action"
+           href="{{action('StatController@getCustomStat')}}"
+        >統計資料</a>
     </div>
 </section>

@@ -5,6 +5,7 @@
  */
 require('./helper');
 require('./extra/jquery.tmpl.js');
+require('./extra/TWZipCode.js');
 let main = require('./main');
 require('./after.dom.loaded');
 

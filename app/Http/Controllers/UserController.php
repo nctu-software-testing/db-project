@@ -18,11 +18,18 @@ class UserController extends BaseController
 
     public function getReg(Request $request)
     {
-        return view('register');
+        return view('register')
+            ->with('hide_login', true);
     }
 
     public function postReg(Request $request)
     {
+        $captchaRes = $this->checkCaptcha();
+
+        if (!$captchaRes['success']) {
+            return $this->result($captchaRes['message'], false);
+        }
+
         //讀表單
         $account = request('account');
         $password = bcrypt(request('password'));
@@ -62,7 +69,14 @@ class UserController extends BaseController
         //讀表單
         $account = request('account');
         $password = request('password');
+        $captchaRes = $this->checkCaptcha();
+
+        if (!$captchaRes['success']) {
+            return $this->result($captchaRes['message'], false);
+        }
+
         $check_user = User::where('account', '=', $account)->first();
+
         if ($check_user) {
             $dbpassword = $check_user->password;
             if (Hash::check($password, $dbpassword)) {
@@ -88,11 +102,11 @@ class UserController extends BaseController
         $data = User::find($id);
         $locationData = Location::
         where('user_id', '=', $id)->first();
-        if(!$data){
+        if (!$data) {
             return $this->logout($request);
         }
 
-        return view('management.user-info', ['data' => $data],['locationData'=>$locationData])
+        return view('management.user-info', ['data' => $data], ['locationData' => $locationData])
             ->with('title', '會員資料');
     }
 
@@ -112,16 +126,17 @@ class UserController extends BaseController
         }
     }
 
-    public function postChangeAvatar(Request $request){
+    public function postChangeAvatar(Request $request)
+    {
         $id = session('user.id');
         $user = User::find($id);
         $avatar = $request->get('avatar');
-        if(!is_string($avatar)) $avatar = '';
+        if (!is_string($avatar)) $avatar = '';
         $user->avatar = trim($avatar);
         $this->updateUser($user);
 
         return $this->result([
-            'url'   => $user->getAvatarUrl()
+            'url' => $user->getAvatarUrl()
         ], true);
     }
 
@@ -135,7 +150,7 @@ class UserController extends BaseController
         return $this->result('修改成功', true);
     }
 
-    private function updateUser(User $user) : User
+    private function updateUser(User $user): User
     {
         $user->save();
         session()->put('user', $user);
