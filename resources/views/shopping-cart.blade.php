@@ -30,30 +30,36 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @for ($i = 0; $i < count($data); $i++)
+                                    @forelse ($data as $d)
                                         <tr>
-                                            <th>{{$i + 1}}</th>
+                                            <th>{{$loop->iteration}}</th>
                                             <td>
                                                 <img class="shoppingCar-image" alt="placeholder"
-                                                     src="{{action('ProductController@getImage', ['pid'=>$data[$i]->product_id, 'id'=>0])}}">
-                                                <a href="{{action('ProductController@getItem', $data[$i]->product->id)}}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{$data[$i]->product->product_name}} </a>
+                                                     src="{{action('ProductController@getImage', ['pid'=>$d->product_id, 'id'=>0])}}">
+                                                <a href="{{action('ProductController@getItem', $d->product->id)}}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{$d->product->product_name}} </a>
                                             </td>
-                                            <td>{{$data[$i]->product->price}}</td>
+                                            <td>{{$d->product->price}}</td>
                                             　
-                                            <td>{{$data[$i]->amount}}</td>
-                                            <td class="price-amount">$ {{$data[$i]->product->price * $data[$i]->amount}}</td>
+                                            <td>{{$d->amount}}</td>
+                                            <td class="price-amount">$ {{$d->product->price * $d->amount}}</td>
                                             <td style="text-align:center;">
                                                 <button type="button" class="btn btn-success btn-sm btn-rounded"
-                                                        onclick="ChangeAmount('{{$data[$i]->product_id}}','{{$data[$i]->amount}}')">
+                                                        onclick="ChangeAmount('{{$d->product_id}}','{{$d->amount}}')">
                                                     <i class="fa fa-arrows-v fa-2x pr-2" aria-hidden="true"></i>修改數量
                                                 </button>
                                                 <button type="button" class="btn btn-danger btn-sm btn-rounded"
-                                                        onclick="Remove('{{$data[$i]->product_id}}')"><i class="fa fa-close pr-2"
+                                                        onclick="Remove('{{$d->product_id}}')"><i class="fa fa-close pr-2"
                                                                                                          aria-hidden="true"></i>移出
                                                 </button>
                                             </td>
                                         </tr>
-                                    @endfor
+                                    @empty
+                                        <tr>
+                                            <td colspan="6">
+                                                <p class="no-data"></p>
+                                            </td>
+                                        </tr>
+                                    @endforelse
                                     </tbody>
                                 </table>
                             </div>
