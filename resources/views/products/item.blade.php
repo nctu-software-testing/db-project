@@ -114,15 +114,17 @@
         var number_element = document.getElementById('amount');
         var number = number_element.value;
         toastr.success('已加入購物車');
-        ajax("POST", "{{action('ProductController@buyProduct')}}",
+        ajax("POST", "{{action('ShoppingCartController@buyProduct')}}",
             {
                 id: id,
                 amount: number,
             }).then(function (data) {
-            location.reload();
+            if(!data.success){
+                toastr.error(data.result);
+            }else{
+                if(window.updateShoppingCartCount) updateShoppingCartCount();
+            }
         });
-
-        //location.href="{{action('ProductController@getShoppingCart')}}"
     }
 </script>
 @endsection

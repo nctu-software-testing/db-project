@@ -15,14 +15,17 @@ switch (session('user.role')) {
 @section('right-nav')
     <div class="flex-center">
         <div class="nav-item">
-            <a href="{{action('ProductController@getShoppingCart')}}" class="nav-link waves-light">
+            <a href="{{action('ShoppingCartController@getShoppingCart')}}" class="nav-link waves-light">
                 <i class="material-icons">shopping_cart</i>
                 <span class="name">購物車</span>
                 <span class="num" id="cartNum"></span>
             </a>
             <script>
-                ajax('GET', '{{action('ProductController@getShoppingCart')}}', {type: 'query'})
-                    .then(d => $("#cartNum").text(d.result ? d.result : ''));
+                function updateShoppingCartCount() {
+                    ajax('GET', '{{action('ShoppingCartController@getShoppingCart')}}', {type: 'query'})
+                        .then(d => $("#cartNum").text(d.result ? d.result : ''));
+                }
+                updateShoppingCartCount();
             </script>
 
         </div>

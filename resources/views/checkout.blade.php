@@ -1,7 +1,7 @@
 @extends('base')
 @section('content')
     <div class="container">
-        <form method="POST" action="{{action('ProductController@checkOut')}}">
+        <form method="POST" action="{{action('ShoppingCartController@checkOut')}}">
             <div class="row">
                 <div class="col-md-12 checkout-info">
                     <h1>訂單資訊</h1>

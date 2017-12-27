@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     @include("include.head")
 </head>
-<body class="mdb-skin-custom currency-eur page-{{$pageName ?? 'base'}}">
+<body class="mdb-skin-custom currency-eur @foreach(explode(' ', $pageName ?? 'base') as $k ) page-{{$k}} @endforeach">
 @include('include.navbar')
 @include("log")
 @yield('header')
