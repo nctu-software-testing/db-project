@@ -9,9 +9,10 @@
 </head>
 <body>
 <h1>Connecting to Server</h1>
+<p>Please <a href="http://127.0.0.1:2080/">click here</a> if you are not redirected within a few seconds</p>
 <script>
     function tryConnect() {
-        const SVR_PATH = 'http://localhost:2080/';
+        const SVR_PATH = 'http://127.0.0.1:2080/';
         const TRY_TIME = 500;
         fetch(SVR_PATH + 'alive.php')
             .then(r => r.json())

@@ -1,0 +1,12 @@
+; 下列註解包含自解檔指令碼指令
+
+Path=%SystemDrive%\
+Setup=AnyBuy_Server\!start.bat
+SetupCode
+Overwrite=1
+Title=Any Buy 任購網
+Text
+{
+<h1>Any Buy 任購網</h1>
+<p>請安裝在磁碟根目錄</p>
+}
