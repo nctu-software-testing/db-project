@@ -18,7 +18,7 @@ class Order extends Model
      * @var array
      */
     protected $fillable = [
-        'location_id', 'customer_id', 'state', 'order_time', 'sent_time', 'arrival_time', 'final_cost', 'discount_id' , 'original_cost','shipping_cost',
+        'location_id', 'customer_id', 'state', 'order_time', 'sent_time', 'arrival_time', 'final_cost', 'discount_id', 'original_cost', 'shipping_cost',
     ];
 
     public function GetState()
@@ -44,7 +44,8 @@ class Order extends Model
         $this->save();
     }
 
-    public function location(){
+    public function location()
+    {
         return $this->belongsTo('App\Location');
     }
 
@@ -58,9 +59,10 @@ class Order extends Model
         return $this->belongsTo('App\Discount');
     }
 
-    public function discountAmount():?int
+    public function discountAmount(): ?int
     {
-        return $this->original_cost-$this->final_cost;
-
+        if ($this->discount_id !== null)
+            return $this->original_cost - $this->final_cost;
+        return null;
     }
 }
