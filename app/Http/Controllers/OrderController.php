@@ -24,6 +24,7 @@ class OrderController extends BaseController
         $id = $request->session()->get('user')->id;
         $data = Order::
         where('customer_id', '=', $id)
+            ->orderBy('id', 'DESC')
             ->paginate($this->paginate);
         return view('order', ['data' => $data])
             ->with('title', '我的訂單');
@@ -41,7 +42,7 @@ class OrderController extends BaseController
         if (!$order)
             return abort(404);
         $data = OrderProduct::where('order_id', $id)->get();
-        $original_cost=$order->original_cost;
+        $original_cost = $order->original_cost;
         $location = Location::find($order->location_id);
         return view('orderDetail')
             ->with('data', $data)
@@ -56,7 +57,9 @@ class OrderController extends BaseController
     {
         $uid = session('user.id');
         $dataQuery = OrderProduct::join('on_product', 'product_id', 'on_product.id')
+            ->orderBy('order_id', 'DESC')
             ->select('order_product.*');
+
         if (session('user.role') !== 'A') {
             $dataQuery->where('on_product.user_id', $uid);
         }
