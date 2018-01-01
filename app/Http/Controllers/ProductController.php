@@ -256,7 +256,7 @@ class ProductController extends BaseController
         if (!is_array($delArray)) $delArray = [];
         for ($i = 0, $j = count($delArray); $i < $j; $i++) {
             if (($delArray[$i] ?? null) === '1' && !is_null($image[$i] ?? null)) {
-                $image[$i]->delete();
+                $image[$i]->forceDelete();
                 $imgCount--;
             } else {
                 $image[$i]->sort = $imgCount++; //從0開始
@@ -306,7 +306,7 @@ class ProductController extends BaseController
             $response->header("Content-Type", $type);
             $response->header("Cache-Control", 'public, max-age=3600');
             return $response;
-        } catch (FileNotFoundException $e) {
+        } catch (\Exception $e) {
             debugbar()->error($e);
         }
         return abort(404);
