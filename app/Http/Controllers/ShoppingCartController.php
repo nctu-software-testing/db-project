@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Catlog;
 use App\Discount;
 use App\Location;
 use App\Order;
