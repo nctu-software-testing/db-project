@@ -39,8 +39,6 @@
                     <td>
                         <div>
                             <input type="date" name="start_date" value="{{$editdata->GetDateTime(0)}}" id="d1" required>
-                            <input type="time" name="expiration_time" value="{{$editdata->GetDateTime(1)}}" id="t1"
-                                   required>
                         </div>
                     </td>
 
@@ -50,7 +48,15 @@
                     <td>
                         <div>
                             <input type="date" name="end_date" value="{{$editdata->GetDateTime(2)}}" id="d2" required>
-                            <input type="time" name="end_time" value="{{$editdata->GetDateTime(3)}}" id="t2" required>
+                        </div>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>數量:</td>
+                    <td>
+                        <div>
+                            <input type="number" name="amount" min="1" value="{{$editdata->amount or 10}}" required>
                         </div>
                     </td>
 
@@ -110,12 +116,8 @@
         $("#Form").submit(function () {
             var d1 = $("#d1").val();
             var d2 = $("#d2").val();
-            var t1 = $("#t1").val();
-            var t2 = $("#t2").val();
             var p = $("#price").val();
-            var dt1 = d1 + " " + t1;
-            var dt2 = d2 + " " + t2;
-            if (dt2 < dt1) {
+            if (d2 < d1) {
                 alert("下架時間需大於上架時間");
                 return false;
             }
