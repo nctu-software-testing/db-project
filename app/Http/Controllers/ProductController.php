@@ -211,11 +211,10 @@ class ProductController extends BaseController
         $category = request('category');
         $price = request('price');
         $d1 = request('start_date');
-        $t1 = request('expiration_time');
         $d2 = request('end_date');
-        $t2 = request('end_time');
-        $dt1 = $d1 . ' ' . $t1;
-        $dt2 = $d2 . ' ' . $t2;
+        $amount = request('amount');
+        $dt1 = $d1;
+        $dt2 = $d2;
         $info = request('info');
         if ($price < 0 || $dt1 > $dt2) {
             $request->session()->flash('log', '參數錯誤');
@@ -243,6 +242,7 @@ class ProductController extends BaseController
         $product->category_id = $category;
         $product->user_id = $id;
         $product->state = Product::STATE_DRAFT;
+        $product->amount = $amount;
         $product->save();
 
         //移除圖片
