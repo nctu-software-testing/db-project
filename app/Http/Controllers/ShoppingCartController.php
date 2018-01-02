@@ -11,6 +11,7 @@ use App\Product;
 use App\Shipping;
 use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 
 class ShoppingCartController extends BaseController
@@ -34,6 +35,13 @@ class ShoppingCartController extends BaseController
             ->where('state', Product::STATE_RELEASE)
             ->first();
         if ($p) {
+            $curSell = DB::select(DB::raw('SELECT GetSellCount(' . $p->id . ') p'))[0]->p;
+            $remCount = $p->amount - $curSell - $amount*1;
+
+            if ($remCount <= 0) {
+                return $this->result('沒有庫存了', false);
+            }
+
             $shoppingcart = session('shoppingcart', []);
             if (!is_array($shoppingcart)) $shoppingcart = [];
 

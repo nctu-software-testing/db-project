@@ -18,7 +18,6 @@
                             @endif
                         @endfor
                     </ol>
-                    </ol>
                     <!--/.Indicators-->
                     <!--Slides-->
                     <div class="carousel-inner" role="listbox">
@@ -33,7 +32,6 @@
                                 </div>
                             @endif
                         @endfor
-
                     </div>
                     <!--/.Slides-->
                     <!--Controls-->
@@ -54,7 +52,6 @@
                     <div class="info-header">
                         <p class="text-right">供應商：{{$p->provider->name}}</p>
                         <h1>{{$p->product_name}}</h1>
-                        <h6 class="suggest">建議售價 NT$ <del>{{$p->price*1.2}}</del> </h6>
                         <h2 class="product-price">NT$ {{$p->price}}</h2>
                     </div>
                     <div class="info-about">
@@ -113,7 +110,6 @@
 */
         var number_element = document.getElementById('amount');
         var number = number_element.value;
-        toastr.success('已加入購物車');
         ajax("POST", "{{action('ShoppingCartController@buyProduct')}}",
             {
                 id: id,
@@ -123,6 +119,7 @@
                 toastr.error(data.result);
             }else{
                 if(window.updateShoppingCartCount) updateShoppingCartCount();
+                toastr.success('已加入購物車');
             }
         });
     }

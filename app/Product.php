@@ -22,7 +22,7 @@ class Product extends Model
      * @var array
      */
     protected $fillable = [
-        'product_name', 'product_information', 'start_date', 'end_date', 'price', 'state', 'category_id', 'user_id',
+        'product_name', 'product_information', 'start_date', 'end_date', 'price', 'state', 'category_id', 'user_id', 'amount'
     ];
 
     public function GetState()
