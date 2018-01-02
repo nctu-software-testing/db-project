@@ -35,10 +35,7 @@ class ShoppingCartController extends BaseController
             ->where('state', Product::STATE_RELEASE)
             ->first();
         if ($p) {
-            $curSell = DB::select(DB::raw('SELECT GetSellCount(' . $p->id . ') p'))[0]->p;
-            $remCount = $p->amount - $curSell - $amount*1;
-
-            if ($remCount <= 0) {
+            if (!$this->checkAllowBuy($amount, $p)) {
                 return $this->result('沒有庫存了', false);
             }
 
@@ -48,7 +45,7 @@ class ShoppingCartController extends BaseController
             $flag = false;
             for ($i = 0, $j = count($shoppingcart); $i < $j; $i++) {
                 if ($shoppingcart[$i]->product->id == $id) {
-                    $shoppingcart[$i]->amount += $amount;
+                    $shoppingcart[$i]->amount = $amount;
                     $flag = true;
                 }
             }
@@ -103,7 +100,12 @@ class ShoppingCartController extends BaseController
         $amount = request('amount');
         $shoppingcart = session()->get('shoppingcart');
         for ($i = 0; $i < count($shoppingcart); $i++) {
-            if ($shoppingcart[$i]->product->id == $id) {
+            $p = $shoppingcart[$i]->product;
+            if ($p->id == $id) {
+                if (!$this->checkAllowBuy($amount, $p)) {
+                    return $this->result('沒有庫存了', false);
+                }
+
                 $shoppingcart[$i]->amount = $amount;
                 $request->session()->put('shoppingcart', $shoppingcart);
             }
@@ -111,6 +113,12 @@ class ShoppingCartController extends BaseController
         session()->remove('discount');
 
         return $this->result('OK', true);
+    }
+    
+    private function checkAllowBuy($amount,Product $p): bool{
+        $curSell = DB::select(DB::raw('SELECT GetSellCount(' . $p->id . ') p'))[0]->p;
+        $remCount = $p->amount - $curSell - $amount*1;
+        return $remCount >= 0;
     }
 
     public function removeProductFromShoppingcart(Request $request)
@@ -126,10 +134,10 @@ class ShoppingCartController extends BaseController
                 $shoppingcart[$i] = $shoppingcart[$i + 1];
             }
         }
-        $shoppingcart->pop();
+        array_pop($shoppingcart);
         $request->session()->put('shoppingcart', $shoppingcart);
         session()->remove('discount');
-        return;
+        return $this->result('OK', true);
     }
 
     //結帳頁面
