@@ -1,1 +1,1 @@
-﻿ALTER TABLE `user` ADD `private_key` TEXT NOT NULL AFTER `avatar`, ADD `public_key` TEXT NOT NULL AFTER `private_key`;
+﻿ALTER TABLE `user` ADD COLUMN `private_key` text NOT NULL AFTER `avatar`,ADD COLUMN `public_key` text NOT NULL AFTER `private_key`;
