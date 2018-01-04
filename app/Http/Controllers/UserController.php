@@ -55,6 +55,26 @@ class UserController extends BaseController
         $new_user->gender = $gender;
         $new_user->email = $email;
         $new_user->birthday = $birthday;
+        //
+        $config = [
+            "digest_alg" => "sha512",
+            "private_key_bits" => 2048,
+            "private_key_type" => OPENSSL_KEYTYPE_RSA,
+        ];
+
+        // Create the keypair
+        $res=openssl_pkey_new($config);
+
+        // Get private key
+        openssl_pkey_export($res, $privatekey);
+
+        // Get public key
+        $publickey = openssl_pkey_get_details($res);
+        // Save the public key in public.key file. Send this file to anyone who want to send you the encrypted data.
+        $publickey = $publickey["key"];
+        $new_user->public_key = $publickey;
+        $new_user->private_key = $privatekey;
+        //
         $check_user = User::where('account', $account)->count();
         if ($check_user !== 0) {
             return $this->result('已有相同帳戶', false);

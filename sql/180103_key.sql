@@ -1,0 +1,1 @@
+﻿ALTER TABLE `user` ADD `private_key` TEXT NOT NULL AFTER `avatar`, ADD `public_key` TEXT NOT NULL AFTER `private_key`;

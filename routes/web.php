@@ -134,3 +134,8 @@ Route::get('products/item/{id}', 'ProductController@getItem');
 
 
 Route::get('function', 'HomeController@getFunction');
+
+//IS_TEST
+Route::get('test', 'TestController@getTest');
+Route::post('test', 'TestController@decrypt');
+

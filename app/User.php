@@ -18,7 +18,7 @@ class User extends Model
      * @var array
      */
     protected $fillable = [
-        'account', 'sn', 'password', 'role', 'name', 'birthday', 'gender', 'email', 'enable', 'avatar'
+        'account', 'sn', 'password', 'role', 'name', 'birthday', 'gender', 'email', 'enable', 'avatar', 'private_key', 'public_key'
     ];
 
     /**
@@ -27,7 +27,7 @@ class User extends Model
      * @var array
      */
     protected $hidden = [
-        'password',
+        'password',  'private_key'
     ];
 
     public function getAvatarUrl()
