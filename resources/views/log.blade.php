@@ -16,7 +16,7 @@
             toastr['{{$type}}']({!! json_encode($message) !!});
         @endif
     };
-    @if(!session('user'))
+    @if(!session('user') || session('refreshKey'))
     sessionStorage.clear();
     @endif
 </script>

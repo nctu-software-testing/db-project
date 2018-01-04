@@ -87,6 +87,7 @@ class UserController extends BaseController
                 //TODO: Check references
                 //$request->session()->put('user', json_decode($check_user->toJson()));
                 $this->updateUser($check_user);
+                session()->flash('refreshKey', true);
                 return $this->result('登入成功', true);
             }
         }
@@ -97,6 +98,7 @@ class UserController extends BaseController
     {
         $request->session()->flush();
         $request->session()->flash('log', '登出成功');
+        $request->session()->flash('refreshKey', true);
         return redirect('/');
     }
 
