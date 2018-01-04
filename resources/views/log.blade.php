@@ -16,5 +16,8 @@
             toastr['{{$type}}']({!! json_encode($message) !!});
         @endif
     };
+    @if(!session('user'))
+    sessionStorage.clear();
+    @endif
 </script>
 

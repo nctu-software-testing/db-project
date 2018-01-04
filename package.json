@@ -32,5 +32,7 @@
   "author": "",
   "license": "ISC",
   "homepage": "https://github.com/ntut-csie/web-programming-fin-S17u#readme",
-  "dependencies": {}
+  "dependencies": {
+    "jsencrypt": "^2.3.1"
+  }
 }

@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 
 class TestController extends BaseController
 {
@@ -16,25 +14,33 @@ class TestController extends BaseController
     }
 
 
-    public function postPublicKey(Request $request){
-        $path = 'public/IS/public.key';
-        $result =  file_get_contents($path);
-        return $result;
+    public function postHandShake(Request $request)
+    {
+        $public_key = $request->session()->get('user')->public_key;
+        if (!empty($public_key))
+            return $this->result($public_key, true);
+        else
+            return $this->result('Error', false);
     }
 
     public function getTest(Request $request)
     {
-        $puk = $request->session()->get('user')->public_key;
-        return view('test', ['puk' => $puk]);
+        return view('test');
     }
 
-    public function decrypt(Request $request)
+    public function postDecrypt(Request $request)
     {
         $cipher_text = request('cipher_text');
-        $private_key = $request->session()->get('user')->private_key;
+        $cipher = base64_decode($cipher_text);
+        $private_key_text = $request->session()->get('user')->private_key;
+        $private_key = openssl_pkey_get_private($private_key_text);
 
         // decrypt
-        openssl_private_decrypt($cipher_text, $plain_text, $private_key);
+        openssl_private_decrypt($cipher, $plain_text, $private_key);
+
+        if (is_null($plain_text)) {
+            return $this->result('Something went wrong.', false);
+        }
 
         return $this->result($plain_text, true);
     }

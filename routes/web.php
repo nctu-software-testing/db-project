@@ -46,6 +46,8 @@ Route::group([
     Route::post('removeProductFromShoppingcart', 'ShoppingCartController@removeProductFromShoppingcart');
 
     Route::post('shopping-cart/discount', 'ShoppingCartController@postSetDiscount');
+
+    Route::post('user/hand-shake', 'TestController@postHandShake');
 });
 
 Route::group([
@@ -137,5 +139,5 @@ Route::get('function', 'HomeController@getFunction');
 
 //IS_TEST
 Route::get('test', 'TestController@getTest');
-Route::post('test', 'TestController@decrypt');
+Route::post('test', 'TestController@postDecrypt');
 

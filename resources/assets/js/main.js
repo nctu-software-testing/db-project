@@ -73,6 +73,24 @@ function bAlert(title, body, closeBtn = '關閉') {
     return m;
 }
 
+function loadKey() {
+    const KEY = 'public_key';
+    let key = sessionStorage.getItem(KEY);
+    if (key) {
+        return new Promise((a, b) => a(key));
+    } else {
+        return ajax('POST', ApiPrefix + 'user/hand-shake')
+            .then((r) => {
+                if (r.success) {
+                    key = r.result;
+                    sessionStorage.setItem(KEY, r.result);
+                    return new Promise((a, b) => a(key));
+                }
+            });
+    }
+
+}
+
 
 require('./safariWarning');
 
@@ -147,4 +165,5 @@ module.exports = {
     },
     palette: require('./palette'),
     Captcha: require('./Captcha'),
+    GetPublicKey: loadKey,
 };
