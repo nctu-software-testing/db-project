@@ -1,6 +1,9 @@
 @extends('base')
 @section('extraScript')
     <script type="text/javascript" src="{{asset('js/ckeditor/ckeditor.js')}}"></script>
+    <meta property="og:title" content="{{$p->product_name}} - Any Buy 任購網">
+    <meta property="og:description" content="{{$p->product_information}}">
+    <meta property="og:image" content="{{action('ProductController@getImage', ['pid'=>$p->id, 'id'=>0])}}">
 @endsection
 @section('content')
     <div class="container product-header">
