@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Location;
+use App\Service\IS_Encryption;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -30,21 +31,27 @@ class UserController extends BaseController
             return $this->result($captchaRes['message'], false);
         }
 
+        $reqData = $this->getEncryptedData($request);
+        if ($reqData === null)
+            return $this->result('參數錯誤', false);
+
+        $reqData = collect($reqData);
+
         //讀表單
-        $account = request('account');
-        $password = bcrypt(request('password'));
-        $name = request('name');
-        $role = request('role');
+        $account = $reqData->get('account');
+        $password = bcrypt($reqData->get('password'));
+        $name = $reqData->get('name');
+        $role = $reqData->get('role');
         if (!preg_match("/^(B|C)$/", $role)) {
             return $this->result('參數錯誤', false);
         }
-        $sn = request('sn');
-        $gender = request('gender');
+        $sn = $reqData->get('sn');
+        $gender = $reqData->get('gender');
         if (!preg_match("/^(男|女)$/", $gender)) {
             return $this->result('參數錯誤', false);
         }
-        $email = request('email');
-        $birthday = request('birthday');
+        $email = $reqData->get('email');
+        $birthday = $reqData->get('birthday');
         //資料封裝
         $new_user = new User();
         $new_user->account = $account;
@@ -55,7 +62,7 @@ class UserController extends BaseController
         $new_user->gender = $gender;
         $new_user->email = $email;
         $new_user->birthday = $birthday;
-        $keyPair = $this->createKeyPair();
+        $keyPair = IS_Encryption::createKeyPair();
         $new_user->public_key = $keyPair->public;
         $new_user->private_key = $keyPair->private;
         //
@@ -70,9 +77,15 @@ class UserController extends BaseController
 
     public function postLogin(Request $request)
     {
+
+        $reqData = $this->getEncryptedData($request);
+        if ($reqData === null)
+            return $this->result('參數錯誤', false);
+
+        $reqData = collect($reqData);
         //讀表單
-        $account = request('account');
-        $password = request('password');
+        $account = $reqData->get('account');
+        $password = $reqData->get('password');
         $captchaRes = $this->checkCaptcha();
 
         if (!$captchaRes['success']) {
@@ -84,8 +97,6 @@ class UserController extends BaseController
         if ($check_user) {
             $dbpassword = $check_user->password;
             if (Hash::check($password, $dbpassword)) {
-                //TODO: Check references
-                //$request->session()->put('user', json_decode($check_user->toJson()));
                 $this->updateUser($check_user);
                 session()->flash('refreshKey', true);
                 return $this->result('登入成功', true);
@@ -159,7 +170,7 @@ class UserController extends BaseController
     private function updateUser(User $user): User
     {
         if (empty($user->private_key) || empty($user->public_key)) {
-            $keyPair = $this->createKeyPair();
+            $keyPair = IS_Encryption::createKeyPair();
             $user->public_key = $keyPair->public;
             $user->private_key = $keyPair->private;
         }
@@ -168,35 +179,5 @@ class UserController extends BaseController
         session()->put('user', $user);
 
         return $user;
-    }
-
-    /**
-     * Create Key Pair
-     * @property string public
-     * @property string private
-     */
-    private function createKeyPair()
-    {
-        //
-        $config = [
-            "digest_alg" => "sha512",
-            "private_key_bits" => 2048,
-            "private_key_type" => OPENSSL_KEYTYPE_RSA,
-        ];
-
-        // Create the keypair
-        $res = openssl_pkey_new($config);
-
-        // Get private key
-        openssl_pkey_export($res, $private_key);
-
-        // Get public key
-        $public_key = openssl_pkey_get_details($res);
-        // Save the public key in public.key file. Send this file to anyone who want to send you the encrypted data.
-        $public_key = $public_key["key"];
-        $ret = new \stdClass();
-        $ret->public = $public_key;
-        $ret->private = $private_key;
-        return $ret;
     }
 }

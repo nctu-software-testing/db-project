@@ -1,10 +1,65 @@
 const Bezier = require('./Bezier');
 const ApiPrefix = require('./ApiPrefix');
-
+const Encryption = require('./Encryption');
+const sha256 = require('sha256');
 let CSRF_TOKEN_ELEMENT = document.querySelector('meta[name="csrf-token"]') || {};
 $.ajaxSetup({
     headers: {'X-CSRF-TOKEN': CSRF_TOKEN_ELEMENT.content}
 });
+
+function encryptAjax(method, url, inputData) {
+    method = method.toUpperCase();
+    let head = {};
+    let data = data || {};
+    if (inputData instanceof HTMLFormElement) {
+        let fd = new FormData(inputData);
+        fd.forEach((v, k) => {
+            if (typeof v !== 'string' || typeof k !== 'string')
+                throw 'Unsupported Data';
+            data[k] = v;
+        });
+    } else {
+        data = Object.assign({}, inputData);
+    }
+
+    head['X-CSRF-TOKEN'] = CSRF_TOKEN_ELEMENT.content;
+    let aesKeyStr = JSON.stringify(Encryption.loadAesKey());
+    let param = new URLSearchParams();
+
+    for (let k in data) {
+        if (data.hasOwnProperty(k))
+            param.append(k, data[k]);
+    }
+
+    return Encryption.rsaEncrypt(aesKeyStr)
+        .then(encKey => {
+            let paramStr = param.toString();
+            head['X-Friends-Sugoi'] = Encryption.encrypt(sha256(paramStr));
+            head['X-Friends-Tanoshii'] = encKey;
+            let conf = {
+                data: Encryption.encrypt(paramStr),
+                type: method,
+                cache: false,
+                processData: false,
+                contentType: 'application/any-buy',
+                beforeSend: function (request) {
+                    for (let k in head) {
+                        if (head.hasOwnProperty(k)) {
+                            request.setRequestHeader(k, head[k]);
+                        }
+                    }
+                },
+            };
+
+            if (method === 'HEAD') {
+                delete conf.data;
+            }
+
+            return new Promise((a, b) => {
+                jQuery.ajax(url, conf).done(a).fail(b);
+            })
+        });
+}
 
 function ajax(method, url, data) {
     method = method.toUpperCase();
@@ -73,25 +128,6 @@ function bAlert(title, body, closeBtn = '關閉') {
     return m;
 }
 
-function loadKey() {
-    const KEY = 'public_key';
-    let key = sessionStorage.getItem(KEY);
-    if (key) {
-        return new Promise((a, b) => a(key));
-    } else {
-        return ajax('POST', ApiPrefix + 'user/hand-shake')
-            .then((r) => {
-                if (r.success) {
-                    key = r.result;
-                    sessionStorage.setItem(KEY, r.result);
-                    return new Promise((a, b) => a(key));
-                }
-            });
-    }
-
-}
-
-
 require('./safariWarning');
 
 $(function () {
@@ -155,6 +191,7 @@ Date.prototype.format = require('./Date');
 
 module.exports = {
     ajax: ajax,
+    encryptAjax: encryptAjax,
     bAlert: bAlert,
     Bezier: Bezier,
     Imgur: require('./Imgur'),
@@ -165,5 +202,8 @@ module.exports = {
     },
     palette: require('./palette'),
     Captcha: require('./Captcha'),
-    GetPublicKey: loadKey,
+    GetPublicKey: Encryption.loadRsaKey,
+    Encryption: Encryption,
+    JSEncrypt: Encryption.JSEncrypt,
+    AES: Encryption.AES,
 };

@@ -25,8 +25,14 @@ class ShoppingCartController extends BaseController
     //購物車
     public function buyProduct(Request $request)
     {
-        $id = request('id');
-        $amount = request('amount');
+        $reqData = $this->getEncryptedData($request);
+        if (is_array($reqData))
+            $reqData = collect($reqData);
+        else
+            return $this->result('WTF', false);
+
+        $id = $reqData->get('id');
+        $amount = $reqData->get('amount');
         $now = new DateTime();
         $p = Product::where("id", $id)
             ->where('start_date', '<=', $now)
@@ -91,8 +97,14 @@ class ShoppingCartController extends BaseController
 
     public function changeAmount(Request $request)
     {
-        $id = request('id');
-        $amount = request('amount');
+        $reqData = $this->getEncryptedData($request);
+        if (is_array($reqData))
+            $reqData = collect($reqData);
+        else
+            return $this->result('WTF', false);
+
+        $id = $reqData->get('id');
+        $amount = $reqData->get('amount');
         $shoppingcart = session()->get('shoppingcart');
         for ($i = 0; $i < count($shoppingcart); $i++) {
             if ($shoppingcart[$i]->product->id == $id) {
@@ -107,7 +119,13 @@ class ShoppingCartController extends BaseController
 
     public function removeProductFromShoppingcart(Request $request)
     {
-        $id = request('id');
+        $reqData = $this->getEncryptedData($request);
+        if (is_array($reqData))
+            $reqData = collect($reqData);
+        else
+            return $this->result('WTF', false);
+
+        $id = $reqData->get('id');
         $shoppingcart = session()->get('shoppingcart');
         $flag = false;
         for ($i = 0; $i < count($shoppingcart) - 1; $i++) {
@@ -176,15 +194,19 @@ class ShoppingCartController extends BaseController
 
     public function checkOut(Request $request)
     {
+        $reqData = $this->getEncryptedData($request);
+        if (is_array($reqData))
+            $reqData = collect($reqData);
+        else
+            return $this->result('參數錯誤', false);
         $uid = $request->session()->get('user')->id;
-        $locationid = request('location');
+        $locationid = $reqData->get('location');
         $discountcode = session()->get('discount')['code'];
         $final = session()->get('final');
         $location = Location::where('id', $locationid)->where('user_id', $uid)
             ->first();
         if (!$location) {
-            $request->session()->flash('log', '參數錯誤');
-            return redirect()->back();
+            return $this->result('參數錯誤', false);
         }
         $order = new Order();
         $shippingCost = $this->getShippingCost($request);
@@ -211,16 +233,21 @@ class ShoppingCartController extends BaseController
             $op->save();
         }
         $request->session()->forget('shoppingcart');
-        $request->session()->flash('log', '成功');
         session()->remove('discount');
-        return redirect('/');
+        return $this->result('購買成功', true);
     }
 
 
     public function postSetDiscount(Request $request)
     {
+        $reqData = $this->getEncryptedData($request);
+        if (is_array($reqData))
+            $reqData = collect($reqData);
+        else
+            return $this->result('參數錯誤', false);
+
         $now = new DateTime();
-        $code = $request->get('code');
+        $code = $reqData->get('code');
         $code = Discount::decrypt($code) ?? -1;
         $d = Discount::where("id", $code)
             ->where('start_discount_time', '<=', $now)

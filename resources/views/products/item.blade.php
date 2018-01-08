@@ -18,18 +18,19 @@
                             @endif
                         @endfor
                     </ol>
-                    </ol>
                     <!--/.Indicators-->
                     <!--Slides-->
                     <div class="carousel-inner" role="listbox">
                         @for ($i = 0; $i < $count; $i++)
                             @if ($i == '0')
                                 <div class="carousel-item active">
-                                    <img class="preview{{$i}} product-image" alt="placeholder" src="{{action('ProductController@getImage', ['pid'=>$p->id, 'id'=>$i])}}">
+                                    <img class="preview{{$i}} product-image" alt="placeholder"
+                                         src="{{action('ProductController@getImage', ['pid'=>$p->id, 'id'=>$i])}}">
                                 </div>
                             @else
                                 <div class="carousel-item ">
-                                    <img class="preview{{$i}} product-image" alt="placeholder" src="{{action('ProductController@getImage', ['pid'=>$p->id, 'id'=>$i])}}">
+                                    <img class="preview{{$i}} product-image" alt="placeholder"
+                                         src="{{action('ProductController@getImage', ['pid'=>$p->id, 'id'=>$i])}}">
                                 </div>
                             @endif
                         @endfor
@@ -54,21 +55,25 @@
                     <div class="info-header">
                         <p class="text-right">供應商：{{$p->provider->name}}</p>
                         <h1>{{$p->product_name}}</h1>
-                        <h6 class="suggest">建議售價 NT$ <del>{{$p->price*1.2}}</del> </h6>
+                        <h6 class="suggest">建議售價 NT$
+                            <del>{{$p->price*1.2}}</del>
+                        </h6>
                         <h2 class="product-price">NT$ {{$p->price}}</h2>
                     </div>
                     <div class="info-about">
-                        <a class="chip" href="{{action('ProductController@getProducts')}}?search[category]={{$p->category_id}}">
+                        <a class="chip"
+                           href="{{action('ProductController@getProducts')}}?search[category]={{$p->category_id}}">
                             {{$p->product_type}}
                         </a>
                         <h6>販售截止日 {{$p->end_date}}</h6>
                     </div>
                     <div class="info-price">
                         <h6>數量&nbsp;&nbsp;&nbsp;
-                            <input id = "amount" type= "number" class="input-alternate" min="0" max="10" value="1">
+                            <input id="amount" type="number" class="input-alternate" min="0" max="10" value="1">
                             &nbsp;&nbsp;
                             <span class="remaining"> 還剩 {{$p->getRemaining()}} 件</span></h6>
-                        <button type="button" class=" buy-btn btn btn-default" onclick="Buy('{{$p->id}}')">加入購物車</button>
+                        <button type="button" class=" buy-btn btn btn-default" onclick="Buy('{{$p->id}}')">加入購物車
+                        </button>
                     </div>
                 </div>
             </div>
@@ -82,49 +87,51 @@
 
 @endsection
 @section('eofScript')
-<script>
-    $('#amount').change(function() {
-        var amount =  $('#amount').val();
-        if (isNaN(amount) || amount <= 0  || amount =="" ) {
-            $('#amount').val("1");
-            alert("請輸入正確數字");
-        }
-    });
-
-    function getBBCodeFromHtml(code){
-        let fragment = CKEDITOR.htmlParser.fragment.fromBBCode( code ),
-            writer = new CKEDITOR.htmlParser.basicWriter();
-        fragment.writeHtml(writer);
-        return writer.getHtml();
-    }
-    $(()=>{
-        let desc = $("#description");
-        let html = getBBCodeFromHtml(desc.text());
-        desc.empty().html(html);
-        desc.removeAttr('hidden');
-    });
-    function Buy(id) {
-/*
-        var amount = prompt("請輸入購買數量!", "1");
-        if (isNaN(amount) || amount < 0 || !amount) {
-            alert("請輸入正確數字");
-            return;
-        }
-*/
-        var number_element = document.getElementById('amount');
-        var number = number_element.value;
-        toastr.success('已加入購物車');
-        ajax("POST", "{{action('ShoppingCartController@buyProduct')}}",
-            {
-                id: id,
-                amount: number,
-            }).then(function (data) {
-            if(!data.success){
-                toastr.error(data.result);
-            }else{
-                if(window.updateShoppingCartCount) updateShoppingCartCount();
+    <script>
+        $('#amount').change(function () {
+            var amount = $('#amount').val();
+            if (isNaN(amount) || amount <= 0 || amount == "") {
+                $('#amount').val("1");
+                alert("請輸入正確數字");
             }
         });
-    }
-</script>
+
+        function getBBCodeFromHtml(code) {
+            let fragment = CKEDITOR.htmlParser.fragment.fromBBCode(code),
+                writer = new CKEDITOR.htmlParser.basicWriter();
+            fragment.writeHtml(writer);
+            return writer.getHtml();
+        }
+
+        $(() => {
+            let desc = $("#description");
+            let html = getBBCodeFromHtml(desc.text());
+            desc.empty().html(html);
+            desc.removeAttr('hidden');
+        });
+
+        function Buy(id) {
+            /*
+                    var amount = prompt("請輸入購買數量!", "1");
+                    if (isNaN(amount) || amount < 0 || !amount) {
+                        alert("請輸入正確數字");
+                        return;
+                    }
+            */
+            var number_element = document.getElementById('amount');
+            var number = number_element.value;
+            encryptAjax("POST", "{{action('ShoppingCartController@buyProduct')}}",
+                {
+                    id: id,
+                    amount: number,
+                }).then(function (data) {
+                if (!data.success) {
+                    toastr.error(data.result);
+                } else {
+                    toastr.success('已加入購物車');
+                    if (window.updateShoppingCartCount) updateShoppingCartCount();
+                }
+            });
+        }
+    </script>
 @endsection

@@ -10,7 +10,7 @@
             GetPublicKey().then(key => {
                 encrypt.setKey(key);
                 var encrypted = encrypt.encrypt($("#plaintext").val());
-                ajax('POST', '{{action('TestController@postDecrypt')}}',
+                ajax('POST', '{{action('KeyController@postDecrypt')}}',
                     {
                         cipher_text: encrypted
                     }

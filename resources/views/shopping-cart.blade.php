@@ -118,7 +118,7 @@
     <script>
         $('#discountBtn').on('click', function () {
             let discountCode = $("#discount").val();
-            ajax('POST', '{{action('ShoppingCartController@postSetDiscount')}}', {
+            encryptAjax('POST', '{{action('ShoppingCartController@postSetDiscount')}}', {
                 code: discountCode
             })
                 .then(d => {
@@ -127,12 +127,15 @@
                         let postFix = d.result.type === '%' ? '%' : '';
                         toastr.success(d.result.message);
                         $("#finalCost").text(`$${d.result.final_cost}`);
-                        $("")
                         $("#discountValue").text(`${preFix}-${d.result.discountAmount}${postFix}`);
                     } else {
-                        $("#finalCost").text(`$${d.result.final_cost}`);
-                        $("#discountValue").text(0);
-                        toastr.error(d.result.message);
+                        if(typeof d.result === 'string'){
+                            toastr.error(d.result);
+                        }else {
+                            $("#finalCost").text(`$${d.result.final_cost}`);
+                            $("#discountValue").text(0);
+                            toastr.error(d.result.message);
+                        }
                     }
                 })
         });
@@ -144,7 +147,7 @@
                 alert("請輸入正確數字");
                 return;
             }
-            ajax('POST', '{{action('ShoppingCartController@changeAmount')}}', {
+            encryptAjax('POST', '{{action('ShoppingCartController@changeAmount')}}', {
                 id: id,
                 amount: amount,
             }).then(function (d) {
@@ -159,8 +162,7 @@
         function Remove(id) {
             var ok = confirm("確認將商品移出購物車?");
             if (ok) {
-
-                ajax('POST', '{{action('ShoppingCartController@removeProductFromShoppingcart')}}', {
+                encryptAjax('POST', '{{action('ShoppingCartController@removeProductFromShoppingcart')}}', {
                     id: id,
                 }).then(function (d) {
                     if (d.success) {

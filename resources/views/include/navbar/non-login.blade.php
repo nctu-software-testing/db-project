@@ -46,7 +46,7 @@
         $("#login").submit(function (e) {
             let statusBar = this.querySelector('.status');
             statusBar.textContent = '登入中...';
-            ajax(this.method, this.action, this)
+            encryptAjax(this.method, this.action, this)
                 .then((result) => {
                     statusBar.textContent = result.result;
                     if (result.success) {

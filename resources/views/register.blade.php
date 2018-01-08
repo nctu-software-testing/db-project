@@ -233,7 +233,7 @@
         $('#regForm').submit(function(e){
             let regBtn = $("#regBtn")[0];
             regBtn.disabled = true;
-            ajax("POST", this.action, this)
+            encryptAjax("POST", this.action, this)
                 .then((d) => {
                     if (d.success) {
                         toastr.success(d.result);

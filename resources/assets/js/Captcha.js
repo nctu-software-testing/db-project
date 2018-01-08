@@ -122,7 +122,7 @@ class Captcha {
         this.updateImagePosition();
         console.log('entered');
         this._input.disabled = true;
-        ajax('POST', this._verifyPath, {value: this._input.value})
+        encryptAjax('POST', this._verifyPath, {value: this._input.value})
             .then((d) => {
                 if (d.success) {
                     toastr.success(d.result, '', {
