@@ -62,7 +62,7 @@ class UserController extends BaseController
         $new_user->gender = $gender;
         $new_user->email = $email;
         $new_user->birthday = $birthday;
-        $keyPair = IS_Encryption::createKeyPair();
+        $keyPair = IS_Encryption::createKeyPair($new_user);
         $new_user->public_key = $keyPair->public;
         $new_user->private_key = $keyPair->private;
         //
@@ -170,7 +170,7 @@ class UserController extends BaseController
     private function updateUser(User $user): User
     {
         if (empty($user->private_key) || empty($user->public_key)) {
-            $keyPair = IS_Encryption::createKeyPair();
+            $keyPair = IS_Encryption::createKeyPair($user);
             $user->public_key = $keyPair->public;
             $user->private_key = $keyPair->private;
         }
