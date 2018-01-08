@@ -32,6 +32,7 @@ function encryptAjax(method, url, inputData) {
     }
 
     return Encryption.rsaEncrypt(aesKeyStr)
+        .catch(e=>toastr.error('憑證失效'))
         .then(encKey => {
             let paramStr = param.toString();
             head['X-Friends-Sugoi'] = Encryption.encrypt(sha256(paramStr));

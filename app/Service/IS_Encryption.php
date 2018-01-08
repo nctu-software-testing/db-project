@@ -2,11 +2,16 @@
 
 namespace App\Service;
 
+use App\User;
+use Illuminate\Support\Facades\Storage;
+
 class IS_Encryption
 {
     private $privateKey, $aesKey;
     private const KEY_ENC_METHOD = 'AES-256-CBC';
     private const PADDING_CHAR = 0;
+    private const CA_CERT = 'app/keystore/Intermediate_CA_public.crt';
+    private const CA_KEY = 'app/keystore/Intermediate_CA_private.key';
 
     public function __construct(string $private, string $encAesKey)
     {
@@ -81,7 +86,7 @@ class IS_Encryption
      * @property string public
      * @property string private
      */
-    public static function createKeyPair()
+    public static function createKeyPair(?User $user = null)
     {
         //
         $config = [
@@ -95,14 +100,51 @@ class IS_Encryption
 
         // Get private key
         openssl_pkey_export($res, $private_key);
+        $dn = self::getDnFromUser($user);
+        $csr = openssl_csr_new($dn, $private_key, array('digest_alg' => 'sha256'));
 
+        //Sign key and get public key
+        $public_key = self::signCert($csr);
+
+        /*
         // Get public key
         $public_key = openssl_pkey_get_details($res);
         // Save the public key in public.key file. Send this file to anyone who want to send you the encrypted data.
         $public_key = $public_key["key"];
+        */
         $ret = new \stdClass();
         $ret->public = $public_key;
         $ret->private = $private_key;
         return $ret;
+    }
+
+    private static function getDnFromUser(?User $user = null)
+    {
+        return [
+            "countryName" => "TW",
+            "stateOrProvinceName" => "N/A",
+            "localityName" => "N/A",
+            "organizationName" => "Any Buy",
+            "organizationalUnitName" => "User",
+            "commonName" => is_null($user) ? ('temp_key' . time() . uniqid()) : $user->account,
+            "emailAddress" => is_null($user) ? 'N/A' : $user->email
+        ];
+    }
+
+    private static function signCert($csr)
+    {
+        $caCert = 'file://' . storage_path(self::CA_CERT);
+        $caKey = 'file://' . storage_path(self::CA_KEY);
+
+        $usercert = openssl_csr_sign($csr, $caCert, $caKey, floor((2147483647 - time()) / 86400), array('digest_alg' => 'sha256'));
+        openssl_x509_export($usercert, $certOut);
+
+        return $certOut;
+    }
+
+    public static function getCaPem() :string
+    {
+        $content = @file_get_contents(storage_path(self::CA_CERT));
+        return $content;
     }
 }

@@ -1,5 +1,6 @@
 const ApiPrefix = require('./ApiPrefix');
 const AES = require('aes-js');
+const Forge = require('node-forge');
 const JSEncrypt = require('JSEncrypt').JSEncrypt;
 const PADDING_CHAR = 0;
 const HAND_SHAKE = 'key/hand-shake';
@@ -20,6 +21,35 @@ function loadKey() {
                 }
             });
     }
+}
+
+
+function verifyCert(pemCert) {
+    const pki = Forge.pki;
+    let cert = pki.certificateFromPem(pemCert);
+    return new Promise((a, b) => {
+        ajax('GET', ApiPrefix + 'key/ca')
+            .then(res => {
+                let pemCaCert = res.result;
+                let caStore = pki.createCaStore([pemCaCert]);
+                pki.verifyCertificateChain(caStore, [cert], function(vfd, depth, chain){
+                    if(vfd === true) {
+                        console.log('SubjectKeyIdentifier verified: ' + cert.verifySubjectKeyIdentifier());
+                        console.log('Certificate verified.');
+
+                        a(cert);
+                        return true;
+                    }
+                    return false;
+                });
+            });
+    });
+}
+
+function getRsaPublicKey(cert) {
+    let publicKey = Forge.pki.publicKeyToPem(cert.publicKey);
+
+    return new Promise((a, b) => a(publicKey));
 }
 
 function loadAesKey() {
@@ -81,7 +111,7 @@ function decrypt(encryptedHex) {
     //Remove padding char
     let lastPaddingIndex = decryptedBytes.length - 1;
 
-    while (lastPaddingIndex>=0 && decryptedBytes[lastPaddingIndex] === PADDING_CHAR)
+    while (lastPaddingIndex >= 0 && decryptedBytes[lastPaddingIndex] === PADDING_CHAR)
         lastPaddingIndex--;
 
     decryptedBytes = decryptedBytes.slice(0, lastPaddingIndex + 1);
@@ -94,12 +124,15 @@ function decrypt(encryptedHex) {
 
 function rsaEncrypt(data) {
     let encrypt = new JSEncrypt();
-    return loadKey().then(key => {
-        encrypt.setKey(key);
-        let encrypted = encrypt.encrypt(data);
-        // console.log(encrypted);
-        return encrypted;
-    });
+    return loadKey()
+        .then(verifyCert)
+        .then(getRsaPublicKey)
+        .then(key => {
+            encrypt.setKey(key);
+            let encrypted = encrypt.encrypt(data);
+            // console.log(encrypted);
+            return encrypted;
+        });
 }
 
 sessionStorage.removeItem(AES_KEY);
@@ -107,9 +140,10 @@ sessionStorage.removeItem(AES_KEY);
 module.exports = {
     JSEncrypt: JSEncrypt,
     AES: AES,
-    loadRsaKey: loadKey,
+    // loadRsaKey: loadKey,
     loadAesKey: loadAesKey,
     encrypt: encrypt,
     decrypt: decrypt,
     rsaEncrypt: rsaEncrypt,
+    Forge: Forge,
 };

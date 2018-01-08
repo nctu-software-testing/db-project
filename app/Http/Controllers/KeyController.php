@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Service\IS_Encryption;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Storage;
 
 class KeyController extends BaseController
 {
@@ -34,6 +36,18 @@ class KeyController extends BaseController
 
             return $this->result($public, true);
         }
+    }
+
+    public function anyMakeKeyEmpty()
+    {
+        session()->forget('tmpKey');
+        return $this->result('OK', true);
+    }
+
+    public function getCaCert()
+    {
+        $content = IS_Encryption::getCaPem();
+        return $this->result($content, true);
     }
 
     /*
