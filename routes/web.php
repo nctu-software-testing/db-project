@@ -46,6 +46,7 @@ Route::group([
     Route::post('removeProductFromShoppingcart', 'ShoppingCartController@removeProductFromShoppingcart');
 
     Route::post('shopping-cart/discount', 'ShoppingCartController@postSetDiscount');
+
 });
 
 Route::group([
@@ -134,3 +135,11 @@ Route::get('products/item/{id}', 'ProductController@getItem');
 
 
 Route::get('function', 'HomeController@getFunction');
+
+//IS_TEST
+Route::post('key/hand-shake', 'KeyController@postHandShake');
+Route::any('key/empty', 'KeyController@anyMakeKeyEmpty');
+Route::any('key/ca', 'KeyController@getCaCert');
+// Route::get('key', 'KeyController@getTest');
+// Route::post('key', 'KeyController@postDecrypt');
+

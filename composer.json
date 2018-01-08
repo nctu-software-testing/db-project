@@ -73,6 +73,7 @@
         "deploy": [
             "composer run cache-clear",
             "npm run prod",
+            "composer dump-autoload",
             "php artisan optimize"
         ],
         "deploy-dev": [

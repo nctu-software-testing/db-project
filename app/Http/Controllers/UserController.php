@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Location;
+use App\Service\IS_Encryption;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -30,21 +31,27 @@ class UserController extends BaseController
             return $this->result($captchaRes['message'], false);
         }
 
+        $reqData = $this->getEncryptedData($request);
+        if ($reqData === null)
+            return $this->result('參數錯誤', false);
+
+        $reqData = collect($reqData);
+
         //讀表單
-        $account = request('account');
-        $password = bcrypt(request('password'));
-        $name = request('name');
-        $role = request('role');
+        $account = $reqData->get('account');
+        $password = bcrypt($reqData->get('password'));
+        $name = $reqData->get('name');
+        $role = $reqData->get('role');
         if (!preg_match("/^(B|C)$/", $role)) {
             return $this->result('參數錯誤', false);
         }
-        $sn = request('sn');
-        $gender = request('gender');
+        $sn = $reqData->get('sn');
+        $gender = $reqData->get('gender');
         if (!preg_match("/^(男|女)$/", $gender)) {
             return $this->result('參數錯誤', false);
         }
-        $email = request('email');
-        $birthday = request('birthday');
+        $email = $reqData->get('email');
+        $birthday = $reqData->get('birthday');
         //資料封裝
         $new_user = new User();
         $new_user->account = $account;
@@ -55,6 +62,10 @@ class UserController extends BaseController
         $new_user->gender = $gender;
         $new_user->email = $email;
         $new_user->birthday = $birthday;
+        $keyPair = IS_Encryption::createKeyPair();
+        $new_user->public_key = $keyPair->public;
+        $new_user->private_key = $keyPair->private;
+        //
         $check_user = User::where('account', $account)->count();
         if ($check_user !== 0) {
             return $this->result('已有相同帳戶', false);
@@ -66,9 +77,15 @@ class UserController extends BaseController
 
     public function postLogin(Request $request)
     {
+
+        $reqData = $this->getEncryptedData($request);
+        if ($reqData === null)
+            return $this->result('參數錯誤', false);
+
+        $reqData = collect($reqData);
         //讀表單
-        $account = request('account');
-        $password = request('password');
+        $account = $reqData->get('account');
+        $password = $reqData->get('password');
         $captchaRes = $this->checkCaptcha();
 
         if (!$captchaRes['success']) {
@@ -80,9 +97,8 @@ class UserController extends BaseController
         if ($check_user) {
             $dbpassword = $check_user->password;
             if (Hash::check($password, $dbpassword)) {
-                //TODO: Check references
-                //$request->session()->put('user', json_decode($check_user->toJson()));
                 $this->updateUser($check_user);
+                session()->flash('refreshKey', true);
                 return $this->result('登入成功', true);
             }
         }
@@ -93,6 +109,7 @@ class UserController extends BaseController
     {
         $request->session()->flush();
         $request->session()->flash('log', '登出成功');
+        $request->session()->flash('refreshKey', true);
         return redirect('/');
     }
 
@@ -152,6 +169,12 @@ class UserController extends BaseController
 
     private function updateUser(User $user): User
     {
+        if (empty($user->private_key) || empty($user->public_key)) {
+            $keyPair = IS_Encryption::createKeyPair();
+            $user->public_key = $keyPair->public;
+            $user->private_key = $keyPair->private;
+        }
+
         $user->save();
         session()->put('user', $user);
 

@@ -1,7 +1,7 @@
 @extends('base')
 @section('content')
     <div class="container">
-        <form method="POST" action="{{action('ShoppingCartController@checkOut')}}">
+        <form method="POST" action="{{action('ShoppingCartController@checkOut')}}" id="form">
             <div class="row">
                 <div class="col-md-12 checkout-info">
                     <h1>訂單資訊</h1>
@@ -77,7 +77,7 @@
                         </tr>
                         <tr>
                             <td><label for="shipping">運費</label></td>
-                            <td><h5 id="shipping">${{$shippingment}}</h5></td>             
+                            <td><h5 id="shipping">${{$shippingment}}</h5></td>
                         </tr>
                         <tr>
                             <td><label for="price">訂單金額：</label></td>
@@ -89,7 +89,8 @@
                             name="_token"
                             value="{{csrf_token()}}"
                             type="submit" class="btn blue-gradient btn-block btn-rounded btn-check-out"
-                      >下訂單
+                            id="orderBtn"
+                    >下訂單
                     </button>
                 </div>
             </div>
@@ -115,7 +116,7 @@
                                 <label for="cvv_number">卡片末三碼</label>
                             </div>
                             <div class="md-form">
-                                <input type="text" id="exp_month" name="exp_month" class="form-control" >
+                                <input type="text" id="exp_month" name="exp_month" class="form-control">
                                 <label for="exp_month">有效月 如 02 (月)</label>
                             </div>
                             <div class="md-form">
@@ -138,6 +139,26 @@
         $("#creditCard").on('hide.bs.modal', function () {
             let number = $("#card_number").val();
             $("#card_number_txt").text(number);
+        });
+
+        $('#form').on('submit', function (e) {
+            e.preventDefault();
+            let orderBtn = $('#orderBtn');
+            orderBtn.prop('disabled', true);
+            toastr.info('正在處理訂單');
+            encryptAjax('POST', this.action, this)
+                .then(res => {
+                    if (res.success) {
+                        toastr.success(res.result);
+                        setTimeout(() => location.replace('{{asset('/')}}'), 3e3);
+                    } else {
+                        toastr.error(res.result);
+                        orderBtn.prop('disabled', false);
+                    }
+                }).catch(() => {
+
+                orderBtn.prop('disabled', false);
+            })
         });
     </script>
 @endsection

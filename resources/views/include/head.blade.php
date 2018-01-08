@@ -6,6 +6,7 @@
 <!-- Include Script -->
 <script type="text/javascript" src="{{asset('js/mdbootstrap.4.4.0.min.js')}}"></script>
 <script type="text/javascript" src="{{asset('dist/js/app.js')}}"></script>
+<!-- Include Script -->
 
 @yield('extraScript')
 <title>Any Buy 任購網</title>

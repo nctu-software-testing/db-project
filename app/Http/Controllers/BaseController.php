@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+
+use App\Service\IS_Encryption;
+use Illuminate\Http\Request;
+
 class BaseController extends \Illuminate\Routing\Controller
 {
     protected $controllerName = 'base';
@@ -51,5 +55,36 @@ class BaseController extends \Illuminate\Routing\Controller
         } else {
             return ['success' => true, 'message' => '驗證成功'];
         }
+    }
+
+    protected function getPrivateKey(): ?string
+    {
+        return session('user.private_key', session('tmpKey.private'));
+    }
+
+    protected function getEncryptedData(Request $request): ?array
+    {
+        $encChecksum = $request->header('X-Friends-Sugoi');
+        $encAesKey = $request->header('X-Friends-Tanoshii');
+        if (empty($encAesKey)) return null;
+        try {
+            $is = new IS_Encryption($this->getPrivateKey(), $encAesKey);
+            $content = $request->getContent();
+            $rawData = $is->decrypt($content);
+            $checksum = $is->decrypt($encChecksum);
+            $hash = hash('sha256', $rawData);
+            if ($hash === $checksum) {
+                $ret = [];
+                parse_str($rawData, $ret);
+
+                return $ret;
+            } else {
+                throw new \Exception('Checksum error');
+            }
+        } catch (\Exception $e) {
+            \Debugbar::error($e);
+        }
+
+        return null;
     }
 }

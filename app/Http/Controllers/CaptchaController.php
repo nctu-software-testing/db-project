@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 
@@ -141,9 +141,11 @@ class CaptchaController extends BaseController
     protected function postVerify(Request $request)
     {
         $captcha = session('captcha');
-        if ($captcha) {
+        $reqData = $this->getEncryptedData($request);
+        if ($captcha && is_array($reqData)) {
+            $reqData = collect($reqData);
             // session()->forget('captcha');
-            $value = floatval(request('value', -999));
+            $value = floatval($reqData->get('value', -999));
             if (abs($captcha['selected']['x'] - $value) < self::ALLOW_ERROR_OF_GRID) {
                 $now = time();
                 if ($now - $captcha['created_at'] > self::TIMEOUT) {
