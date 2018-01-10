@@ -25,7 +25,7 @@
 <p class="text-center" style="margin-top: -1.5rem">
     請按住拖動完成上方拼圖
 </p>
-<script type="text/javascript">
+<script type="text/javascript" nonce="{{$nonce}}">
     (function () {
         let c = new Captcha('#captcha');
         c.Initialize()

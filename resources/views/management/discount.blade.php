@@ -99,7 +99,7 @@
     </div>
 @endsection
 @section('eofScript')
-    <script>
+    <script type="text/javascript" nonce="{{$nonce}}">
         $(function () {
             let AllCategory = [];
             ajax('GET', '{{action('CategoryController@getCategory')}}', {type: 'json'})

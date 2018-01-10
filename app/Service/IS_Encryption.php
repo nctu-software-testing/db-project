@@ -147,4 +147,11 @@ class IS_Encryption
         $content = @file_get_contents(storage_path(self::CA_CERT));
         return $content;
     }
+
+    public static function getNonce(): string
+    {
+        $time = $_SERVER['REQUEST_TIME_FLOAT'];
+        $hash = substr(hash('sha256', hash('sha512', $time)), 11, 29);
+        return $hash;
+    }
 }

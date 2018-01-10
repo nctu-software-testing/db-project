@@ -29,7 +29,7 @@ switch (session('user.role')) {
     @if(!empty($path))
         @include('management.menu.'.$path)
     @endif
-    <script type="text/javascript">
+    <script type="text/javascript" nonce="{{$nonce}}">
         (function () {
             let menu = $("#menu");
             let items = menu.find('.list-group-item');

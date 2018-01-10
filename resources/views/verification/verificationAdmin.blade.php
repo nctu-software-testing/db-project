@@ -46,7 +46,7 @@
 
 @endsection
 @section('eofScript')
-    <script>
+    <script type="text/javascript" nonce="{{$nonce}}">
         $(".verify-image").on('click', function (e) {
             window.open(this.href, 'Image', 'height=400,width=600');
             e.preventDefault();

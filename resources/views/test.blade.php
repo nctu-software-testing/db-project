@@ -4,7 +4,7 @@
     <button onclick="Encrypt()">加密</button>
 @endsection
 @section('eofScript')
-    <script>
+    <script type="text/javascript" nonce="{{$nonce}}">
         function Encrypt() {
             let encrypt = new JSEncrypt();
             GetPublicKey().then(key => {

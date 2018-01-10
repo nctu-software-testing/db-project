@@ -24,7 +24,7 @@
     </div>
 @endsection
 @section('eofScript')
-    <script>
+    <script type="text/javascript" nonce="{{$nonce}}">
         (function () {
             let chart1, chart2;
             let getContext = (chartId) => document.getElementById(chartId).querySelector('canvas').getContext('2d');

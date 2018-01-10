@@ -135,7 +135,7 @@
 
 @endsection
 @section('eofScript')
-    <script>
+    <script type="text/javascript" nonce="{{$nonce}}">
         $("#creditCard").on('hide.bs.modal', function () {
             let number = $("#card_number").val();
             $("#card_number_txt").text(number);

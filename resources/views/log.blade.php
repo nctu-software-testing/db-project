@@ -1,5 +1,5 @@
-<script>
-    window.onload = function () {
+<script type="text/javascript" nonce="{{$nonce}}">
+    $(window).on('load', function () {
         <?php
         $log = session('log') ?? null;
         $message = '';
@@ -15,7 +15,7 @@
         @if(!empty($log) && !empty($type))
             toastr['{{$type}}']({!! json_encode($message) !!});
         @endif
-    };
+    });
     @if(!session('user') || session('refreshKey'))
     sessionStorage.clear();
     @endif

@@ -38,6 +38,4 @@
     </div>
 @endsection
 @section('eofScript')
-    <script>
-    </script>
 @endsection

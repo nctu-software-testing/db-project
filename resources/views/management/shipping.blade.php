@@ -63,7 +63,7 @@
     </div>
 @endsection
 @section('eofScript')
-    <script>
+    <script type="text/javascript" nonce="{{$nonce}}">
         function DeleteShipping(id) {
             if (confirm('你要刪除嗎?')) {
                 ajax('DELETE', '{{action('DiscountController@deleteShipping')}}', {id: id})

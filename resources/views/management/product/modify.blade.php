@@ -108,7 +108,7 @@
     </form>
 
 
-    <script>
+    <script type="text/javascript" nonce="{{$nonce}}">
         function Cancel() {
             location.href = "{{action('ProductController@getProducts')}}";
         }

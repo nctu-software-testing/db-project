@@ -30,7 +30,7 @@
                         <td>{{$data[$i]->birthday}}</td>
                         <td>{{$data[$i]->email}}</td>
                         <td>{{$data[$i]->enable?'通過':'未通過'}}</td>
-                        <td><a href="javascript: ChangePwd({{$data[$i]->id}})" style="color:#0275d8;">更改</a></td>
+                        <td><a data-uid="{{$data[$i]->id}}" class="chg-pwd-link" style="color:#0275d8;">更改</a></td>
                     </tr>
                 @endfor
                 </tbody>
@@ -41,7 +41,11 @@
     </div>
 @endsection
 @section('eofScript')
-<script>
+<script type="text/javascript" nonce="{{$nonce}}">
+    $(".chg-pwd-link").on('click', function(e){
+        e.preventDefault();
+        ChangePwd(this.getAttribute('data-uid'));
+    });
     function ChangePwd(id) {
         let alert = bAlert('修改密碼', `
             <form class="form">

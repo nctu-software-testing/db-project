@@ -68,7 +68,7 @@
 
 @endsection
 @section('eofScript')
-    <script>
+    <script type="text/javascript" nonce="{{$nonce}}">
         function Delete(id) {
             var ok = confirm("確認?");
             if (ok) {

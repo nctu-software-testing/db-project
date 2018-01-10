@@ -24,7 +24,7 @@
     </div>
 </form>
 @section('eofScript')
-    <script>
+    <script type="text/javascript" nonce="{{$nonce}}">
         $('.img-uploader').change(function () {
             const DEF_ATTR = 'data-default';
             let imgObj = this.parentNode.querySelector('img');

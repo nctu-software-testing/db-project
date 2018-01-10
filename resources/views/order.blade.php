@@ -39,7 +39,7 @@
     </div>
 @endsection
 @section('eofScript')
-    <script>
+    <script type="text/javascript" nonce="{{$nonce}}">
         $('.order-row').on('click', function (e) {
             location.href = this.querySelector('a.order-details').href;
         });

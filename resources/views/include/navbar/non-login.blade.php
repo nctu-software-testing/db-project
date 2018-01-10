@@ -41,7 +41,7 @@
         </div>
     </div>
 </form>
-<script>
+<script type="text/javascript" nonce="{{$nonce}}">
     $(function () {
         $("#login").submit(function (e) {
             let statusBar = this.querySelector('.status');

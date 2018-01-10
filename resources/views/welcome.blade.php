@@ -148,7 +148,7 @@
     </section>
 @endsection
 @section('eofScript')
-    <script>
+    <script type="text/javascript" nonce="{{$nonce}}">
         window.Pages.Index.init();
     </script>
 @endsection

@@ -93,7 +93,7 @@
 
 @endsection
 @section('eofScript')
-    <script>
+    <script type="text/javascript" nonce="{{$nonce}}">
         function createSearchInput(name){
             return $('<input type="hidden" name="search['+name+']">');
 

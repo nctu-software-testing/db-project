@@ -56,7 +56,7 @@
     </div>
 @endsection
 @section('eofScript')
-    <script>
+    <script type="text/javascript" nonce="{{$nonce}}">
 
         function CreateLocation() {
             document.getElementById('lo').style.display = '';

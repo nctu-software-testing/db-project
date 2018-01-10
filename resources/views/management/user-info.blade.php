@@ -34,7 +34,7 @@
                             <span class="label">Email</span>
                             <span class="content">
                                 {{$data->email}}
-                                <a class="edit-link waves-effect" href="javascript: ChangeEmail()">
+                                <a class="edit-link waves-effect" href="javascript: ChangeEmail()" nonce="{{$nonce}}">
                                     修改
                                     <i class="material-icons">keyboard_arrow_right</i>
                                 </a>
@@ -48,7 +48,7 @@
                             <span class="label">密碼</span>
                             <span class="content">
                                 &nbsp;
-                                <a class="edit-link waves-effect" href="javascript: ChangePwd()">
+                                <a class="edit-link waves-effect" href="javascript: ChangePwd()" nonce="{{$nonce}}">
                                     修改
                                     <i class="material-icons">keyboard_arrow_right</i>
                                 </a>
@@ -80,7 +80,7 @@
     </div>
 @endsection
 @section('eofScript')
-    <script>
+    <script type="text/javascript" nonce="{{$nonce}}">
         function ChangePwd() {
             let alert = bAlert('修改密碼', `
             <form class="form">

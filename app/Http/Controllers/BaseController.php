@@ -14,6 +14,7 @@ class BaseController extends \Illuminate\Routing\Controller
     {
         $this->controllerName = $name;
         $this->setShareVariables('pageName', $name);
+        $this->setShareVariables('nonce', IS_Encryption::getNonce());
     }
 
     protected function setShareVariables($key, $val)

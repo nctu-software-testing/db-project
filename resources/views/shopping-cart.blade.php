@@ -115,7 +115,7 @@
                 display: none
             }</style>
     @endif
-    <script>
+    <script type="text/javascript" nonce="{{$nonce}}">
         $('#discountBtn').on('click', function () {
             let discountCode = $("#discount").val();
             encryptAjax('POST', '{{action('ShoppingCartController@postSetDiscount')}}', {

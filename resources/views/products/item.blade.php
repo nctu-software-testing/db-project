@@ -89,7 +89,7 @@
 
 @endsection
 @section('eofScript')
-    <script>
+    <script type="text/javascript" nonce="{{$nonce}}">
         $('#amount').change(function () {
             var amount = $('#amount').val();
             if (isNaN(amount) || amount <= 0 || amount == "") {

@@ -209,7 +209,7 @@
     </div>
 @endsection
 @section('eofScript')
-    <script>
+    <script type="text/javascript" nonce="{{$nonce}}">
         let setRole = (role) => {
             $('#role').val(role);
             $('#fillInPanel').attr('data-role', role);

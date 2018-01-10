@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Service\IS_Encryption;
 use Closure;
 
 class ContentSecurityPolicy
@@ -18,11 +19,12 @@ class ContentSecurityPolicy
     {
         $response = $next($request);
         $selfUrl = asset('/');
+        $nonce = IS_Encryption::getNonce();
         $rule = [
             // "upgrade-insecure-requests",
             "block-all-mixed-content",
             "default-src 'none'",
-            "script-src 'unsafe-inline' $selfUrl",
+            "script-src 'nonce-$nonce' $selfUrl",
             "style-src 'unsafe-inline' https://fonts.googleapis.com/ $selfUrl",
             "img-src data: blob: https://i.imgur.com/ $selfUrl",
             "font-src data: https://fonts.gstatic.com/ $selfUrl",

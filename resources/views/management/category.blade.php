@@ -55,7 +55,7 @@
     </div>
 @endsection
 @section('eofScript')
-    <script>
+    <script type="text/javascript" nonce="{{$nonce}}">
         function AddCategory() {
             ShowCategory(-1);
         }

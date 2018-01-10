@@ -20,7 +20,7 @@ switch (session('user.role')) {
                 <span class="name">購物車</span>
                 <span class="num" id="cartNum"></span>
             </a>
-            <script>
+            <script type="text/javascript" nonce="{{$nonce}}">
                 function updateShoppingCartCount() {
                     ajax('GET', '{{action('ShoppingCartController@getShoppingCart')}}', {type: 'query'})
                         .then(d => $("#cartNum").text(d.result ? d.result : ''));
