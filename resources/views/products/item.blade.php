@@ -109,6 +109,16 @@
             let desc = $("#description");
             let html = getBBCodeFromHtml(desc.text());
             desc.empty().html(html);
+            desc.find('a').on('click', function (e) {
+                if (!this.href.startsWith("{{asset('/')}}")) {
+                    e.preventDefault();
+                    let hr = '============';
+                    if (confirm(`你確定要開啟外部連結:\n${hr}\n${this.href}\n${hr}\nAnyBuy提醒您惡意的連結可能會使您的帳戶出現危險，是否要繼續?`)) {
+                        let w = window.open("about:blank");
+                        w.location.replace(this.href);
+                    }
+                }
+            });
             desc.removeAttr('hidden');
         });
 
