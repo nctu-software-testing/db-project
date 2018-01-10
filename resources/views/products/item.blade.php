@@ -74,8 +74,7 @@
                             <input id="amount" type="number" class="input-alternate" min="0" max="10" value="1">
                             &nbsp;&nbsp;
                             <span class="remaining"> 還剩 {{$p->getRemaining()}} 件</span></h6>
-                        <button type="button" class=" buy-btn btn btn-default" onclick="Buy('{{$p->id}}')">加入購物車
-                        </button>
+                        <button type="button" class=" buy-btn btn btn-default">加入購物車</button>
                     </div>
                 </div>
             </div>
@@ -120,6 +119,7 @@
                 }
             });
             desc.removeAttr('hidden');
+            $('.buy-btn').on('click', () => Buy({{$p->id}}));
         });
 
         function Buy(id) {
