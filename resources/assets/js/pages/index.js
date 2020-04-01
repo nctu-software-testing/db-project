@@ -8,6 +8,10 @@ let IndexPage = {
         let inner = carousel.find('.carousel-inner');
         ajax("GET", 'images/banner/list.json')
             .then(data => {
+                let realPrefix = ApiPrefix;
+                if(realPrefix.endsWith('/')) {
+                    realPrefix = realPrefix.substr(0, realPrefix.length - 1);
+                }
                 data.forEach((d, i)=>{
                     indicators.append(
                         `<li data-target="#${id}" data-slide-to="${i}"></li>`
@@ -15,7 +19,7 @@ let IndexPage = {
                     inner.append(
                         `
                         <div class="carousel-item">
-                            <img class="d-block w-100" src="${ApiPrefix}/images/banner/${d}" alt="slide">
+                            <img class="d-block w-100" src="${realPrefix}/images/banner/${d}" alt="slide">
                         </div>
                         `
                     );
