@@ -1,6 +1,6 @@
 ## Download Dependencies
 - [Node.js 10](https://nodejs.org/en/download/) (cannot above)
-- [PHP 7.2](https://www.php.net/downloads.php) (or above)
+- [PHP 7.3](https://www.php.net/downloads.php) (or above)
 - [Composer](https://getcomposer.org/download/)
 - VS 2015 Build Tools (While installation node.js, where are a option can install it. Only for windows)
 
