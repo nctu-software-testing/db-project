@@ -1,3 +1,32 @@
+## Download Dependencies
+- [Node.js 10](https://nodejs.org/en/download/) (cannot above)
+- [PHP 7.2](https://www.php.net/downloads.php) (or above)
+- [Composer](https://getcomposer.org/download/)
+- VS 2015 Build Tools (While installation node.js, where are a option can install it. Only for windows)
+
+If you have VS 2019, execute ```npm config set msvs_version 2015``` first.
+
+## Install Dependencies
+```
+composer install
+npm install
+```
+
+## Set .env File
+1. Copy ```.env.development``` to ```.env```
+2. Update database connect information in .env file
+
+## Build Frontend Script
+```
+npm run development
+```
+
+## Start Web Server
+```
+php artisan serve
+```
+
+
 <p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
 
 <p align="center">
