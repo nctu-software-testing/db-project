@@ -89,7 +89,11 @@
             "git pull",
             "composer run deploy",
             "composer run do-cache"
-        ]
+        ],
+        "tests": [
+            "phpunit"
+        ],
+        "testsVerbose": "@tests -vvv"
     },
     "config": {
         "preferred-install": "dist",
