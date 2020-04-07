@@ -19,7 +19,7 @@ class CreatePrivateMessageTable extends Migration {
 			$table->boolean('is_read')->default(0);
 			$table->string('title', 100);
 			$table->text('content', 65535);
-			$table->dateTime('send_datetime')->default('\'0000-00-00 00:00:00\'');
+			$table->dateTime('send_datetime')->nullable()->default(null);
 		});
 	}
 

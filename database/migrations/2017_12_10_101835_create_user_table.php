@@ -17,7 +17,7 @@ class CreateUserTable extends Migration {
 			$table->integer('id', true);
 			$table->string('account', 50)->unique('account');
 			$table->string('password', 60);
-			$table->string('sn', 50)->nullable()->default('NULL');
+			$table->string('sn', 50)->nullable()->default(null);
 			$table->char('role', 1);
 			$table->text('name', 65535);
 			$table->dateTime('sign_up_datetime')->nullable()->default('current_timestamp()');
