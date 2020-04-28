@@ -34,8 +34,7 @@ class AddOrderCost extends Migration
     public function down()
     {
         Schema::table('order', function (Blueprint $table) {
-            $table->dropColumn('shipping_cost');
-            $table->dropColumn('original_cost');
+            $table->dropColumn(['shipping_cost', 'original_cost']);
         });
     }
 }
