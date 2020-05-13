@@ -35,7 +35,8 @@ class CategoryTableSeeder extends Seeder
 其他類別"));
 
         $i = 0;
-        foreach ($type as $t) {
+        foreach ($type as &$t) {
+            $t = trim($t);
             if (!DB::table('category')->where('product_type', $t)->exists()) {
                 DB::table('category')->insert([
                     'product_type' => $t,
