@@ -116,7 +116,7 @@ class ShoppingCartController extends BaseController
     }
     
     private function checkAllowBuy($amount,Product $p): bool{
-        $curSell = DB::select(DB::raw('SELECT GetSellCount(' . $p->id . ') p'))[0]->p;
+        $curSell = OrderProduct::getSellCount($p->id);
         $remCount = $p->amount - $curSell - $amount*1;
         return $remCount >= 0;
     }

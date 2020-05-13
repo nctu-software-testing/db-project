@@ -179,15 +179,16 @@ class ProductController extends BaseController
     {
         if (!$id)
             return redirect('/');
-        $data = Product::
-        join('category', 'on_product.category_id', '=', 'category.id')
-            ->select('on_product.id', 'product_name', 'product_information', 'start_date', 'end_date', 'price', 'state', 'product_type', 'user_id', 'category_id', 'amount')
-            ->selectRaw('GetSellCount(on_product.id) as sell')
-            ->where('on_product.id', '=', $id)->first();
 
-        if (
-        !$data
-        ) return abort(404);
+        $sellCount = OrderProduct::getSellCount($id);
+
+        $data = Product::where('on_product.id', '=', $id)
+            ->join('category', 'on_product.category_id', '=', 'category.id')
+            ->select('on_product.id', 'product_name', 'product_information', 'start_date', 'end_date', 'price', 'state', 'product_type', 'user_id', 'category_id', 'amount')
+            ->first();
+
+        if (!$data) return abort(404);
+        $data->sell = $sellCount;
 
         if (
             $data->state !== Product::STATE_RELEASE && //沒有發布
@@ -200,9 +201,9 @@ class ProductController extends BaseController
         }
 
         //圖片數量
-        $count = ProductPicture::
-        where('product_id', '=', $id)
+        $count = ProductPicture::where('product_id', '=', $id)
             ->count();
+
         return view('products.item', ['p' => $data, 'count' => $count]);
     }
 
