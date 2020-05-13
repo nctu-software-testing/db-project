@@ -3,13 +3,11 @@
 
 namespace Tests\TestCore;
 
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Support\Facades\Artisan;
 use Tests\TestCase;
 
 abstract class BaseTestCase extends TestCase
 {
-    use DatabaseMigrations;
+    protected $resourcesPath;
 
     /**
      * Setup the test environment.
@@ -20,7 +18,9 @@ abstract class BaseTestCase extends TestCase
     {
         parent::setUp();
 
-        $this->seed();
+        $this->resourcesPath = realpath(__DIR__ . '/../resources');
+
+        $this->freshDatabase();
     }
 
     /**
@@ -30,5 +30,70 @@ abstract class BaseTestCase extends TestCase
     protected function tearDown()
     {
         parent::tearDown();
+    }
+
+    private function freshDatabase()
+    {
+        $templateDBFilePath = $this->resourcesPath . '/db-template.db';
+        $con = \DB::connection();
+
+        // drop old tables
+        do {
+            $con->update('PRAGMA foreign_keys = OFF');
+            $tables = $con->table('main.sqlite_master')
+                ->select('name')->get()
+                ->pluck('name');
+
+            foreach ($tables as $table) {
+                $con->update("DROP TABLE main.`$table`");
+            }
+
+            $con->update('PRAGMA foreign_keys = ON');
+        } while (false);
+
+        $attachSQL = 'ATTACH DATABASE "' . $templateDBFilePath . '" AS template';
+        $con->update($attachSQL);
+
+        // copy tables
+        do {
+            $tables = $con
+                ->table('template.sqlite_master')
+                ->where('type', 'table')
+                ->orderBy('rootpage')
+                ->get();
+
+            // create tables
+            foreach ($tables as $table) {
+                // skip internal table
+                if (strpos($table->name, 'sqlite_') === 0)
+                    continue;
+
+                $con->update($table->sql);
+            }
+
+            // copy data
+            foreach ($tables as $table) {
+                $sql = "INSERT INTO main.`{$table->name}` SELECT * FROM template.`{$table->name}`";
+                $con->update($sql);
+            }
+        } while (false);
+
+        // update table index
+        do {
+            $tables = $con
+                ->table('template.sqlite_master')
+                ->where('type', 'index')
+                ->whereNotNull('sql')
+                ->orderBy('rootpage')
+                ->get();
+
+            // create indexes
+            foreach ($tables as $table) {
+                $con->update($table->sql);
+            }
+        } while (false);
+
+        // detach template database
+        $con->update('DETACH DATABASE template');
     }
 }

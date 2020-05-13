@@ -15,12 +15,19 @@ class DBRelatedTest extends BaseTestCase
      */
     public function testCategoryContains3C()
     {
-        $categories = Category::all();
-        $categoryArray = [];
-        foreach($categories as $category) {
-            $categoryArray[$category->product_type] = true;
-        }
+        $categories = Category::all()->pluck('product_type');
+        $this->assertContains('3C相關', $categories);
+    }
 
-        $this->assertArrayHasKey('3C相關', $categoryArray);
+    /**
+     * A basic test example.
+     *
+     * @return void
+     */
+    public function testCategoryContainsLive()
+    {
+        $categories = Category::all()->pluck('product_type');
+
+        $this->assertContains('居家生活', $categories);
     }
 }
