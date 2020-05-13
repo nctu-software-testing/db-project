@@ -3,18 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Category;
-use App\Location;
-use App\Order;
 use App\OrderProduct;
 use App\Product;
 use App\ProductPicture;
-use App\Shipping;
 use DateTime;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
-use League\Flysystem\FileNotFoundException;
 
 
 class ProductController extends BaseController
@@ -31,9 +27,17 @@ class ProductController extends BaseController
     public function getProducts(Request $request)
     {
         $search = request('search', []);
+        $buyCountSub = OrderProduct::select([
+            'product_id',
+            \DB::raw('COUNT(DISTINCT customer_id) AS cnt')
+        ])
+            ->join('order', 'order_id', '=', 'order.id')
+            ->groupBy(['product_id']);
+
         //商品資訊
         $data = Product
             ::join('category', 'on_product.category_id', '=', 'category.id')
+            ->leftJoin(\DB::raw('(' . $buyCountSub->getQuery()->toSql() . ') as sub'), 'sub.product_id', '=', 'on_product.id')
             ->select(
                 'on_product.id',
                 'product_name',
@@ -44,7 +48,7 @@ class ProductController extends BaseController
                 'state',
                 'product_type'
             )
-            ->selectRaw('GetDiffUserBuyProduct(on_product.id) as diffBuy');
+            ->selectRaw('COALESCE(sub.cnt, 0) as diffBuy');
 
         //公開瀏覽
         $now = new DateTime();
@@ -175,15 +179,16 @@ class ProductController extends BaseController
     {
         if (!$id)
             return redirect('/');
-        $data = Product::
-        join('category', 'on_product.category_id', '=', 'category.id')
-            ->select('on_product.id', 'product_name', 'product_information', 'start_date', 'end_date', 'price', 'state', 'product_type', 'user_id', 'category_id', 'amount')
-            ->selectRaw('GetSellCount(on_product.id) as sell')
-            ->where('on_product.id', '=', $id)->first();
 
-        if (
-        !$data
-        ) return abort(404);
+        $sellCount = OrderProduct::getSellCount($id);
+
+        $data = Product::where('on_product.id', '=', $id)
+            ->join('category', 'on_product.category_id', '=', 'category.id')
+            ->select('on_product.id', 'product_name', 'product_information', 'start_date', 'end_date', 'price', 'state', 'product_type', 'user_id', 'category_id', 'amount')
+            ->first();
+
+        if (!$data) return abort(404);
+        $data->sell = $sellCount;
 
         if (
             $data->state !== Product::STATE_RELEASE && //沒有發布
@@ -196,9 +201,9 @@ class ProductController extends BaseController
         }
 
         //圖片數量
-        $count = ProductPicture::
-        where('product_id', '=', $id)
+        $count = ProductPicture::where('product_id', '=', $id)
             ->count();
+
         return view('products.item', ['p' => $data, 'count' => $count]);
     }
 

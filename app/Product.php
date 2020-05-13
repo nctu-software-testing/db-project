@@ -80,8 +80,8 @@ class Product extends Model
         if (isset($this->sell)) {
             return $this->sell;
         } else {
-            $res = DB::select('SELECT GetSellCount(:pid) as c', ['pid' => $this->id])[0];
-            return $res->c;
+            $this->sell = OrderProduct::getSellCount($this->id);
+            return $this->sell;
         }
     }
 
