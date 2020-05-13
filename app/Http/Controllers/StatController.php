@@ -133,12 +133,20 @@ class StatController extends BaseController
                 return $this->result($result, true);
             }
         } else if ($type === 3) {
+            $buyCountSub = OrderProduct::select([
+                'product_id',
+                \DB::raw('COUNT(DISTINCT customer_id) AS cnt')
+            ])
+                ->join('order', 'order_id', '=', 'order.id')
+                ->groupBy(['product_id']);
+
             $data = Product
                 ::where('user_id', $uid)
+                ->leftJoin(\DB::raw('(' . $buyCountSub->getQuery()->toSql() . ') as sub'), 'sub.product_id', '=', 'on_product.id')
                 ->select(
                     'id', 'product_name'
                 )
-                ->selectRaw('GetDiffUserBuyProduct(on_product.id) as `diff_buy`')
+                ->selectRaw('COALESCE(sub.cnt, 0) AS diff_buy')
                 ->groupBy('id', 'diff_buy', 'product_name')
                 ->having('diff_buy', '>', 0)
                 ->orderBy('diff_buy', 'DESC')
