@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/nctu-software-testing/db-project.svg?branch=test%2Fbau%2Fcicd)](https://travis-ci.org/nctu-software-testing/db-project)
+[![codecov](https://codecov.io/gh/nctu-software-testing/db-project/branch/test%2Fbau%2Fcicd/graph/badge.svg)](https://codecov.io/gh/nctu-software-testing/db-project)
 
 ## Download Dependencies
 - [Node.js 10](https://nodejs.org/en/download/) (cannot above)
