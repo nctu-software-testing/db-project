@@ -1,0 +1,21 @@
+dist: precise
+
+language: php
+
+php:
+  - 7.3
+
+services:
+  - sqlite
+
+before_script:
+  - cp .env.testing .env
+  - composer self-update
+  - composer install --no-interaction
+  - php artisan migrate
+
+script:
+  - vendor/bin/phpunit --coverage-clover=coverage.xml
+
+after_success:
+    - bash <(curl -s https://codecov.io/bash)
