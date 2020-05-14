@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/nctu-software-testing/db-project.svg?branch=test%2Fbau%2Fcicd)](https://travis-ci.org/nctu-software-testing/db-project)
+
 ## Download Dependencies
 - [Node.js 10](https://nodejs.org/en/download/) (cannot above)
 - [PHP 7.3](https://www.php.net/downloads.php) (or above)
