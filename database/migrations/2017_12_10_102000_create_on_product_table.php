@@ -17,8 +17,8 @@ class CreateOnProductTable extends Migration {
 			$table->integer('id', true);
 			$table->string('product_name');
 			$table->text('product_information', 65535);
-			$table->dateTime('start_date')->nullable()->default('NULL');
-			$table->dateTime('end_date')->nullable()->default('NULL');
+			$table->dateTime('start_date')->nullable()->default(null);
+			$table->dateTime('end_date')->nullable()->default(null);
 			$table->integer('price');
 			$table->integer('state');
 			$table->integer('category_id')->index('Product_Category');

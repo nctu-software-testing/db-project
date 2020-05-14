@@ -20,7 +20,7 @@ class CreateUserTable extends Migration {
 			$table->string('sn', 50)->nullable()->default('NULL');
 			$table->char('role', 1);
 			$table->text('name', 65535);
-			$table->dateTime('sign_up_datetime')->nullable()->default('current_timestamp()');
+			$table->dateTime('sign_up_datetime')->nullable()->default(DB::raw('CURRENT_TIMESTAMP'));
 			$table->date('birthday');
 			$table->text('gender', 65535);
 			$table->text('email', 65535);

@@ -16,3 +16,5 @@ _ide_helper_models.php
 public/dist/**/*.map
 public/mix-manifest.json
 *.iml
+.phpunit.result.cache
+/out

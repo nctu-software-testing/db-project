@@ -16,8 +16,8 @@ class CreateDiscountTable extends Migration {
 		{
 			$table->integer('id', true);
 			$table->string('name', 100);
-			$table->dateTime('start_discount_time')->nullable()->default('NULL');
-			$table->dateTime('end_discount_time')->nullable()->default('NULL');
+			$table->dateTime('start_discount_time')->nullable()->default(null);
+			$table->dateTime('end_discount_time')->nullable()->default(null);
 			$table->char('type', 1);
 			$table->float('discount_percent', 11);
 		});
