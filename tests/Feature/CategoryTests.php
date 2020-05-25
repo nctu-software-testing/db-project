@@ -11,9 +11,7 @@ class CategoryTests extends BaseTestCase
     protected function setUp()
     {
         parent::setUp();
-
-        // TODO: mock middleware
-        $this->withoutMiddleware();
+        $this->withUser('admin');
     }
 
     public function testCreateCategoryNormal()
@@ -74,5 +72,34 @@ class CategoryTests extends BaseTestCase
         ]);
 
         $this->assertEquals($newName, Category::find($id)->product_type);
+    }
+
+    public function testBusinessCannotCreateCategory()
+    {
+        $this->withUser('b1');
+        $name = str_random();
+        $response = $this->postJson('/category/manage', [
+            'id' => -1,
+            'product_type' => $name,
+        ]);
+
+        $this->assertTrue(Category::where('product_type', $name)->doesntExist());
+        $response->assertRedirect('/');
+    }
+
+    public function testCustomerCannotModifyCategory()
+    {
+        $this->withUser('c');
+        $originalName = '3C相關';
+        $newName = 'new_name_' . str_random();
+        $id = Category::where('product_type', $originalName)->first()->id;
+        $response = $this->postJson('/category/manage', [
+            'id' => $id,
+            'product_type' => $newName,
+        ]);
+
+        $response->assertRedirect('/');
+
+        $this->assertEquals($originalName, Category::find($id)->product_type);
     }
 }

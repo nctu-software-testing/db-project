@@ -3,6 +3,7 @@
 
 namespace Tests\TestCore;
 
+use App\User;
 use Tests\TestCase;
 
 abstract class BaseTestCase extends TestCase
@@ -95,5 +96,16 @@ abstract class BaseTestCase extends TestCase
 
         // detach template database
         $con->update('DETACH DATABASE template');
+    }
+
+    protected function withUser(string $account): BaseTestCase
+    {
+        $user = User::where('account', $account)->firstOrFail();
+
+        $this->withSession([
+            'user' => $user,
+        ]);
+
+        return $this;
     }
 }
