@@ -138,7 +138,7 @@ class CaptchaController extends BaseController
         return $output;
     }
 
-    protected function postVerify(Request $request)
+    public function postVerify(Request $request)
     {
         $captcha = session('captcha');
         if ($captcha) {
