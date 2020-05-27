@@ -2,10 +2,11 @@
 
 namespace Tests\Feature;
 
-use Tests\DummyController;
+use App\Services\CaptchaService;
+use Carbon\Carbon;
 use Tests\TestCore\BaseTestCase;
 
-class CaptchaTests extends BaseTestCase
+class CaptchaTest extends BaseTestCase
 {
     private const ROW_COUNT = 9;
     private const COL_COUNT = 16;
@@ -148,8 +149,7 @@ class CaptchaTests extends BaseTestCase
 
     public function testDoVerifyOnlyWorkOnce()
     {
-        $controller = new DummyController();
-
+        $captchaService = resolve(CaptchaService::class);
         $this->assertTrue(config('app.captcha'));
 
         $fullImageResp = $this->assertFullImageAndGet();
@@ -163,6 +163,8 @@ class CaptchaTests extends BaseTestCase
             'value' => $captchaValue['selected']['x']
         ]);
 
+        $session = session();
+
         $verifyResp->assertJson([
             'result' => '驗證成功',
             'success' => true,
@@ -170,13 +172,13 @@ class CaptchaTests extends BaseTestCase
         $this->assertEquals([
             'message' => '驗證成功',
             'success' => true,
-        ], $controller->exportedCheckCaptcha());
+        ], $captchaService->checkCaptcha($session));
 
         // second verify
         $this->assertEquals([
             'message' => '驗證碼錯誤',
             'success' => false,
-        ], $controller->exportedCheckCaptcha());
+        ], $captchaService->checkCaptcha($session));
     }
 
     public function testViewFullAgainWillChangeCaptcha()
@@ -200,5 +202,53 @@ class CaptchaTests extends BaseTestCase
     {
         $sliceImageResp = $this->get('/captcha/masked-image');
         $this->assertTrue($sliceImageResp->isForbidden());
+    }
+
+    public function testTimeoutWhileVerify()
+    {
+        $fullImageResp = $this->assertFullImageAndGet();
+
+        $captchaValue = session('captcha');
+        $now = Carbon::now();
+
+        $expiredTime = (clone $now)->addMinutes(3)->addSeconds(1); // 3min 1s
+        Carbon::setTestNow($expiredTime);
+        $verifyResp = $this->post('/captcha/verify', [
+            'value' => $captchaValue['selected']['x']
+        ]);
+
+        $verifyResp->assertJson([
+            'result' => '驗證碼逾時',
+            'success' => false,
+        ]);
+    }
+
+    public function testTimeoutAfterVerify()
+    {
+        $captchaService = resolve(CaptchaService::class);
+
+        $fullImageResp = $this->assertFullImageAndGet();
+
+        $captchaValue = session('captcha');
+        $verifyResp = $this->post('/captcha/verify', [
+            'value' => $captchaValue['selected']['x']
+        ]);
+
+        $verifyResp->assertJson([
+            'result' => '驗證成功',
+            'success' => true,
+        ]);
+
+
+        $now = Carbon::now();
+
+        $expiredTime = (clone $now)->addMinutes(3)->addSeconds(1); // 3min 1s
+        Carbon::setTestNow($expiredTime);
+
+        // get verify result
+        $this->assertEquals([
+            'message' => '驗證碼逾時',
+            'success' => false,
+        ], $captchaService->checkCaptcha(session()));
     }
 }

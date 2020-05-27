@@ -108,4 +108,14 @@ abstract class BaseTestCase extends TestCase
 
         return $this;
     }
+
+    protected function doPassCaptcha()
+    {
+        $this->get('/captcha/full-image');
+        $captchaValue = session('captcha');
+
+        $this->post('/captcha/verify', [
+            'value' => $captchaValue['selected']['x']
+        ]);
+    }
 }

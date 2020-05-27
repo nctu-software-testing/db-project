@@ -5,7 +5,7 @@ namespace Tests\Feature;
 use App\Category;
 use Tests\TestCore\BaseTestCase;
 
-class CategoryTests extends BaseTestCase
+class CategoryTest extends BaseTestCase
 {
 
     protected function setUp()
