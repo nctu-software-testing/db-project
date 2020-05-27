@@ -130,7 +130,7 @@ class ProductController extends BaseController
         if (is_numeric($request->get('category'))) {
             $data->where('on_product.category_id', $request->get('category'));
         }
-        $data->orderBy('id', 'DESC');
+        $data->orderBy('on_product.id', 'DESC');
 
         $data = $data->paginate($this->paginate);
         $id = request("id", 0);
