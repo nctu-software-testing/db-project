@@ -2,10 +2,9 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCore\BaseTestCase;
 
-class ExampleTest extends TestCase
+class ExampleTest extends BaseTestCase
 {
     use RefreshDatabase;
     /**

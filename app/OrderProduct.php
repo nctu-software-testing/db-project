@@ -17,11 +17,18 @@ class OrderProduct extends Model
         'order_id', 'product_id', 'amount',
     ];
 
-    public function product(){
+    public function product()
+    {
         return $this->belongsTo('App\Product');
     }
 
-    public function order(){
+    public function order()
+    {
         return $this->belongsTo('App\Order');
+    }
+
+    public static function getSellCount($id): int
+    {
+        return static::where('product_id', $id)->sum('amount');
     }
 }

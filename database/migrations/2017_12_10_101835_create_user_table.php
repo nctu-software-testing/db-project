@@ -14,18 +14,20 @@ class CreateUserTable extends Migration {
 	{
 		Schema::create('user', function(Blueprint $table)
 		{
-			$table->integer('id', true);
-			$table->string('account', 50)->unique('account');
+			$table->increments('id');
+			$table->string('account', 50);
 			$table->string('password', 60);
 			$table->string('sn', 50)->nullable()->default(null);
 			$table->char('role', 1);
-			$table->text('name', 65535);
-			$table->dateTime('sign_up_datetime')->nullable()->default('current_timestamp()');
+			$table->string('name');
+			$table->dateTime('sign_up_datetime')->nullable()->default(\DB::raw('current_timestamp'));
 			$table->date('birthday');
-			$table->text('gender', 65535);
-			$table->text('email', 65535);
+			$table->string('gender', 10);
+			$table->string('email');
 			$table->boolean('enable')->default(0);
-			$table->string('avatar', 12)->default('\'\'')->comment('Imgur ID');
+			$table->string('avatar', 12)->default('')->comment('Imgur ID');
+
+			$table->unique('account');
 		});
 	}
 

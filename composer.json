@@ -91,7 +91,7 @@
             "composer run do-cache"
         ],
         "tests": [
-            "phpunit"
+            "phpunit --configuration phpunit.xml"
         ],
 	"travis-tests": [
             "vendor/bin/phpunit --coverage-clover=coverage.xml"
