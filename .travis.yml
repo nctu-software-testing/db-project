@@ -15,7 +15,7 @@ before_script:
   - php artisan migrate
 
 script:
-  - vendor/bin/phpunit --coverage-clover=coverage.xml
+  - composer travis-tests
 
 after_success:
     - bash <(curl -s https://codecov.io/bash)

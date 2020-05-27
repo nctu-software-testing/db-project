@@ -93,6 +93,9 @@
         "tests": [
             "phpunit"
         ],
+	"travis-tests": [
+            "vendor/bin/phpunit --coverage-clover=coverage.xml"
+	],
         "testsVerbose": "@tests -vvv"
     },
     "config": {
