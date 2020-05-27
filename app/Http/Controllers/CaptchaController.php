@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\CaptchaService;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
@@ -17,9 +19,15 @@ class CaptchaController extends BaseController
     private const ALLOW_ERROR_OF_GRID = self::GRID_SIZE / 4;
     public const TIMEOUT = 3 * 60;
 
-    public function __construct()
+    /**
+     * @var CaptchaService
+     */
+    private $service;
+
+    public function __construct(CaptchaService $service)
     {
         parent::__construct('captcha');
+        $this->service = $service;
     }
 
     private static function getImageList()
@@ -138,19 +146,18 @@ class CaptchaController extends BaseController
         return $output;
     }
 
-    protected function postVerify(Request $request)
+    public function postVerify(Request $request)
     {
         $captcha = session('captcha');
         if ($captcha) {
             // session()->forget('captcha');
             $value = floatval(request('value', -999));
             if (abs($captcha['selected']['x'] - $value) < self::ALLOW_ERROR_OF_GRID) {
-                $now = time();
-                if ($now - $captcha['created_at'] > self::TIMEOUT) {
+                if ($this->service->isTimeout($captcha['created_at'])) {
                     return $this->result('驗證碼逾時', false);
                 }
                 $captcha['passed'] = true;
-                $captcha['passed_at'] = $now;
+                $captcha['passed_at'] = Carbon::now()->timestamp;
                 session()->put('captcha', $captcha);
                 return $this->result('驗證成功', true);
             } else {
@@ -180,7 +187,7 @@ class CaptchaController extends BaseController
             'selected' => $selected,
             'path' => $path,
             'passed' => false,
-            'created_at' => time(),
+            'created_at' => Carbon::now()->timestamp,
         ];
     }
 

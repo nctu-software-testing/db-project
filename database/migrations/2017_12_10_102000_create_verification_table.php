@@ -19,7 +19,7 @@ class CreateVerificationTable extends Migration {
 			$table->string('front_picture');
 			$table->string('back_picture');
 			$table->dateTime('upload_datetime')->nullable()->default(null);
-			$table->string('verify_result', 8)->nullable()->default('\'未驗證\'');
+			$table->string('verify_result', 8)->nullable()->default('未驗證');
 			$table->dateTime('datetime')->nullable()->default(null);
 			$table->string('description', 100)->nullable()->default(null);
 		});

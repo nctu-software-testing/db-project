@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\CaptchaService;
+
 class BaseController extends \Illuminate\Routing\Controller
 {
     protected $controllerName = 'base';
@@ -36,20 +38,7 @@ class BaseController extends \Illuminate\Routing\Controller
 
     protected function checkCaptcha(): array
     {
-        if (config('app.captcha') === false) {
-            return ['success' => true, 'message' => ''];
-        }
-        $captcha = session('captcha');
-
-        if (!$captcha || $captcha['passed'] !== true) {
-            return ['success' => false, 'message' => '驗證碼錯誤'];
-        }
-        session()->forget('captcha');
-
-        if (time() - $captcha['passed_at'] > CaptchaController::TIMEOUT) {
-            return ['success' => false, 'message' => '驗證碼逾時'];
-        } else {
-            return ['success' => true, 'message' => '驗證成功'];
-        }
+        $captchaService = resolve(CaptchaService::class);
+        return $captchaService->checkCaptcha(session());
     }
 }
