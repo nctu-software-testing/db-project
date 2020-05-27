@@ -91,7 +91,7 @@
             "composer run do-cache"
         ],
         "tests": [
-            "phpunit"
+            "phpunit --configuration phpunit.xml"
         ],
         "testsVerbose": "@tests -vvv"
     },
