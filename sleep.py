@@ -1,2 +1,4 @@
 import time
-time.sleep(180)
+for i in range(18):
+	print(i)
+	time.sleep(10)
