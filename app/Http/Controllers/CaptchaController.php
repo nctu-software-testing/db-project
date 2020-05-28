@@ -10,8 +10,6 @@ use Illuminate\Support\Facades\Storage;
 
 class CaptchaController extends BaseController
 {
-    private static $imageList = null;
-    private const PATH = 'captcha';
     private const ROW_COUNT = 9;
     private const COL_COUNT = 16;
     private const GRID_SIZE = 32;
@@ -30,26 +28,10 @@ class CaptchaController extends BaseController
         $this->service = $service;
     }
 
-    private static function getImageList()
-    {
-        if (self::$imageList != null) return;
-        $imgList = Storage::files(self::PATH);
-        self::$imageList = $imgList;
-    }
-
-    public function getList()
-    {
-        self::getImageList();
-
-        return $this->result(self::$imageList, true);
-    }
-
-
     public function getIndex()
     {
         return view('captcha.index');
     }
-
 
     public function getFullImage()
     {
@@ -169,9 +151,7 @@ class CaptchaController extends BaseController
 
     protected function prepareImageConfig()
     {
-        self::getImageList();
-        $index = array_rand(self::$imageList);
-        $path = self::$imageList[$index];
+        $path = $this->service->getImagePathRandomly();
 
         $imageArray = range(0, self::COL_COUNT * self::ROW_COUNT - 1);
         shuffle($imageArray);

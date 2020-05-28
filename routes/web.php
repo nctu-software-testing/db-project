@@ -116,7 +116,6 @@ Route::group([
 Route::group([
     'prefix' => 'captcha',
 ], function () {
-    Route::get('list', 'CaptchaController@getList');
     Route::get('full-image', 'CaptchaController@getFullImage');
     Route::get('masked-image', 'CaptchaController@getMaskImage');
     Route::get('slice', 'CaptchaController@getSliceImage');
