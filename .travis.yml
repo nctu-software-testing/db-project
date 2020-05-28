@@ -16,9 +16,8 @@ before_script:
 
 jobs:
   include:
-    - stage: test
-      script: composer travis-tests
-      script: python3 sleep.py
+      - script: composer travis-tests
+      - script: python3 sleep.py
 
 after_success:
     - bash <(curl -s https://codecov.io/bash)
