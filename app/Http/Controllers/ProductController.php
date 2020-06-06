@@ -191,7 +191,7 @@ class ProductController extends BaseController
         $data->sell = $sellCount;
 
         if (
-            $data->state !== Product::STATE_RELEASE && //沒有發布
+            $data->state * 1 !== Product::STATE_RELEASE && //沒有發布
             !(
                 session('user.id') === $data->user_id ||
                 session('user.role') === 'A'
