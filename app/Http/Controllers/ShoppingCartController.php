@@ -9,6 +9,7 @@ use App\Order;
 use App\OrderProduct;
 use App\Product;
 use App\Shipping;
+use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -28,7 +29,7 @@ class ShoppingCartController extends BaseController
     {
         $id = request('id');
         $amount = request('amount');
-        $now = new DateTime();
+        $now = Carbon::now();
         $p = Product::where("id", $id)
             ->where('start_date', '<=', $now)
             ->where('end_date', '>=', $now)
@@ -235,7 +236,7 @@ class ShoppingCartController extends BaseController
 
     public function postSetDiscount(Request $request)
     {
-        $now = new DateTime();
+        $now = Carbon::now();
         $code = $request->get('code');
         $code = Discount::decrypt($code) ?? -1;
         $d = Discount::where("id", $code)

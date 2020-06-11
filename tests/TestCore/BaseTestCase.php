@@ -98,13 +98,19 @@ abstract class BaseTestCase extends TestCase
         $con->update('DETACH DATABASE template');
     }
 
-    protected function withUser(string $account): BaseTestCase
+    protected function withUser(?string $account): BaseTestCase
     {
-        $user = User::where('account', $account)->firstOrFail();
+        if ($account === null) {
+            $this->withSession([
+                'user' => null,
+            ]);
+        } else {
+            $user = User::where('account', $account)->firstOrFail();
 
-        $this->withSession([
-            'user' => $user,
-        ]);
+            $this->withSession([
+                'user' => $user,
+            ]);
+        }
 
         return $this;
     }

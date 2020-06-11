@@ -6,6 +6,7 @@ use App\Category;
 use App\OrderProduct;
 use App\Product;
 use App\ProductPicture;
+use Carbon\Carbon;
 use DateTime;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -51,7 +52,7 @@ class ProductController extends BaseController
             ->selectRaw('COALESCE(sub.cnt, 0) as diffBuy');
 
         //公開瀏覽
-        $now = new DateTime();
+        $now = Carbon::now();
         $data = Product::getOnProductsBuilder($data)
             ->where('on_product.state', Product::STATE_RELEASE);
         $data = $this->applySearchCond($data, $search);

@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use DateTime;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -94,7 +95,7 @@ class Product extends Model
 
     public static function getOnProductsBuilder(Builder $builder = null): Builder
     {
-        $now = new DateTime();
+        $now = Carbon::now();
         if (is_null($builder)) {
             $builder = Product::whereRaw('1=1');
         }
