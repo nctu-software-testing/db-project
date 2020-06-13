@@ -216,7 +216,7 @@ class ShoppingCartController extends BaseController
 
         $now = Carbon::now();
 
-        $order->sent_time = (clone $now)->addHour(1);;
+        $order->sent_time = (clone $now)->addHour(1);
 
         $order->arrival_time = (clone $now)->addHour(6);
         $order->save();
