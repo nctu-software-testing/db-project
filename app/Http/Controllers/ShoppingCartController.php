@@ -213,10 +213,12 @@ class ShoppingCartController extends BaseController
         $order->discount_id = $discountcode;
         $order->final_cost = $this->getAfterDiscountFinal($request) + $this->getShippingCost($request);
         $order->save();
-        $date = date('Y-m-d H:i:s', strtotime('+1hour'));
-        $order->sent_time = $date;
-        $date = date('Y-m-d H:i:s', strtotime('+6hours'));
-        $order->arrival_time = $date;
+
+        $now = Carbon::now();
+
+        $order->sent_time = (clone $now)->addHour(1);;
+
+        $order->arrival_time = (clone $now)->addHour(6);
         $order->save();
         //裝填貨物
         $shoppingcart = session()->get('shoppingcart');
