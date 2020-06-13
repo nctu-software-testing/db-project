@@ -4,6 +4,7 @@
 namespace Tests\Feature\HW3;
 
 
+use App\Discount;
 use App\Order;
 use App\Product;
 use Carbon\Carbon;
