@@ -134,7 +134,10 @@ class ShoppingCartController extends BaseController
                 $shoppingcart[$i] = $shoppingcart[$i + 1];
             }
         }
-        array_pop($shoppingcart);
+
+        if($flag) {
+            array_pop($shoppingcart);
+        }
         $request->session()->put('shoppingcart', $shoppingcart);
         session()->remove('discount');
         return $this->result('OK', true);
