@@ -126,18 +126,95 @@ class ShoppingCartCCTest extends BaseTestCase
         $this->assertEquals('2020-06-05 06:00:00', $newOrder->arrival_time);
     }
 
-    public function testRemoveProductFromShoppingcartCaseN()
+    public function testRemoveProductFromShoppingcartCase1()
     {
-        $response = $this->post('removeProductFromShoppingcart', []);
+        Carbon::setTestNow('2020-06-05 00:00:00');
+        session()->put('shoppingcart', []);
+        $response = $this->post('removeProductFromShoppingcart', [
+            'id' => null,
+        ]);
+
+        $response->assertJson([
+            'result' => 'OK',
+            'success' => true,
+        ]);
+
+        $this->assertEquals([], session('shoppingcart'));
     }
 
-    public function testPostShoppingCartCaseN()
+    public function testRemoveProductFromShoppingcartCase2()
     {
-        $response = $this->post('shopping-cart', []);
+        Carbon::setTestNow('2020-06-05 00:00:00');
+        $targetProductIds = [83, 84, 85];
+        Product::whereIn('id', $targetProductIds)->update([
+            'state' => Product::STATE_RELEASE,
+            'amount' => 999,
+        ]);
+
+        foreach ($targetProductIds as $id) {
+            // add item into cart
+            $this->post('buy', [
+                'id' => $id,
+                'amount' => 1,
+            ])->assertJson([
+                'result' => 'OK',
+                'success' => true,
+            ]);
+        }
+
+        $this->assertEquals(count($targetProductIds), count(session('shoppingcart')));
+
+        $response = $this->post('removeProductFromShoppingcart', [
+            'id' => 83,
+        ]);
+
+        $response->assertJson([
+            'result' => 'OK',
+            'success' => true,
+        ]);
+
+        $productIds = array_map(function ($p) {
+            return $p->product->id;
+        }, session('shoppingcart'));
+
+        $this->assertEquals([84, 85], $productIds);
     }
 
-    public function testPostSetDiscountCaseN()
+    public function testRemoveProductFromShoppingcartCase3()
     {
-        $response = $this->post('shopping-cart/discount', []);
+        Carbon::setTestNow('2020-06-05 00:00:00');
+        $targetProductIds = [83, 84, 85];
+        Product::whereIn('id', $targetProductIds)->update([
+            'state' => Product::STATE_RELEASE,
+            'amount' => 999,
+        ]);
+
+        foreach ($targetProductIds as $id) {
+            // add item into cart
+            $this->post('buy', [
+                'id' => $id,
+                'amount' => 1,
+            ])->assertJson([
+                'result' => 'OK',
+                'success' => true,
+            ]);
+        }
+
+        $this->assertEquals(count($targetProductIds), count(session('shoppingcart')));
+
+        $response = $this->post('removeProductFromShoppingcart', [
+            'id' => 82,
+        ]);
+
+        $response->assertJson([
+            'result' => 'OK',
+            'success' => true,
+        ]);
+
+        $productIds = array_map(function ($p) {
+            return $p->product->id;
+        }, session('shoppingcart'));
+
+        $this->assertEquals($targetProductIds, $productIds);
     }
 }
