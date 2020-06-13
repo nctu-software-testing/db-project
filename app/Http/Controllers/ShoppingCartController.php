@@ -173,7 +173,6 @@ class ShoppingCartController extends BaseController
         $final = session()->get('final');
         if ($discount) {
             $final = $discount['final_price'];
-            $discountAmount = $discount['discountAmount'];
         }
         return $final;
     }
@@ -184,14 +183,6 @@ class ShoppingCartController extends BaseController
         $price = $this->getAfterDiscountFinal($request);
         return Shipping::getShippingPrice($price);
     }
-
-    private function getCurrentPrice(): int
-    {
-        $this->renewShoppingCart();
-
-        return session('final', 0);
-    }
-
 
     public function checkOut(Request $request)
     {
