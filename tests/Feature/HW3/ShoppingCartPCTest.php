@@ -101,7 +101,34 @@ class ShoppingCartPCTest extends BaseTestCase
 
     public function testBuyProductCase4()
     {
-        // test (flag) and (!flag)
+        // buy product currently not in cart 
+
+        Carbon::setTestNow('2020-06-13 00:00:00');
+        $targetProduct = Product::find(71);
+        $targetProduct->state = Product::STATE_RELEASE;
+        $targetProduct->amount = 100;
+        $targetProduct->save();
+        
+        $this->post('buy', [
+            'id' => $targetProduct->id,
+            'amount' => 1,
+        ])->assertJson([
+            'result' => 'OK',
+            'success' => true,
+        ]);  
+        
+        $this->post('buy', [
+            'id' => 72,
+            'amount' => 2,
+        ])->assertJson([
+            'result' => 'OK',
+            'success' => true,
+        ]); 
+    }
+
+    public function testBuyProductCase5()
+    {
+        // modify amount of product in cart 
 
         Carbon::setTestNow('2020-06-13 00:00:00');
         $targetProduct = Product::find(71);
@@ -120,19 +147,6 @@ class ShoppingCartPCTest extends BaseTestCase
         $this->post('buy', [
             'id' => $targetProduct->id,
             'amount' => 2,
-        ])->assertJson([
-            'result' => 'OK',
-            'success' => true,
-        ]);
-
-        $targetProduct = Product::find(72);
-        $targetProduct->state = Product::STATE_RELEASE;
-        $targetProduct->amount = 100;
-        $targetProduct->save();
-        
-        $this->post('buy', [
-            'id' => $targetProduct->id,
-            'amount' => 1,
         ])->assertJson([
             'result' => 'OK',
             'success' => true,
