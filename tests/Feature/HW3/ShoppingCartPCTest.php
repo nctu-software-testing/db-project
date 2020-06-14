@@ -31,10 +31,19 @@ class ShoppingCartPCTest extends BaseTestCase
         ]);
     }
 
-    public function testGetShoppingCartCaseN()
+    public function testGetShoppingCartCase1()
     {
         $response = $this->get('shopping-cart', []);
         $response->assertSuccessful();
+    }
+
+    public function testGetShoppingCartCase2()
+    {
+        $response = $this->get('shopping-cart?type=query', []);
+        $response->assertJson([
+            'result' => 0,
+            'success' => true,
+        ]);
     }
 
     public function testBuyProductCase1()
@@ -133,7 +142,7 @@ class ShoppingCartPCTest extends BaseTestCase
     public function testChangeAmountCase1()
     {
         // out of stock
-        
+
         $targetProduct = Product::find(71);
         $targetProduct->state = Product::STATE_RELEASE;
         $targetProduct->amount = 100;
