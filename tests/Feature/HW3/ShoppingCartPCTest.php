@@ -34,7 +34,7 @@ class ShoppingCartPCTest extends BaseTestCase
     public function testGetShoppingCartCaseN()
     {
         $response = $this->get('shopping-cart', []);
-        $this->assertTrue(true);
+        $response->assertSuccessful();
     }
 
     public function testBuyProductCase1()
@@ -90,8 +90,121 @@ class ShoppingCartPCTest extends BaseTestCase
         ]);        
     }
 
-    public function testChangeAmountCaseN()
+    public function testBuyProductCase4()
     {
+        // test (flag) and (!flag)
+
+        Carbon::setTestNow('2020-06-13 00:00:00');
+        $targetProduct = Product::find(71);
+        $targetProduct->state = Product::STATE_RELEASE;
+        $targetProduct->amount = 100;
+        $targetProduct->save();
         
+        $this->post('buy', [
+            'id' => $targetProduct->id,
+            'amount' => 1,
+        ])->assertJson([
+            'result' => 'OK',
+            'success' => true,
+        ]);  
+        
+        $this->post('buy', [
+            'id' => $targetProduct->id,
+            'amount' => 2,
+        ])->assertJson([
+            'result' => 'OK',
+            'success' => true,
+        ]);
+
+        $targetProduct = Product::find(72);
+        $targetProduct->state = Product::STATE_RELEASE;
+        $targetProduct->amount = 100;
+        $targetProduct->save();
+        
+        $this->post('buy', [
+            'id' => $targetProduct->id,
+            'amount' => 1,
+        ])->assertJson([
+            'result' => 'OK',
+            'success' => true,
+        ]); 
+    }
+
+    public function testChangeAmountCase1()
+    {
+        // out of stock
+        
+        $targetProduct = Product::find(71);
+        $targetProduct->state = Product::STATE_RELEASE;
+        $targetProduct->amount = 100;
+        $targetProduct->save();
+        
+        $this->post('buy', [
+            'id' => $targetProduct->id,
+            'amount' => 1,
+        ])->assertJson([
+            'result' => 'OK',
+            'success' => true,
+        ]);
+
+        $this->post('changeAmount', [
+            'id' => $targetProduct->id,
+            'amount' => 101,
+        ])->assertJson([
+            'result' => '沒有庫存了',
+            'success' => false,
+        ]);
+    }
+
+    public function testChangeAmountCase2()
+    {
+        // normal
+
+        $targetProduct = Product::find(71);
+        $targetProduct->state = Product::STATE_RELEASE;
+        $targetProduct->amount = 100;
+        $targetProduct->save();
+        
+        $this->post('buy', [
+            'id' => $targetProduct->id,
+            'amount' => 1,
+        ])->assertJson([
+            'result' => 'OK',
+            'success' => true,
+        ]);
+
+        $this->post('changeAmount', [
+            'id' => $targetProduct->id,
+            'amount' => 10,
+        ])->assertJson([
+            'result' => 'OK',
+            'success' => true,
+        ]);
+    }
+
+    public function testChangeAmountCase3()
+    {
+        // not in cart
+
+        $targetProduct = Product::find(71);
+        $targetProduct->state = Product::STATE_RELEASE;
+        $targetProduct->amount = 100;
+        $targetProduct->save();
+        
+        $this->post('buy', [
+            'id' => $targetProduct->id,
+            'amount' => 1,
+        ])->assertJson([
+            'result' => 'OK',
+            'success' => true,
+        ]);
+
+        $this->post('changeAmount', [
+            'id' => 70,
+            'amount' => 101,
+        ])->assertJson([
+            'result' => 'OK',
+            'success' => true,
+        ]);
     }
 }
