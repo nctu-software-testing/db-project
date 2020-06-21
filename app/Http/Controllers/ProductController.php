@@ -6,6 +6,7 @@ use App\Category;
 use App\OrderProduct;
 use App\Product;
 use App\ProductPicture;
+use Carbon\Carbon;
 use DateTime;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -51,7 +52,7 @@ class ProductController extends BaseController
             ->selectRaw('COALESCE(sub.cnt, 0) as diffBuy');
 
         //公開瀏覽
-        $now = new DateTime();
+        $now = Carbon::now();
         $data = Product::getOnProductsBuilder($data)
             ->where('on_product.state', Product::STATE_RELEASE);
         $data = $this->applySearchCond($data, $search);
@@ -130,7 +131,7 @@ class ProductController extends BaseController
         if (is_numeric($request->get('category'))) {
             $data->where('on_product.category_id', $request->get('category'));
         }
-        $data->orderBy('id', 'DESC');
+        $data->orderBy('on_product.id', 'DESC');
 
         $data = $data->paginate($this->paginate);
         $id = request("id", 0);
@@ -191,7 +192,7 @@ class ProductController extends BaseController
         $data->sell = $sellCount;
 
         if (
-            $data->state !== Product::STATE_RELEASE && //沒有發布
+            $data->state * 1 !== Product::STATE_RELEASE && //沒有發布
             !(
                 session('user.id') === $data->user_id ||
                 session('user.role') === 'A'

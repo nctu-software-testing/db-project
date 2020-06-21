@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\Verification;
+use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
@@ -51,7 +52,7 @@ class VerificationController extends BaseController
         $verification = Verification::where('id', '=', $id)->first();
         $verification->verify_result = $result;
         $verification->description = $reason;
-        $now = new DateTime();
+        $now = Carbon::now();
         $verification->datetime = $now;
         $verification->save();
         $userid = $verification->user_id;

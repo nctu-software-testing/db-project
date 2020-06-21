@@ -37,14 +37,13 @@ Route::group([
 
 
     //購物車
-    Route::post('buy', 'ShoppingCartController@buyProduct');
-    Route::get('shopping-cart', 'ShoppingCartController@getShoppingCart');
-    Route::post('shopping-cart', 'ShoppingCartController@postShoppingCart');
     Route::delete('shopping-cart', 'ShoppingCartController@deleteShoppingCart');
-    Route::post('checkout', 'ShoppingCartController@checkOut');
+    Route::get('shopping-cart', 'ShoppingCartController@getShoppingCart');
+    Route::post('buy', 'ShoppingCartController@buyProduct');
     Route::post('changeAmount', 'ShoppingCartController@changeAmount');
+    Route::post('checkout', 'ShoppingCartController@checkOut');
     Route::post('removeProductFromShoppingcart', 'ShoppingCartController@removeProductFromShoppingcart');
-
+    Route::post('shopping-cart', 'ShoppingCartController@postShoppingCart');
     Route::post('shopping-cart/discount', 'ShoppingCartController@postSetDiscount');
 });
 
@@ -116,7 +115,6 @@ Route::group([
 Route::group([
     'prefix' => 'captcha',
 ], function () {
-    Route::get('list', 'CaptchaController@getList');
     Route::get('full-image', 'CaptchaController@getFullImage');
     Route::get('masked-image', 'CaptchaController@getMaskImage');
     Route::get('slice', 'CaptchaController@getSliceImage');

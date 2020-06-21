@@ -9,6 +9,7 @@ use App\Order;
 use App\OrderProduct;
 use App\Product;
 use App\Shipping;
+use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -28,7 +29,7 @@ class ShoppingCartController extends BaseController
     {
         $id = request('id');
         $amount = request('amount');
-        $now = new DateTime();
+        $now = Carbon::now();
         $p = Product::where("id", $id)
             ->where('start_date', '<=', $now)
             ->where('end_date', '>=', $now)
@@ -134,7 +135,10 @@ class ShoppingCartController extends BaseController
                 $shoppingcart[$i] = $shoppingcart[$i + 1];
             }
         }
-        array_pop($shoppingcart);
+
+        if($flag) {
+            array_pop($shoppingcart);
+        }
         $request->session()->put('shoppingcart', $shoppingcart);
         session()->remove('discount');
         return $this->result('OK', true);
@@ -170,7 +174,6 @@ class ShoppingCartController extends BaseController
         $final = session()->get('final');
         if ($discount) {
             $final = $discount['final_price'];
-            $discountAmount = $discount['discountAmount'];
         }
         return $final;
     }
@@ -181,14 +184,6 @@ class ShoppingCartController extends BaseController
         $price = $this->getAfterDiscountFinal($request);
         return Shipping::getShippingPrice($price);
     }
-
-    private function getCurrentPrice(): int
-    {
-        $this->renewShoppingCart();
-
-        return session('final', 0);
-    }
-
 
     public function checkOut(Request $request)
     {
@@ -212,10 +207,12 @@ class ShoppingCartController extends BaseController
         $order->discount_id = $discountcode;
         $order->final_cost = $this->getAfterDiscountFinal($request) + $this->getShippingCost($request);
         $order->save();
-        $date = date('Y-m-d H:i:s', strtotime('+1hour'));
-        $order->sent_time = $date;
-        $date = date('Y-m-d H:i:s', strtotime('+6hours'));
-        $order->arrival_time = $date;
+
+        $now = Carbon::now();
+
+        $order->sent_time = (clone $now)->addHour(1);
+
+        $order->arrival_time = (clone $now)->addHour(6);
         $order->save();
         //裝填貨物
         $shoppingcart = session()->get('shoppingcart');
@@ -235,7 +232,7 @@ class ShoppingCartController extends BaseController
 
     public function postSetDiscount(Request $request)
     {
-        $now = new DateTime();
+        $now = Carbon::now();
         $code = $request->get('code');
         $code = Discount::decrypt($code) ?? -1;
         $d = Discount::where("id", $code)
