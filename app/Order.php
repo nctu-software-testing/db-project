@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
@@ -35,7 +36,7 @@ class Order extends Model
     {
         $st = $this->sent_time;
         $at = $this->arrival_time;
-        $now = date('Y-m-d H:i:s');
+        $now = Carbon::now();
         $this->state = 0;
         if ($now > $st)
             $this->state = 1;

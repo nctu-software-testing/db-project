@@ -32,7 +32,7 @@ class ShoppingCartController extends BaseController
         $now = Carbon::now();
         $p = Product::where("id", $id)
             ->where('start_date', '<=', $now)
-            ->where('end_date', '>=', $now)
+            ->where('end_date', '>', $now)
             ->where('state', Product::STATE_RELEASE)
             ->first();
         if ($p) {
@@ -237,7 +237,7 @@ class ShoppingCartController extends BaseController
         $code = Discount::decrypt($code) ?? -1;
         $d = Discount::where("id", $code)
             ->where('start_discount_time', '<=', $now)
-            ->where('end_discount_time', '>=', $now)->first();
+            ->where('end_discount_time', '>', $now)->first();
 
         $finalCost = session('final', 0);
 

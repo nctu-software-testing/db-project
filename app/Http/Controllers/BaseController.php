@@ -28,14 +28,6 @@ class BaseController extends \Illuminate\Routing\Controller
         ]);
     }
 
-    protected function setMessage($message, $type = 'info')
-    {
-        return session()->flash('log', [
-            'message' => $message,
-            'type' => $type
-        ]);
-    }
-
     protected function checkCaptcha(): array
     {
         $captchaService = resolve(CaptchaService::class);
