@@ -491,4 +491,27 @@ class UserTest extends BaseTestCase
             'success' => false,
         ]);
     }
+
+    public function testLoggedInUserCannotLoginAgain()
+    {
+        $this->testLoginSuccessful();
+        $mock = Mockery::mock(CaptchaService::class)
+            ->shouldAllowMockingProtectedMethods()
+            ->makePartial();
+
+        $mock->shouldReceive('checkCaptcha')
+            ->andReturn(['success' => true, 'message' => 'TESTING']);
+
+        $this->app->instance(CaptchaService::class, $mock);
+
+        $ret = $this->post('/login', [
+            'account' => 'admin',
+            'password' => 'admin',
+        ]);
+
+        $ret->assertRedirect('/');
+        $this->assertNotEquals(User::ADMIN_ROLE, session('user.role'));
+
+        Mockery::close();
+    }
 }
