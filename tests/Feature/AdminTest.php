@@ -19,7 +19,6 @@ class AdminTest extends BaseTestCase
     protected function tearDown()
     {
         parent::tearDown();
-        $this->randomString = null;
     }
 
     private function _testAccessAndUserListCannotAccess()
