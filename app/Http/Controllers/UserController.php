@@ -44,6 +44,9 @@ class UserController extends BaseController
             return $this->result('參數錯誤', false);
         }
         $email = request('email');
+        if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return $this->result('參數錯誤', false);
+        }
         $birthday = request('birthday');
         //資料封裝
         $new_user = new User();
@@ -144,6 +147,11 @@ class UserController extends BaseController
     {
         $id = $request->session()->get('user')->id;
         $email = request('email');
+
+        if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return $this->result('參數錯誤', false);
+        }
+        
         $check_user = User::where('id', '=', $id)->first();
         $check_user->email = $email;
         $this->updateUser($check_user);
