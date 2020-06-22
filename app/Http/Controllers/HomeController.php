@@ -25,9 +25,4 @@ class HomeController extends BaseController
         ]);
     }
 
-    public function getFunction()
-    {
-        return view('function');
-    }
-
 }
