@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Catlog;
 use App\Discount;
 use App\Shipping;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use DateTime;
 
@@ -84,7 +85,7 @@ class DiscountController extends BaseController
 
     public  function disableDiscount(Request $request)
     {
-        $date = date('Y-m-d H:i:s');
+        $date = Carbon::now();
         $id = request('id');
         $discount = Discount::find($id);
         $discount->end_discount_time = $date;
