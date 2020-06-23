@@ -6,6 +6,7 @@ use Tests\TestCore\BaseTestCase;
 
 class ExampleTest extends BaseTestCase
 {
+    //use RefreshDatabase;
     /**
      * A basic test example.
      *

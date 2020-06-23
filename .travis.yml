@@ -1,0 +1,23 @@
+dist: precise
+
+language: php
+
+php:
+  - 7.3
+
+services:
+  - sqlite
+
+before_script:
+  - cp .env.testing .env
+  - composer self-update
+  - composer install --no-interaction
+  - php artisan migrate
+
+jobs:
+  include:
+      - script: composer travis-tests
+      - script: python3 sleep.py
+
+after_success:
+    - bash <(curl -s https://codecov.io/bash)

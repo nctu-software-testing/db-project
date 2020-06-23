@@ -1,3 +1,7 @@
+[![Build Status](https://travis-ci.org/nctu-software-testing/db-project.svg?branch=test%2Fbau%2Fcicd)](https://travis-ci.org/nctu-software-testing/db-project)
+[![codecov](https://codecov.io/gh/nctu-software-testing/db-project/branch/test%2Fbau%2Fcicd/graph/badge.svg)](https://codecov.io/gh/nctu-software-testing/db-project)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=nctu-software-testing_db-project&metric=alert_status)](https://sonarcloud.io/dashboard?id=nctu-software-testing_db-project)
+
 ## Download Dependencies
 - [Node.js 10](https://nodejs.org/en/download/) (cannot above)
 - [PHP 7.3](https://www.php.net/downloads.php) (or above)
