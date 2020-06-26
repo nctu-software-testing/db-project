@@ -9,7 +9,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-WEBDRIVER_PATH = '/home/jhcheng/ui-test/chromedriver'
+WEBDRIVER_PATH = './chromedriver'
 TARGET = "http://127.0.0.1:8000"
 admin_addr = "admin"
 admin_pwd = "admin"
