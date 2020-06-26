@@ -1,23 +1,17 @@
 dist: precise
 
-language: php
+language: python
 
-php:
-  - 7.3
+python:
+  - 3.6
 
-services:
-  - sqlite
+install:
+  - pip3 install selenium
 
 before_script:
-  - cp .env.testing .env
-  - composer self-update
-  - composer install --no-interaction
-  - php artisan migrate
+  - cp db-template.db tests/resources/db-template.db
+  - php artisan serve --env=ui.test &
 
-jobs:
-  include:
-      - script: composer travis-tests
-      - script: python3 sleep.py
-
-after_success:
-    - bash <(curl -s https://codecov.io/bash)
+script:
+  - ./main.py -v
+  - ps aux | grep "db-project/server.php" | head -1 | awk '{print $2}' | xargs kill -9
