@@ -1,15 +1,21 @@
-dist: precise
+dist: trusty
 
-language: python
+language: generic
 
 python:
   - 3.6
+
+php:
+  - 7.3
 
 install:
   - pip3 install selenium
 
 before_script:
   - cp db-template.db tests/resources/db-template.db
+  - composer self-update
+  - composer install --no-interaction
+  - php artisan migrate
   - php artisan serve --env=ui.test &
 
 script:
