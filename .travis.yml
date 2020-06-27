@@ -13,5 +13,6 @@ before_script:
   - php artisan serve --env=ui.test &
 
 script:
+  - pwd
   - python3 main.py -v
   - ps aux | grep "db-project/server.php" | head -1 | awk '{print $2}' | xargs kill -9
