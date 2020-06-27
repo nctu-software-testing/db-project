@@ -7,7 +7,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-WEBDRIVER_PATH = './chromedriver'
+WEBDRIVER_PATH = '/home/travis/build/nctu-software-testing/db-project/chromedriver'
 TARGET = "http://127.0.0.1:8000"
 admin_addr = "admin"
 admin_pwd = "admin"
