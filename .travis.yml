@@ -33,5 +33,6 @@ before_script:
 
 script:
   - pwd
+  - google-chrome --version
   - python3 main.py -v
   - ps aux | grep "db-project/server.php" | head -1 | awk '{print $2}' | xargs kill -9
