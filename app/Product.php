@@ -27,16 +27,16 @@ class Product extends Model
 
     public function GetState()
     {
-        if ($this->state === self::STATE_DRAFT) return "草稿";
-        if ($this->state === self::STATE_RELEASE) return "發佈";
-        if ($this->state === self::STATE_DELETED) return "已刪除";
+        if ($this->state * 1 === self::STATE_DRAFT) return "草稿";
+        if ($this->state * 1 === self::STATE_RELEASE) return "發佈";
+        if ($this->state * 1 === self::STATE_DELETED) return "已刪除";
 
         return "";
     }
 
     public function isAllowChange()
     {
-        if ($this->state === self::STATE_DRAFT) return true;
+        if ($this->state * 1 === self::STATE_DRAFT) return true;
 
         return false;
     }

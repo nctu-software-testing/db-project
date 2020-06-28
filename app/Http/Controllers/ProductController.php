@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductController extends BaseController
 {
-    public $paginate = 12;
+    public const PAGINATE = 12;
     private const SEARCH_KEY = ['name', 'category', 'minPrice', 'maxPrice', 'sort'];
     private const IMAGE_LIMIT = 5;
 
@@ -56,7 +56,7 @@ class ProductController extends BaseController
             ->where('on_product.state', Product::STATE_RELEASE);
         $data = $this->applySearchCond($data, $search);
 
-        $data = $data->paginate($this->paginate);
+        $data = $data->paginate(self::PAGINATE);
         $id = request("id", 0);
         $count = 0;
         //類別資訊
@@ -132,7 +132,7 @@ class ProductController extends BaseController
         }
         $data->orderBy('id', 'DESC');
 
-        $data = $data->paginate($this->paginate);
+        $data = $data->paginate(self::PAGINATE);
         $id = request("id", 0);
         $count = 0;
         //類別資訊
@@ -156,6 +156,12 @@ class ProductController extends BaseController
             $editdata = Product::
             join('category', 'on_product.category_id', '=', 'category.id')
                 ->where('on_product.id', $id)
+                ->where('on_product.user_id')
+                ->select([
+                    "on_product.*",
+                    "category.*",
+                    "on_product.id", // override id
+                ])
                 ->get()->first();
             if (is_null($editdata) || !$editdata->isAllowChange()) {
                 return abort(404);
