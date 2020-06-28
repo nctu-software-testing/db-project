@@ -7,7 +7,6 @@ use App\OrderProduct;
 use App\Product;
 use App\ProductPicture;
 use Carbon\Carbon;
-use DateTime;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
@@ -16,7 +15,7 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductController extends BaseController
 {
-    public $paginate = 12;
+    public const PAGINATE = 12;
     private const SEARCH_KEY = ['name', 'category', 'minPrice', 'maxPrice', 'sort'];
     private const IMAGE_LIMIT = 5;
 
@@ -52,12 +51,11 @@ class ProductController extends BaseController
             ->selectRaw('COALESCE(sub.cnt, 0) as diffBuy');
 
         //公開瀏覽
-        $now = Carbon::now();
         $data = Product::getOnProductsBuilder($data)
             ->where('on_product.state', Product::STATE_RELEASE);
         $data = $this->applySearchCond($data, $search);
 
-        $data = $data->paginate($this->paginate);
+        $data = $data->paginate(self::PAGINATE);
         $id = request("id", 0);
         $count = 0;
         //類別資訊
@@ -133,7 +131,7 @@ class ProductController extends BaseController
         }
         $data->orderBy('on_product.id', 'DESC');
 
-        $data = $data->paginate($this->paginate);
+        $data = $data->paginate(self::PAGINATE);
         $id = request("id", 0);
         $count = 0;
         //類別資訊
@@ -154,9 +152,16 @@ class ProductController extends BaseController
             $editdata = new Product();
         } else {
             $id = intval($id, 10);
+            $uid = session('user.id');
             $editdata = Product::
             join('category', 'on_product.category_id', '=', 'category.id')
                 ->where('on_product.id', $id)
+                ->where('on_product.user_id', $uid)
+                ->select([
+                    "on_product.*",
+                    "category.*",
+                    "on_product.id", // override id
+                ])
                 ->get()->first();
             if (is_null($editdata) || !$editdata->isAllowChange()) {
                 return abort(404);
@@ -191,14 +196,20 @@ class ProductController extends BaseController
         if (!$data) return abort(404);
         $data->sell = $sellCount;
 
-        if (
-            $data->state * 1 !== Product::STATE_RELEASE && //沒有發布
-            !(
-                session('user.id') === $data->user_id ||
-                session('user.role') === 'A'
-            )
-        ) {
-            return abort(403, 'You Can\'t See Me');
+        $isSelfOrAdmin = session('user.id') * 1 === $data->user_id * 1 || session('user.role') === 'A';
+        $now = Carbon::now();
+
+        if (!$isSelfOrAdmin) {
+            //沒有發布
+            if ($data->state * 1 !== Product::STATE_RELEASE) {
+                return abort(403, 'You Can\'t See Me');
+            }
+
+            $s = Carbon::parse($data->start_date);
+            $e = Carbon::parse($data->end_date);
+            if (!$s->lte($now) || !$now->lt($e)) {
+                return abort(404);
+            }
         }
 
         //圖片數量
@@ -227,7 +238,7 @@ class ProductController extends BaseController
             return redirect()->back();
         }
         $product = null;
-        if ($edit_id == 0)
+        if (empty($edit_id))
             $product = new Product();
         else {
             $product = Product::where('id', $edit_id);
@@ -260,10 +271,10 @@ class ProductController extends BaseController
         // sort從0開始
         $delArray = request('delImage', []);
         if (!is_array($delArray)) $delArray = [];
-        for ($i = 0, $j = count($delArray); $i < $j; $i++) {
-            if (($delArray[$i] ?? null) === '1' && !is_null($image[$i] ?? null)) {
+
+        foreach ($delArray as $i => $val) {
+            if ($val === '1' && !is_null($image[$i] ?? null)) {
                 $image[$i]->forceDelete();
-                $imgCount--;
             } else {
                 $image[$i]->sort = $imgCount++; //從0開始
                 $image[$i]->save();
@@ -285,7 +296,7 @@ class ProductController extends BaseController
                 }
             }
         }
-        if ($edit_id === 0)
+        if (empty($edit_id))
             $request->session()->flash('log', '建立成功');
         else
             $request->session()->flash('log', '修改成功');
@@ -321,7 +332,10 @@ class ProductController extends BaseController
     public function delProduct(Request $request)
     {
         $id = request('id');
-        $p = Product::where("id", $id)->first();
+        $p = $this->getProductByIdWithPermissionCheck($id);
+        if (!$p) {
+            return $this->result('error', false);
+        }
         $p->state = Product::STATE_DELETED;
         $p->save();
 
@@ -331,11 +345,23 @@ class ProductController extends BaseController
     public function releaseProduct(Request $request)
     {
         $id = request('id');
-        $p = Product::where("id", $id)->first();
+        $p = $this->getProductByIdWithPermissionCheck($id);
+        if (!$p) {
+            return $this->result('error', false);
+        }
         $p->state = Product::STATE_RELEASE;
         $p->save();
         return $this->result('ok', true);
     }
 
+    private function getProductByIdWithPermissionCheck($id): ?Product
+    {
+        $pBuilder = Product::where("id", $id);
+        if (session('user.role') === 'B') {
+            $pBuilder->where('user_id', session('user.id'));
+        }
+
+        return $pBuilder->first();
+    }
 }
 

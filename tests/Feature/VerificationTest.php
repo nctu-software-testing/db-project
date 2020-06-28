@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\User;
 use App\Verification;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCore\BaseTestCase;
 
 class VerificationTest extends BaseTestCase
@@ -94,6 +95,7 @@ class VerificationTest extends BaseTestCase
 
     private function submitVerifyImage(string $account)
     {
+        Storage::fake();
         $this->withUser($account);
         $front = UploadedFile::fake()->image('img1.png');
         $back = UploadedFile::fake()->image('img2.png');
