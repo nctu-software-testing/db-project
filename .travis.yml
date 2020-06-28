@@ -16,7 +16,7 @@ before_install:
 install:
   - sudo apt-get install -y python3 python3-pip php7.3 php7.3-common php7.3-cli
   - pip3 install selenium --user
-
+  - php -v
 before_script:
   - cp db-template.db tests/resources/db-template.db
   - composer self-update
