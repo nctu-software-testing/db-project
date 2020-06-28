@@ -1,6 +1,6 @@
 dist: xenial
 
-language: php
+language: node_js
 
 python:
   - 3.6
@@ -17,8 +17,9 @@ before_install:
   - sudo apt-get -y install libxml2-dev
 
 install:
-  - sudo apt-get install -y python3 python3-pip php-common php7.3 php7.3-cli php7.3-common php7.3-fpm php7.3-json php7.3-mbstring php7.3-mysql php7.3-opcache php7.3-readline php7.3-xml php-xdebug
+  - sudo apt-get install -y python3 python3-pip
   - pip3 install selenium --user
+  - phpenv global 7.3 2>/dev/null
   - composer self-update
   - ./download_chromedriver.sh
   - node -v
