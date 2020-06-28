@@ -4,7 +4,10 @@ namespace Tests\Feature;
 
 use App\Category;
 use App\Product;
+use App\ProductPicture;
 use Carbon\Carbon;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCore\BaseTestCase;
 
 class ProductTest extends BaseTestCase
@@ -239,6 +242,236 @@ class ProductTest extends BaseTestCase
         $this->withUser('b1');
         $response = $this->get("/products/item/{$productId}/edit");
         $this->assertTrue($response->isNotFound());
+    }
+
+    public function testGetProductDetails()
+    {
+        $productId = 59;
+        $response = $this->get("/products/item/{$productId}");
+        $response->assertViewIs('products.item');
+
+        $data = $response->getOriginalContent();
+        $this->assertEquals($productId, $data['p']->id);
+        $this->assertEquals(7, $data['count']);
+    }
+
+    public function testGetExpiredProductDetails()
+    {
+        Carbon::setTestNow('2000-01-02 03:04:05');
+        $productId = 59;
+        $response = $this->get("/products/item/{$productId}");
+        $this->assertTrue($response->isNotFound() || $response->isForbidden());
+    }
+
+    public function testSelfAllowViewDraftProduct()
+    {
+        $productId = 59;
+        Product::where('id', $productId)->update(['state' => Product::STATE_DRAFT]);
+        $this->withUser('b1');
+        $response = $this->get("/products/item/{$productId}");
+        $response->assertViewIs('products.item');
+    }
+
+    public function testOthersCannotViewDraftProduct()
+    {
+        $productId = 59;
+        Product::where('id', $productId)->update(['state' => Product::STATE_DRAFT]);
+        $this->withUser('b2');
+        $response = $this->get("/products/item/{$productId}");
+        $this->assertTrue($response->isNotFound() || $response->isForbidden());
+    }
+
+    public function testGetDefaultProductImage()
+    {
+        $response = $this->get('/products/item-image/22/0');
+        $response->assertHeader('content-type', 'image/png');
+        $image = $response->getContent();
+        $defaultImage = Storage::get('public/product-no-image.png');
+
+        $this->assertTrue($defaultImage === $image);
+    }
+
+    public function testGetProductImage()
+    {
+        $pid = 1;
+        Storage::fake();
+
+        foreach (range(1, 2) as $sort) {
+            $fakeImage = UploadedFile::fake()->image('photo' . $sort . '.jpg', ($sort + 1), ($sort + 2));
+            $path = $fakeImage->store('images');
+            ProductPicture::where('product_id', $pid)->where('sort', $sort)->update([
+                'path' => $path,
+            ]);
+
+            $response = $this->get('/products/item-image/1/' . $sort);
+            $this->assertEquals($fakeImage->getSize(), strlen($response->getContent()));
+        }
+    }
+
+    public function testDeleteProduct()
+    {
+        $productId = 66;
+
+        $this->withUser(null);
+        $this->get("/products/item/{$productId}")->assertSuccessful();
+
+        $this->withUser('b2');
+        $this->post('/products/deleteProduct', [
+            'id' => $productId
+        ])->assertJson([
+            'success' => true,
+            'result' => 'ok',
+        ]);
+
+        $this->withUser(null);
+        $itemResp = $this->get("/products/item/{$productId}");
+        $this->assertTrue($itemResp->isNotFound() || $itemResp->isForbidden());
+    }
+
+    public function testDeleteOthersProduct()
+    {
+        $productId = 66; // owner is b2
+
+        $this->withUser(null);
+        $this->get("/products/item/{$productId}")->assertSuccessful();
+
+        $this->withUser('b1');
+        $this->post('/products/deleteProduct', [
+            'id' => $productId
+        ]);
+
+        $this->withUser(null);
+        $this->get("/products/item/{$productId}")->assertSuccessful();
+    }
+
+    public function testPublishProduct()
+    {
+        $productId = 58;
+
+        $this->withUser(null);
+        $itemResp = $this->get("/products/item/{$productId}");
+        $this->assertTrue($itemResp->isNotFound() || $itemResp->isForbidden());
+
+        $this->withUser('b');
+        $this->post('products/manage/release-product', [
+            'id' => $productId
+        ])->assertJson([
+            'success' => true,
+            'result' => 'ok',
+        ]);
+
+        $this->withUser(null);
+        $this->get("/products/item/{$productId}")->assertSuccessful();
+    }
+
+    public function testPublishOthersProduct()
+    {
+        $productId = 58;
+
+        $this->withUser(null);
+        $itemResp = $this->get("/products/item/{$productId}");
+        $this->assertTrue($itemResp->isNotFound() || $itemResp->isForbidden());
+
+        $this->withUser('b2');
+        $this->post('products/manage/release-product', [
+            'id' => $productId
+        ])->assertJson([
+            'success' => true,
+            'result' => 'ok',
+        ]);
+
+        $this->withUser(null);
+        $itemResp = $this->get("/products/item/{$productId}");
+        $this->assertTrue($itemResp->isNotFound() || $itemResp->isForbidden());
+    }
+
+    public function testAddProduct()
+    {
+        $this->withUser('b');
+        $lastPid = Product::orderBy('id', 'DESC')->first()->id;
+        $title = 'new_product_' . str_random();
+        $desc = str_random(40);
+        $category = 5;
+        $fakeImg1 = UploadedFile::fake()->image('img1.png');
+        $fakeImg2 = UploadedFile::fake()->image('img2.png');
+
+        $response = $this->post('products/item/manage', [
+            'Edit_id' => '0',
+            'title' => $title,
+            'category' => $category,
+            'price' => 567,
+            'start_date' => '2020-01-02 03:04:05',
+            'end_date' => '2022-06-07 08:09:10',
+            'amount' => 9876,
+            'info' => $desc,
+            'productImage' => [
+                $fakeImg1,
+                $fakeImg2,
+            ],
+        ]);
+
+        $response->assertSessionHas('log', '建立成功');
+        $newProduct = Product::find($lastPid + 1);
+        $this->assertEquals($title, $newProduct->product_name);
+        $this->assertEquals($desc, $newProduct->product_information);
+        $this->assertEquals('2020-01-02 03:04:05', $newProduct->start_date);
+        $this->assertEquals('2022-06-07 08:09:10', $newProduct->end_date);
+        $this->assertEquals(567, $newProduct->price);
+        $this->assertEquals($category, $newProduct->category_id);
+        $this->assertEquals(session('user.id'), $newProduct->user_id);
+        $this->assertEquals(9876, $newProduct->amount);
+
+        $imagesCnt = ProductPicture::where('product_id', $newProduct->id)->count();
+        $this->assertEquals(2, $imagesCnt);
+    }
+
+    public function testEditProduct()
+    {
+        $targetPid = 59;
+        Product::where('id', $targetPid)->update([
+            'state' => Product::STATE_DRAFT,
+        ]);
+        $this->withUser('b1');
+        $title = 'new_product_' . str_random();
+        $desc = str_random(40);
+        $category = 5;
+        $fakeImg1 = UploadedFile::fake()->image('img1.png');
+        $fakeImg2 = UploadedFile::fake()->image('img2.png');
+        $fakeImg3 = UploadedFile::fake()->image('img3.png');
+
+        $originImageLen = ProductPicture::where('product_id', $targetPid)->count();
+        $deleteImage = array_fill(0, $originImageLen, '1');
+        unset($deleteImage[1]); // keep 2nd image
+        $response = $this->post('products/item/manage', [
+            'Edit_id' => $targetPid,
+            'title' => $title,
+            'category' => $category,
+            'price' => 567,
+            'start_date' => '2020-01-02 03:04:05',
+            'end_date' => '2022-06-07 08:09:10',
+            'amount' => 9876,
+            'info' => $desc,
+            'productImage' => [
+                $fakeImg1,
+                $fakeImg2,
+                $fakeImg3,
+            ],
+            'delImage' => $deleteImage,
+        ]);
+
+        $response->assertSessionHas('log', '修改成功');
+        $product = Product::find($targetPid);
+        $this->assertEquals($title, $product->product_name);
+        $this->assertEquals($desc, $product->product_information);
+        $this->assertEquals('2020-01-02 03:04:05', $product->start_date);
+        $this->assertEquals('2022-06-07 08:09:10', $product->end_date);
+        $this->assertEquals(567, $product->price);
+        $this->assertEquals($category, $product->category_id);
+        $this->assertEquals(session('user.id'), $product->user_id);
+        $this->assertEquals(9876, $product->amount);
+
+        $imagesCnt = ProductPicture::where('product_id', $product->id)->count();
+        $this->assertEquals(3 + 1 /* skipped 2nd image */, $imagesCnt);
     }
 
     private function assertItemsOrderByField(array $arr, string $field, string $order = 'ASC')
