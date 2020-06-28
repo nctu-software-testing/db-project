@@ -376,8 +376,7 @@ class ProductTest extends BaseTestCase
         $this->post('products/manage/release-product', [
             'id' => $productId
         ])->assertJson([
-            'success' => true,
-            'result' => 'ok',
+            'success' => false,
         ]);
 
         $this->withUser(null);
