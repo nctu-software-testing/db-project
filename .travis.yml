@@ -23,7 +23,7 @@ before_script:
   - composer self-update
   - composer install --no-interaction
   - php artisan migrate
-  - php artisan serve --env=ui.test &
+  - php artisan serve --env=ui.test --no-interaction --force & 
 
 script:
   - pwd
