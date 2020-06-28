@@ -40,6 +40,7 @@ jobs:
   include:
     - name: UI-Test
     - name: PHPUnit
-      before_install: cp .env.testing .env && composer self-update
+      env: APP_ENV=testing
+      before_install: composer self-update
       install: composer install --no-interaction
       script: composer travis-tests && bash <(curl -s https://codecov.io/bash)
