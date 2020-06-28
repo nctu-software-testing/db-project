@@ -153,10 +153,11 @@ class ProductController extends BaseController
             $editdata = new Product();
         } else {
             $id = intval($id, 10);
+            $uid = session('user.id');
             $editdata = Product::
             join('category', 'on_product.category_id', '=', 'category.id')
                 ->where('on_product.id', $id)
-                ->where('on_product.user_id')
+                ->where('on_product.user_id', $uid)
                 ->select([
                     "on_product.*",
                     "category.*",
