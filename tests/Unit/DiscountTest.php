@@ -3,10 +3,24 @@
 namespace Tests\Unit;
 
 use App\Discount;
-use Tests\TestCore\BaseTestCase;
+use Tests\TestCore\BaseNonDBTestCase;
 
-class DiscountTest extends BaseTestCase
+class DiscountTest extends BaseNonDBTestCase
 {
+    private $model;
+
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->model = new Discount();
+    }
+
+    protected function tearDown()
+    {
+        parent::tearDown();
+        $this->model = null;
+    }
+
     public function testSnEncoding()
     {
 
@@ -25,29 +39,25 @@ class DiscountTest extends BaseTestCase
 
     public function testDiscountTypeA()
     {
-        $model = new Discount();
-        $model->type = 'A';
-        $this->assertEquals('不限品項打折', $model->GetType());
+        $this->model->type = 'A';
+        $this->assertEquals('不限品項打折', $this->model->GetType());
     }
 
     public function testDiscountTypeB()
     {
-        $model = new Discount();
-        $model->type = 'B';
-        $this->assertEquals('優惠折扣', $model->GetType());
+        $this->model->type = 'B';
+        $this->assertEquals('優惠折扣', $this->model->GetType());
     }
 
     public function testDiscountTypeC()
     {
-        $model = new Discount();
-        $model->type = 'C';
-        $this->assertEquals('特定分類打折', $model->GetType());
+        $this->model->type = 'C';
+        $this->assertEquals('特定分類打折', $this->model->GetType());
     }
 
     public function testDiscountTypeWrongType()
     {
-        $model = new Discount();
-        $model->type = 'D';
-        $this->assertNull($model->GetType());
+        $this->model->type = 'D';
+        $this->assertNull($this->model->GetType());
     }
 }
