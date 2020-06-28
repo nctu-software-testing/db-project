@@ -34,3 +34,12 @@ script:
   - ./chromedriver --version
   - python3 main.py -v
   - ps aux | grep "db-project/server.php" | head -1 | awk '{print $2}' | xargs kill -9
+
+
+jobs:
+  include:
+    - name: UI-Test
+    - name: PHPUnit
+      before_install: cp .env.testing .env && composer self-update
+      install: composer install --no-interaction
+      script: composer travis-tests && bash <(curl -s https://codecov.io/bash)
