@@ -1,23 +1,46 @@
-dist: precise
+dist: xenial
 
 language: php
+
+python:
+  - 3.6
 
 php:
   - 7.3
 
-services:
-  - sqlite
+node_js:
+  - 12
 
-before_script:
-  - cp .env.testing .env
+before_install:
+  - sudo apt-get update
+  - sudo apt-get install -y python3 python3-pip libxml2-dev nasm
+  - nvm install 12
+  - pip3 install selenium --user
+  - ./download_chromedriver.sh
   - composer self-update
-  - composer install --no-interaction
-  - php artisan migrate
+
+install:
+  - composer install
+  - npm install
+  - npm run prod
+  - php artisan serve --env=ui.test & 
+
+script:
+  - pwd
+  - python3 --version
+  - php -v
+  - node -v
+  - google-chrome --version
+  - ./chromedriver --version
+  - python3 main.py -v
+  - ps aux | grep "db-project/server.php" | head -1 | awk '{print $2}' | xargs kill -9
+
 
 jobs:
   include:
-      - script: composer travis-tests
-      - script: python3 sleep.py
-
-after_success:
-    - bash <(curl -s https://codecov.io/bash)
+    - name: UI-Test
+    - name: PHPUnit
+      env: APP_ENV=testing
+      before_install: composer self-update
+      install: composer install --no-interaction
+      script: composer travis-tests && bash <(curl -s https://codecov.io/bash)
